@@ -12,19 +12,19 @@ import experiment.TestBoard;
 import experiment.TestBoardCell;
 
 
-class BoardTestsExp {
+public class BoardTestsExp {
 
 	TestBoard board;
 
 	@BeforeEach //run before each test
-	void setUp() {
+	public void setUp() {
 		board = new TestBoard();
 	}
 
 
 	//test the creation of adjacency lists for a 4x4 board, including:
 	@Test
-	void testAdjacency() {
+	public void testAdjacency() {
 
 		//test the creation of adjacency lists for the top left corner (i.e., location [0][0])
 		TestBoardCell cell = board.getCell(0, 0);
@@ -66,7 +66,7 @@ class BoardTestsExp {
 	
 	//Test for behavior with at least one cell being flagged as occupied.  A player cannot move into an occupied cell.
 	@Test
-	void testCellOccupied() {
+	public void testCellOccupied() {
 		//set up occupied cells.
 		board.getCell(0, 2).setOccupied(true);
 		
@@ -83,7 +83,7 @@ class BoardTestsExp {
 	
 
 	//Test for behavior with at least one cell being flagged as a room. A player used up all movement points upon entering a room.
-	void testCellFlaggedRoom() {
+	public void testCellFlaggedRoom() {
 		//set up flagged room.
 		board.getCell(0, 3).setIsRoom(true);
 		
@@ -106,7 +106,7 @@ class BoardTestsExp {
 	
 	
 	@Test
-	void testTargetsNormal() {
+	public void testTargetsNormal() {
 		TestBoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 3);
 		Set<TestBoardCell>  targets = board.getTargets();
@@ -121,7 +121,7 @@ class BoardTestsExp {
 
 	// Target test with rooms and occupied
 	@Test
-	void testTargetsMixed() {
+	public void testTargetsMixed() {
 		
 		//set up occupied cells.
 		board.getCell(0, 2).setOccupied(true);
