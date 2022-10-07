@@ -1,3 +1,10 @@
+/*
+ * CSCI 306 Section B
+ * C13A-2 Clue Paths 1 (Clue Pair)
+ * Author: Yonghao Li; Ping Zhang
+ * 10/06/2022
+ */
+
 package experiment;
 
 import java.util.HashMap;
