@@ -35,35 +35,59 @@ public class TestBoardCell {
 	public Set<TestBoardCell> getAdjList() {		
 		return adjList;  	
 	}
-	
 
+	//calculating the adjacency list in the board since the important data is the grid, 
+	//and then telling the cell what its adjacencies are
 	public void setAdjList(TestBoard board) {		
-		if ((row-1) >= 0) {
+
+		if (row == 0) 
+		{
+			adjList.add(board.getCell(row+1, col));
+			if(col ==0) {
+				adjList.add(board.getCell(row, col+1));	
+			}
+			if(col == board.COLS-1){
+				adjList.add(board.getCell(row, col-1));				
+			}
+			if((col-1) >= 0 && (col+1) <= board.COLS-1) {
+				adjList.add(board.getCell(row, col-1));
+				adjList.add(board.getCell(row, col+1));	
+			}
+		}
+		if(row == board.ROWS-1 ) {
+
+			adjList.add(board.getCell(row-1, col)); 
+			
+			if(col ==0) {
+				adjList.add(board.getCell(row, col+1));	
+			}
+			if(col == board.COLS-1){
+				adjList.add(board.getCell(row, col-1));				
+			}
+			if((col-1) >= 0 && (col+1) <= board.COLS-1) {
+				adjList.add(board.getCell(row, col-1));
+				adjList.add(board.getCell(row, col+1));	
+			}
+
+		}
+
+		if ((row-1) >= 0 && (row+1) <= board.ROWS-1) {
 			adjList.add(board.getCell(row-1, col));			
 			adjList.add(board.getCell(row+1, col));
 
-			if((col-1) >= 0) {
+			if(col ==0) {
+				adjList.add(board.getCell(row, col+1));	
+			}
+			if(col == board.COLS-1){
+				adjList.add(board.getCell(row, col-1));				
+			}
+			if((col-1) >= 0 && (col+1) <= board.COLS-1) {
 				adjList.add(board.getCell(row, col-1));
-				adjList.add(board.getCell(row, col+1));				
+				adjList.add(board.getCell(row, col+1));	
 			}
-			else {
-				
-				adjList.add(board.getCell(row, col+1));
-			}
-		}
-		else {
-			adjList.add(board.getCell(row+1, col));
-			if((col-1) >= 0) {
-				adjList.add(board.getCell(row, col-1));
-				adjList.add(board.getCell(row, col+1));				
-			}
-			else {
-				
-				adjList.add(board.getCell(row, col+1));
-			}			
 		}
 	}
-	
+
 	//for indicating a cell is part of a room (void setRoom(boolean) and perhaps boolean isRoom()).	
 	public void setIsRoom(boolean isRoom)
 	{

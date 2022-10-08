@@ -34,30 +34,42 @@ public class TestBoard {
 
 	//returns the cell from the board at row, col.
 	public TestBoardCell getCell( int row, int col ) {
-		
+
 		if(grid[row][col] == null) {
 			TestBoardCell cell = new TestBoardCell(row,col);
 			grid[row][col] = cell;
 		}		
-		return grid[row][col] ;
+		return grid[row][col];
 	}
-
-
-	//What about calculating the adjacency list in the board since the important data is the grid, 
-	//and then telling the cell what its adjacencies are
-	public void calcAdjacency(TestBoardCell cell){
-
-		cell = grid[row][col];	
+	
+	public void setStartCellVisited(TestBoardCell startCell) {
+		this.visited.add(startCell);
 	}
 
 	//calculates legal targets for a move from startCell of length pathlength.
-	//leave the method blank (if void)
 	public void calcTargets( TestBoardCell startCell, int pathlength) 
 	{
-
-
+		startCell.setAdjList(this);		
+		Set<TestBoardCell> adjList= startCell.getAdjList();
+		for(TestBoardCell adjCell: adjList)
+		{
+           if (visited.contains(adjCell) ==true) {
+        	   continue;
+           }
+    	   visited.add(adjCell);
+    	   if (pathlength == 1) {
+    		   targets.add(adjCell);       		   
+    	   }
+    	   else {
+    		   calcTargets(adjCell,pathlength-1);
+    	   }
+    	   
+    	   visited.remove(adjCell);    
+             
+		}
+		
+		  
 	}
-
 	//  gets the targets last created by calcTargets()
 	//return an empty object (example, an empty map instead of a null) 
 	public Set<TestBoardCell> getTargets(){		
