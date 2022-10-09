@@ -1,3 +1,10 @@
+/*
+ * CSCI 306 Section B
+ * C13A-2 Clue Paths 1 (Clue Pair)
+ * Author: Yonghao Li; Ping Zhang
+ * 10/10/2022
+ */
+
 package experiment;
 
 import java.util.HashMap;
@@ -13,16 +20,11 @@ public class TestBoard {
 	//A set of board cells to hold the resulting targets from TargetCalc()
 	private Set<TestBoardCell> targets;
 	//A set of board cells to hold the visited list
+	//It is used to avoid backtracking.
 	private Set<TestBoardCell> visited;
 	//Constants for the grid size
 	final static int COLS = 4;
 	final static int ROWS = 4;
-
-
-	//private Set<TestBoardCell> adjList;
-
-	private int row;
-	private int col;
 
 	//A constructor that sets up the board
 	public TestBoard() {
@@ -41,7 +43,8 @@ public class TestBoard {
 		}		
 		return grid[row][col];
 	}
-	
+
+	//add the start location to the visited list (so no cycle through this cell)
 	public void setStartCellVisited(TestBoardCell startCell) {
 		this.visited.add(startCell);
 	}
@@ -53,22 +56,23 @@ public class TestBoard {
 		Set<TestBoardCell> adjList= startCell.getAdjList();
 		for(TestBoardCell adjCell: adjList)
 		{
-           if (visited.contains(adjCell) ==true) {
-        	   continue;
-           }
-    	   visited.add(adjCell);
-    	   if (pathlength == 1) {
-    		   targets.add(adjCell);       		   
-    	   }
-    	   else {
-    		   calcTargets(adjCell,pathlength-1);
-    	   }
-    	   
-    	   visited.remove(adjCell);    
-             
+			if (visited.contains(adjCell) ==true) {
+				continue;
+			}
+			visited.add(adjCell);
+			if (pathlength == 1) {
+				targets.add(adjCell);       		   
+			}
+			else {
+
+				calcTargets(adjCell,pathlength-1);
+			}
+
+			visited.remove(adjCell);    
 		}
-		
-		  
+
+
+
 	}
 	//  gets the targets last created by calcTargets()
 	//return an empty object (example, an empty map instead of a null) 
