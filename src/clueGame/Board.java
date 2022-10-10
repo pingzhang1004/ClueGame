@@ -1,6 +1,14 @@
+/*
+ * CSCI 306 Section B
+ * C14A-2 Clue Init 1 (Clue Pair)
+ * Author: Yonghao Li; Ping Zhang
+ * 10/09/2022
+ */
+
 package clueGame;
 
 import java.util.Map;
+import java.util.TreeMap;
 
 import experiment.TestBoardCell;
 
@@ -12,7 +20,7 @@ public class Board {
 	private int numColumns;
 	private String layoutConfigFile;
 	private String setupConfigfile;
-	private Map<Character, Room> roomMap;
+	private Map<Character, Room> roomMap = new TreeMap();
 	private Room room = new Room();
 	private BoardCell cell;
 	
@@ -73,5 +81,10 @@ public class Board {
 	public BoardCell getCell( int row, int col ) {
 		cell = new BoardCell(row, col);
 		return  cell;
+	}
+	
+	// return 
+	public Map<Character, Room> getRoomMap() {
+		return roomMap;
 	}
 }

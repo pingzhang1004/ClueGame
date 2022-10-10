@@ -1,5 +1,11 @@
-package tests;
+/*
+ * CSCI 306 Section B
+ * C14A-2 Clue Init 1 (Clue Pair)
+ * Author: Yonghao Li; Ping Zhang
+ * 10/09/2022
+ */
 
+package tests;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.Assert.*;
@@ -34,6 +40,7 @@ public class FileInitTest {
 	// test several entries including first and last in file
 	@Test
 	public void testRoomLoaded() {
+		assertEquals(LEGEND_SIZE, board.getRoomMap().size());
 		assertEquals("Balcony", board.getRoom('B').getName());
 		assertEquals("Play Room", board.getRoom('P').getName());
 		assertEquals("Home Office", board.getRoom('H').getName());

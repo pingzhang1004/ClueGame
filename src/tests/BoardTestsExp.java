@@ -139,6 +139,7 @@ public class BoardTestsExp {
 	@Test
 	public void testTargetsEmpty_4() {		
 		TestBoardCell cell = board.getCell(0, 0);
+		board.setStartCellVisited(cell);
 		board.calcTargets(cell, 3);
 		Set<TestBoardCell> targets = board.getTargets();
 		Assert.assertEquals(6, targets.size());

@@ -1,3 +1,10 @@
+/*
+ * CSCI 306 Section B
+ * C14A-2 Clue Init 1 (Clue Pair)
+ * Author: Yonghao Li; Ping Zhang
+ * 10/09/2022
+ */
+
 package clueGame;
 
 import java.util.HashSet;
