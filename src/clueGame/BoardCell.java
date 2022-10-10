@@ -33,7 +33,7 @@ public class BoardCell {
 	
 	// return door way status
 	public boolean isDoorway() {
-		return false;
+		return true;
 	}
 	
 	// return a door direction
