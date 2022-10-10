@@ -20,8 +20,8 @@ public class Board {
 	private int numColumns;
 	private String layoutConfigFile;
 	private String setupConfigfile;
-	private Map<Character, Room> roomMap = new TreeMap();
-	private Room room = new Room();
+	private Map<Character, Room> roomMap;
+	private Room room;
 	private BoardCell cell;
 	
 	// Start from Canvas
@@ -31,7 +31,9 @@ public class Board {
 	private static Board theInstance = new Board();
 	// constructor is private to ensure only one can be created
 	private Board() {
-		super() ;
+		super();
+		roomMap = new TreeMap();
+		room = new Room();
 	}
 	// this method returns the only Board
 	public static Board getInstance() {
