@@ -9,6 +9,7 @@ package clueGame;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -55,30 +56,39 @@ public class Board {
 	// Load setup file
 	public void loadLayoutConfig() {	
 		FileReader reader = null;
-		Scanner in = null;
+		Scanner inRow = null;
+		Scanner inCol = null;
+		Scanner inCell = null;
+		String line;
+		String strSplit[];
 		try {
 			reader = new FileReader("data/"+ layoutConfigFile);
-			in = new Scanner(reader);
-			String line = new String();
-			String[] strSplit = new String[] {};
-
-
-			//read the layoutConfigFile first time to get the numColumns;
-			line = in.nextLine();
-			strSplit = line.split(",");
-			numColumns = strSplit.length;
-
+			inRow = new Scanner(reader);
+			
 			//read the layoutConfigFile first time to get the numRows++;
-			while (in.hasNextLine()) {
+			while (inRow.hasNextLine()) {
+				if(inRow.nextLine().length() == 0) {
+					break;
+				}
 				numRows++;
 			}
 
+			//read the layoutConfigFile first time to get the numColumns;
+			reader = new FileReader("data/"+ layoutConfigFile);
+			inCol = new Scanner(reader);
+			line = inCol.nextLine();
+		    strSplit = line.split(",");
+			numColumns = strSplit.length;
+			
 			grid = new BoardCell[numRows][numColumns];
 
-			int i=0;
+			
 			//populate the data from the layoutConfigFile to board cells
-			while (in.hasNextLine()) {
-				line = in.nextLine();						
+			reader = new FileReader("data/"+ layoutConfigFile);
+			inCell = new Scanner(reader);
+			int i=0;
+			while (inCell.hasNextLine()) {
+				line = inCell.nextLine();						
 				strSplit  = line.split(",");
 				//for(int i =0; i < numRows; i++)
 				for(int j =0; j< numColumns; i++)
