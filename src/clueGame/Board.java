@@ -56,32 +56,23 @@ public class Board {
 	// Load setup file
 	public void loadLayoutConfig() {	
 		FileReader reader = null;
-		Scanner inRow = null;
-		Scanner inCol = null;
+		Scanner in = null;
 		Scanner inCell = null;
 		String line;
 		String strSplit[];
 		try {
-			reader = new FileReader("data/"+ layoutConfigFile);
-			inRow = new Scanner(reader);
-			
-			//read the layoutConfigFile first time to get the numRows++;
-			while (inRow.hasNextLine()) {
-				if(inRow.nextLine().length() == 0) {
-					break;
-				}
-				numRows++;
+			//read the layoutConfigFile first time to get the numColumns and numRows;		
+			reader = new FileReader("data/" + theInstance.layoutConfigFile);
+			in = new Scanner(reader);
+			ArrayList<String> lines = new ArrayList<String>();
+			while (in.hasNextLine()) {
+				lines.add(in.nextLine());
 			}
-
-			//read the layoutConfigFile first time to get the numColumns;
-			reader = new FileReader("data/"+ layoutConfigFile);
-			inCol = new Scanner(reader);
-			line = inCol.nextLine();
-		    strSplit = line.split(",");
-			numColumns = strSplit.length;
+			numRows = lines.size();		
+			numColumns = lines.get(0).split(",").length;
 			
-			grid = new BoardCell[numRows][numColumns];
-
+			//delacoate the grid size.
+			grid = new BoardCell[numRows][numColumns];			
 			
 			//populate the data from the layoutConfigFile to board cells
 			reader = new FileReader("data/"+ layoutConfigFile);
