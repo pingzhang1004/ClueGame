@@ -48,8 +48,8 @@ public class Board {
 	 */
 	public void initialize()
 	{		
-		theInstance.loadSetupConfig();
-		theInstance.loadLayoutConfig();
+		loadSetupConfig();
+		loadLayoutConfig();
 	}
 	// End from Canvas
 
@@ -57,12 +57,11 @@ public class Board {
 	public void loadLayoutConfig() {	
 		FileReader reader = null;
 		Scanner in = null;
-		Scanner inCell = null;
 		String line;
 		String strSplit[];
 		try {
 			//read the layoutConfigFile first time to get the numColumns and numRows;		
-			reader = new FileReader("data/" + theInstance.layoutConfigFile);
+			reader = new FileReader("data/" + layoutConfigFile);
 			in = new Scanner(reader);
 			ArrayList<String> lines = new ArrayList<String>();
 			while (in.hasNextLine()) {
@@ -70,25 +69,45 @@ public class Board {
 			}
 			numRows = lines.size();		
 			numColumns = lines.get(0).split(",").length;
-			
+
 			//delacoate the grid size.
 			grid = new BoardCell[numRows][numColumns];			
-			
+
+			//grid = new BoardCell[numRows][numColumns];
 			//populate the data from the layoutConfigFile to board cells
-			reader = new FileReader("data/"+ layoutConfigFile);
-			inCell = new Scanner(reader);
-			int i=0;
-			while (inCell.hasNextLine()) {
-				line = inCell.nextLine();						
-				strSplit  = line.split(",");
-				//for(int i =0; i < numRows; i++)
-				for(int j =0; j< numColumns; i++)
-				{
+			for(int i =0; i < numRows; i++) {
+				for(int j =0; j< numColumns; i++) {
 					cell = new BoardCell(i,j);
-					cell.setInitial(strSplit[j].charAt(0));
+					if (lines.get(i).split(",")[j].length() == 1) {						
+						cell.setInitial(lines.get(i).split(",")[j].charAt(0));
+					}
+					else {
+						cell.setInitial(lines.get(i).split(",")[j].charAt(0));
+						if(lines.get(i).split(",")[j].charAt(1) == '*'){
+							cell.setRoomCenter(true);							
+						}
+						else if (lines.get(i).split(",")[j].charAt(1) == '#'){
+							cell.setRoomLabel(true)	;					
+						}
+						else if(lines.get(i).split(",")[j].charAt(1) == 'v'){
+							cell.setDoordDirection(DoorDirection.DOWN);							
+						}
+						else if(lines.get(i).split(",")[j].charAt(1) == '^'){
+							cell.setDoordDirection(DoorDirection.UP);							
+						}
+						else if(lines.get(i).split(",")[j].charAt(1) == '>'){
+							cell.setDoordDirection(DoorDirection.RIGHT);							
+						}
+						else if (lines.get(i).split(",")[j].charAt(1) == '<'){
+							cell.setDoordDirection(DoorDirection.LEFT);							
+						}
+						else{
+							cell.setSecretPassage(lines.get(i).split(",")[j].charAt(1));
+						}
+
+					}
 					grid[i][j] = cell; 		
 				}
-				i++;
 			}
 		}
 		catch (FileNotFoundException e) {
@@ -125,13 +144,6 @@ public class Board {
 			System.out.println(e.getMessage());
 		}	
 	}
-
-
-
-	//Alternately, you could read in the entire data and put it into an ArrayList of Strings. 
-	//Then figure out the size and populate the board cells from your ArrayList of Strings..
-
-
 
 	// Set all config files
 	public void setConfigFiles(String layout, String setup) {

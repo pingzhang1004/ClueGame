@@ -32,12 +32,29 @@ public class BoardCell {
 	// constructor
 	public BoardCell(int row, int col) {
 		super();
+		roomLabel = false;
+		roomCenter = false;
+		doordDirection= DoorDirection.NONE;
 	}
-	
-	
 	
 	public void setInitial(char initial) {
 		this.initial = initial;
+	}
+
+	public void setDoordDirection(DoorDirection doordDirection) {
+		this.doordDirection = doordDirection;
+	}
+
+	public void setRoomLabel(boolean roomLabel) {
+		this.roomLabel = roomLabel;
+	}
+
+	public void setRoomCenter(boolean roomCenter) {
+		this.roomCenter = roomCenter;
+	}
+
+	public void setSecretPassage(char secretPassage) {
+		this.secretPassage = secretPassage;
 	}
 
 	// Add adj cell to list
@@ -46,25 +63,30 @@ public class BoardCell {
 	
 	// return door way status
 	public boolean isDoorway() {
-		return true;
+		if(doordDirection == DoorDirection.NONE) {
+			return false;			
+		}
+		else {
+			return true;
+		}
 	}
 	
 	// return a door direction
 	public DoorDirection getDoorDirection() {
-		return DoorDirection.NONE;
+		return doordDirection;
 	}
 	
 	// return label status
 	public boolean isLabel() {
-		return true;
+		return roomLabel;
 	}
 	// return room center way status
 	public boolean isRoomCenter() {
-		return true;
+		return roomCenter;
 	}
 	
 	// return a secret passage
 	public char getSecretPassage() {
-		return ' ';
+		return secretPassage;
 	}
 }
