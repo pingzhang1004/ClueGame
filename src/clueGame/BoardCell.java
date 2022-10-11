@@ -34,6 +34,12 @@ public class BoardCell {
 		super();
 	}
 	
+	
+	
+	public void setInitial(char initial) {
+		this.initial = initial;
+	}
+
 	// Add adj cell to list
 	public void addAdj(BoardCell adj) {
 	}

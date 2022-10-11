@@ -18,7 +18,7 @@ import experiment.TestBoardCell;
 public class Board {
 
 	// Variables
-	private TestBoardCell[][] grid;
+	private BoardCell[][] grid;
 	private int numRows;
 	private int numColumns;
 	private String layoutConfigFile;
@@ -46,51 +46,129 @@ public class Board {
 	 * initialize the board (since we are using singleton pattern)
 	 */
 	public void initialize()
-	{
+	{		
+		theInstance.loadSetupConfig();
+		theInstance.loadLayoutConfig();
 	}
 	// End from Canvas
 
 	// Load setup file
-	public void loadSetupConfig() {	
-	
-		}
+	public void loadLayoutConfig() {	
+		FileReader reader = null;
+		Scanner in = null;
+		try {
+			reader = new FileReader("data/"+ layoutConfigFile);
+			in = new Scanner(reader);
+			String line = new String();
+			String[] strSplit = new String[] {};
 
-		// Load layout file
-		public void loadLayoutConfig() {
-		}
 
-		// Set all config files
-		public void setConfigFiles(String layout, String setup) {	
-		}
+			//read the layoutConfigFile first time to get the numColumns;
+			line = in.nextLine();
+			strSplit = line.split(",");
+			numColumns = strSplit.length;
 
-		// return a room object by passing a char
-		public Room getRoom(char letter) {
-			return room;
-		}
+			//read the layoutConfigFile first time to get the numRows++;
+			while (in.hasNextLine()) {
+				numRows++;
+			}
 
-		// return a room object by passing a BoardCell
-		public Room getRoom(BoardCell cell) {
-			return room;
-		}
+			grid = new BoardCell[numRows][numColumns];
 
-		// return the number of rows
-		public int getNumRows() {	
-			return 0;
+			int i=0;
+			//populate the data from the layoutConfigFile to board cells
+			while (in.hasNextLine()) {
+				line = in.nextLine();						
+				strSplit  = line.split(",");
+				//for(int i =0; i < numRows; i++)
+				for(int j =0; j< numColumns; i++)
+				{
+					cell = new BoardCell(i,j);
+					cell.setInitial(strSplit[j].charAt(0));
+					grid[i][j] = cell; 		
+				}
+				i++;
+			}
 		}
-
-		// return the number of columns
-		public int getNumColumns() {	
-			return 0;
-		}
-
-		//returns the cell from the board at row, col.
-		public BoardCell getCell( int row, int col ) {
-			cell = new BoardCell(row, col);
-			return  cell;
-		}
-
-		// return 
-		public Map<Character, Room> getRoomMap() {
-			return roomMap;
-		}
+		catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+		}	
 	}
+
+	// Load layout file
+	public void loadSetupConfig() {
+		//you need to build the grid array with the layout file. But how big do you make it, i.e. number of rows and columns?
+		//You almost need to know this information before you even read the file.
+		FileReader reader = null;
+		Scanner in = null;
+		try {
+			reader = new FileReader("data/"+ setupConfigfile);
+			in = new Scanner(reader);
+			String line;
+			String[] strSplit; 
+			while (in.hasNextLine()) {
+				line = in.nextLine();
+				if(line.startsWith("//")){
+					continue;
+				}				
+				else{					
+					strSplit  = line.split(", ");
+					room.setName(strSplit[1]);				
+					String roomName = room.getName();
+					char roomLabel =strSplit[2].charAt(0);
+					roomMap.put(roomLabel, new Room(roomName));				
+				}
+			}
+		}
+		catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+		}	
+	}
+
+
+
+	//Alternately, you could read in the entire data and put it into an ArrayList of Strings. 
+	//Then figure out the size and populate the board cells from your ArrayList of Strings..
+
+
+
+	// Set all config files
+	public void setConfigFiles(String layout, String setup) {
+
+		theInstance.layoutConfigFile = layout;
+		theInstance.setupConfigfile = setup;
+
+	}
+
+	// return a room object by passing a char
+	public Room getRoom(char letter) {
+		return room;
+	}
+
+	// return a room object by passing a BoardCell
+	public Room getRoom(BoardCell cell) {
+		return room;
+	}
+
+	// return the number of rows
+	public int getNumRows() {	
+		return 0;
+	}
+
+	// return the number of columns
+	public int getNumColumns() {	
+		return 0;
+	}
+
+	//returns the cell from the board at row, col.
+	public BoardCell getCell( int row, int col ) {
+		cell = new BoardCell(row, col);
+		return  cell;
+	}
+
+	// return 
+	public Map<Character, Room> getRoomMap() {
+
+		return roomMap;
+	}
+}
