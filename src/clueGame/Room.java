@@ -6,6 +6,7 @@ public class Room {
 
 	// Variables
 	private String name;
+	private String label;
 	private BoardCell centerCell;
 	private BoardCell lableCell;
 	private BoardCell cell;
@@ -20,6 +21,18 @@ public class Room {
 		return name;
 	}
 	
+	public String getLabel() {
+		return label;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
 	// return a label cell
 	public BoardCell getLabelCell() {
 		return cell;

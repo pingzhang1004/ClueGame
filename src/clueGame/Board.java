@@ -7,13 +7,16 @@
 
 package clueGame;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.TreeMap;
 
 import experiment.TestBoardCell;
 
 public class Board {
-	
+
 	// Variables
 	private TestBoardCell[][] grid;
 	private int numRows;
@@ -23,7 +26,7 @@ public class Board {
 	private Map<Character, Room> roomMap;
 	private Room room;
 	private BoardCell cell;
-	
+
 	// Start from Canvas
 	/*
 	 * variable and methods used for singleton pattern
@@ -46,47 +49,48 @@ public class Board {
 	{
 	}
 	// End from Canvas
-	
+
 	// Load setup file
 	public void loadSetupConfig() {	
-	}
 	
-	// Load layout file
-	public void loadLayoutConfig() {
-	}
-	
-	// Set all config files
-	public void setConfigFiles(String layout, String setup) {	
-	}
-	
-	// return a room object by passing a char
-	public Room getRoom(char letter) {
-		return room;
-	}
-	
-	// return a room object by passing a BoardCell
-	public Room getRoom(BoardCell cell) {
-		return room;
-	}
-	
-	// return the number of rows
-	public int getNumRows() {	
-		return 0;
-	}
-	
-	// return the number of columns
-	public int getNumColumns() {	
-		return 0;
-	}
+		}
 
-	//returns the cell from the board at row, col.
-	public BoardCell getCell( int row, int col ) {
-		cell = new BoardCell(row, col);
-		return  cell;
+		// Load layout file
+		public void loadLayoutConfig() {
+		}
+
+		// Set all config files
+		public void setConfigFiles(String layout, String setup) {	
+		}
+
+		// return a room object by passing a char
+		public Room getRoom(char letter) {
+			return room;
+		}
+
+		// return a room object by passing a BoardCell
+		public Room getRoom(BoardCell cell) {
+			return room;
+		}
+
+		// return the number of rows
+		public int getNumRows() {	
+			return 0;
+		}
+
+		// return the number of columns
+		public int getNumColumns() {	
+			return 0;
+		}
+
+		//returns the cell from the board at row, col.
+		public BoardCell getCell( int row, int col ) {
+			cell = new BoardCell(row, col);
+			return  cell;
+		}
+
+		// return 
+		public Map<Character, Room> getRoomMap() {
+			return roomMap;
+		}
 	}
-	
-	// return 
-	public Map<Character, Room> getRoomMap() {
-		return roomMap;
-	}
-}
