@@ -9,18 +9,16 @@ public class Room {
 	//private char label;
 	private BoardCell centerCell;
 	private BoardCell lableCell;
-	private BoardCell cell;
+	
 	
 	// default constructor
 	public Room() {
-		cell = new BoardCell();
 	}
 	
-	public Room(String name) {
-		cell = new BoardCell();
-		//this.label = label;
-		this.name = name;
-	}
+//	public Room(String name) {
+//		//this.label = label;
+//		this.name = name;
+//	}
 	
 	
 	// return a room name
@@ -37,18 +35,22 @@ public class Room {
 		this.name = name;
 	}
 
-//	public void setLabel(char label) {
-//		this.label = label;
-//	}
+	public void setLabel(BoardCell lableCell) {
+		this.lableCell = lableCell;
+	}
+	
+	public void setCenter(BoardCell centerCell) {
+		this.centerCell = centerCell;
+	}
 
 	// return a label cell
 	public BoardCell getLabelCell() {
-		return cell;
+		return lableCell;
 	}
 	
 	// return a center cell
 	public BoardCell getCenterCell() {
-		return cell;
+		return centerCell;
 	}
 
 }

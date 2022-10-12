@@ -77,6 +77,8 @@ public class Board {
 		}
 		numRows = lines.size();		
 		numColumns = lines.get(0).split(",").length;
+		System.out.println(numRows);
+		System.out.println(numColumns);
 		// Columns Exception------------------------
 		int sum = 0;
 		for (int i=0; i < numRows; i++) {
@@ -91,8 +93,6 @@ public class Board {
 		else {
 			//delacoate the grid size.
 			grid = new BoardCell[numRows][numColumns];			
-
-			//grid = new BoardCell[numRows][numColumns];
 			//populate the data from the layoutConfigFile to board cells
 			for(int i =0; i < numRows; i++) {
 				for(int j =0; j< numColumns; j++) {
@@ -102,18 +102,20 @@ public class Board {
 				    	throw new BadConfigFormatException("The board layout refers to a room that is not in the setup file!");
 				    }
 					// Legend Exception End+++++++++++++++++++++
-					
 					cell = new BoardCell(i,j);
+					//cell = getCell(i,j);
 					if (lines.get(i).split(",")[j].length() == 1) {						
 						cell.setInitial(lines.get(i).split(",")[j].charAt(0));
 					}
 					else {
 						cell.setInitial(lines.get(i).split(",")[j].charAt(0));
 						if(lines.get(i).split(",")[j].charAt(1) == '*'){
-							cell.setRoomCenter(true);							
+							cell.setRoomCenter(true);
+							getRoom(cell).setCenter(cell);
 						}
 						else if (lines.get(i).split(",")[j].charAt(1) == '#'){
-							cell.setRoomLabel(true)	;					
+							cell.setRoomLabel(true)	;
+							getRoom(cell).setLabel(cell);
 						}
 						else if(lines.get(i).split(",")[j].charAt(1) == 'v'){
 							cell.setDoordDirection(DoorDirection.DOWN);							
@@ -156,18 +158,16 @@ public class Board {
 			if(!line.startsWith("//")){
 				
 				strSplit  = line.split(", ");
-				String entry = strSplit[0];
-				System.out.println(entry);
-				if (!entry.equalsIgnoreCase("Room") && !entry.equalsIgnoreCase("Space")) {
-					throw new BadConfigFormatException("An entry in either file does not have the proper format!");
+				System.out.println(strSplit[0]);
+				if (!strSplit[0].equalsIgnoreCase("Room") && !strSplit[0].equalsIgnoreCase("Space")) {
+					System.out.println("False");
+					//throw new BadConfigFormatException("An entry in either file does not have the proper format!");
 				}
 				else {
-					room.setName(strSplit[1]);
-					String roomName = room.getName();
-					System.out.println(roomName);
+					Room room = new Room();
+					room.setName(strSplit[1]);	
 					char roomLabel =strSplit[2].charAt(0);
-					System.out.println(roomLabel);
-					roomMap.put(roomLabel, new Room(roomName));
+					roomMap.put(roomLabel, room);
 				}
 			}
 		}
@@ -190,7 +190,8 @@ public class Board {
 
 	// return a room object by passing a BoardCell
 	public Room getRoom(BoardCell cell) {
-		return room;
+		
+		return roomMap.get(cell.getInitial());
 	}
 
 	// return the number of rows
@@ -205,8 +206,7 @@ public class Board {
 
 	//returns the cell from the board at row, col.
 	public BoardCell getCell( int row, int col ) {
-		cell = new BoardCell(row, col);
-		return  cell;
+		return  grid[row] [col];
 	}
 
 	// return 
@@ -214,4 +214,16 @@ public class Board {
 
 		return roomMap;
 	}
+//	public static void main(String[] args) throws FileNotFoundException, BadConfigFormatException {
+//		Board board = Board.getInstance();
+//		board.setConfigFiles("ClueLayout.csv", "ClueSetup306.txt");
+//		
+//		//board.initialize();
+//		board.loadSetupConfig();
+//		//board.loadLayoutConfig();
+//		//System.out.println(board.getNumRows());
+//		//System.out.println(board.getNumColumns());
+//		System.out.println(board.getRoomMap().size());
+//		System.out.println(board.getRoomMap().keySet());
+//	}
 }

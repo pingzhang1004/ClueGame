@@ -41,6 +41,10 @@ public class BoardCell {
 		this.initial = initial;
 	}
 
+	public char getInitial() {
+		return initial;
+	}
+	
 	public void setDoordDirection(DoorDirection doordDirection) {
 		this.doordDirection = doordDirection;
 	}
@@ -63,7 +67,7 @@ public class BoardCell {
 	
 	// return door way status
 	public boolean isDoorway() {
-		if(doordDirection == DoorDirection.NONE) {
+		if (doordDirection == DoorDirection.NONE) {
 			return false;			
 		}
 		else {

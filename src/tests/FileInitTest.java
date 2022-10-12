@@ -88,7 +88,7 @@ public class FileInitTest {
 	}
 	
 	// check that the correct number of doors have been loaded.
-	//@Test
+	@Test
 	public void testNumberOfDoorways() {
 		int numDoors = 0;
 		for (int row = 0; row < board.getNumRows(); row++)
@@ -101,7 +101,7 @@ public class FileInitTest {
 	}
 
 	// Test a few room cells to ensure the room initial is correct.
-	//@Test
+	@Test
 	public void testRooms() {
 		// check some of the cells to ensure they have the correct initial
 		BoardCell cell = board.getCell(20, 1);
