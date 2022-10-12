@@ -26,6 +26,8 @@ public class ExceptionTests306 {
 		board.loadSetupConfig();
 		// This one should throw an exception
 		board.loadLayoutConfig();
+		System.out.println("Do:");
+		System.out.println(board.getRoomMap());
 	}
 
 	// Test that an exception is thrown for a Layout file that specifies

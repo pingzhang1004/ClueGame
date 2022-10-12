@@ -47,29 +47,48 @@ public class Board {
 	 * initialize the board (since we are using singleton pattern)
 	 */
 	public void initialize()
-	{		
-		loadSetupConfig();
-		loadLayoutConfig();
+	{	
+		try {
+		    loadSetupConfig();
+		    loadLayoutConfig();
+		}
+		catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+		}	
+		catch (BadConfigFormatException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	// End from Canvas
 
 	// Load setup file
-	public void loadLayoutConfig() {	
+	public void loadLayoutConfig() throws FileNotFoundException, BadConfigFormatException {	
 		FileReader reader = null;
 		Scanner in = null;
 		String line;
 		String strSplit[];
-		try {
-			//read the layoutConfigFile first time to get the numColumns and numRows;		
-			reader = new FileReader("data/" + layoutConfigFile);
-			in = new Scanner(reader);
-			ArrayList<String> lines = new ArrayList<String>();
-			while (in.hasNextLine()) {
-				lines.add(in.nextLine());
-			}
-			numRows = lines.size();		
-			numColumns = lines.get(0).split(",").length;
+		
+		//read the layoutConfigFile first time to get the numColumns and numRows;		
+		reader = new FileReader("data/" + layoutConfigFile);
+		in = new Scanner(reader);
+		ArrayList<String> lines = new ArrayList<String>();
+		while (in.hasNextLine()) {
+			lines.add(in.nextLine());
+		}
+		numRows = lines.size();		
+		numColumns = lines.get(0).split(",").length;
+		// Columns Exception------------------------
+		int sum = 0;
+		for (int i=0; i < numRows; i++) {
+			sum = sum + lines.get(i).split(",").length;
+		}
 
+		if (sum / numRows != numColumns) {
+			throw new BadConfigFormatException("The board layout file does not have the same number of columns in every row!");
+		}
+		// Columns Exception End++++++++++++++++++++++
+
+		else {
 			//delacoate the grid size.
 			grid = new BoardCell[numRows][numColumns];			
 
@@ -77,6 +96,13 @@ public class Board {
 			//populate the data from the layoutConfigFile to board cells
 			for(int i =0; i < numRows; i++) {
 				for(int j =0; j< numColumns; i++) {
+					
+					// Legend Exception----------------------
+					if (!roomMap.keySet().contains(lines.get(i).split(",")[j].charAt(0))) {
+				    	throw new BadConfigFormatException("The board layout refers to a room that is not in the setup file!");
+				    }
+					// Legend Exception End+++++++++++++++++++++
+					
 					cell = new BoardCell(i,j);
 					if (lines.get(i).split(",")[j].length() == 1) {						
 						cell.setInitial(lines.get(i).split(",")[j].charAt(0));
@@ -110,39 +136,40 @@ public class Board {
 				}
 			}
 		}
-		catch (FileNotFoundException e) {
-			System.out.println(e.getMessage());
-		}	
+
+	
 	}
 
 	// Load layout file
-	public void loadSetupConfig() {
+	public void loadSetupConfig() throws FileNotFoundException, BadConfigFormatException {
 		//you need to build the grid array with the layout file. But how big do you make it, i.e. number of rows and columns?
 		//You almost need to know this information before you even read the file.
 		FileReader reader = null;
 		Scanner in = null;
-		try {
-			reader = new FileReader("data/"+ setupConfigfile);
-			in = new Scanner(reader);
-			String line;
-			String[] strSplit; 
-			while (in.hasNextLine()) {
-				line = in.nextLine();
-				if(line.startsWith("//")){
-					continue;
-				}				
-				else{					
-					strSplit  = line.split(", ");
+		
+		reader = new FileReader("data/"+ setupConfigfile);
+		in = new Scanner(reader);
+		String line;
+		String[] strSplit; 
+		while (in.hasNextLine()) {
+			line = in.nextLine();
+			if(line.startsWith("//")){
+				continue;
+			}				
+			else{					
+				strSplit  = line.split(",");
+				if (strSplit[0] != "Room" && strSplit[0] != "Space") {
+					throw new BadConfigFormatException("An entry in either file does not have the proper format!");
+				}
+				else {
 					room.setName(strSplit[1]);				
 					String roomName = room.getName();
 					char roomLabel =strSplit[2].charAt(0);
-					roomMap.put(roomLabel, new Room(roomName));				
+					roomMap.put(roomLabel, new Room(roomName));
 				}
 			}
 		}
-		catch (FileNotFoundException e) {
-			System.out.println(e.getMessage());
-		}	
+
 	}
 
 	// Set all config files

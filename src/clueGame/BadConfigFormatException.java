@@ -5,6 +5,10 @@ public class BadConfigFormatException extends Exception {
 
 	// default constructor
 	public BadConfigFormatException() {
-		super();
+		super("File Format Is Not Correct!");
+	}
+
+	public BadConfigFormatException(String message) {
+		super(message);
 	}
 }
