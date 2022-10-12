@@ -41,16 +41,16 @@ public class FileInitTest {
 	@Test
 	public void testRoomLoaded() {
 		assertEquals(LEGEND_SIZE, board.getRoomMap().size());
-//		assertEquals("Balcony", board.getRoom('B').getName());
-//		assertEquals("Play Room", board.getRoom('P').getName());
-//		assertEquals("Home Office", board.getRoom('H').getName());
-//		assertEquals("Living Room", board.getRoom('I').getName());
-//		assertEquals("Reception", board.getRoom('R').getName());
-//		assertEquals("Walkway", board.getRoom('X').getName());
+		assertEquals("Balcony", board.getRoom('B').getName());
+		assertEquals("Play Room", board.getRoom('P').getName());
+		assertEquals("Home Office", board.getRoom('H').getName());
+		assertEquals("Living Room", board.getRoom('I').getName());
+		assertEquals("Reception", board.getRoom('R').getName());
+		assertEquals("Walkway", board.getRoom('X').getName());
 	}
 	
 	//ensure the correct number of rows/columns have been read
-	//@Test
+	@Test
 	public void testBoardDimensions() {
 		// Ensure we have the proper number of rows and columns
 		assertEquals(NUM_ROWS, board.getNumRows());
@@ -60,7 +60,7 @@ public class FileInitTest {
 	// Test a doorway in each direction (RIGHT/LEFT/UP/DOWN), plus
 	// three cells that are not a doorway.
 	// These cells are purple on the spreadsheet
-	//@Test
+	@Test
 	public void testDoorDirections() {
 		// Fitness Room
 		BoardCell cell = board.getCell(13, 3);

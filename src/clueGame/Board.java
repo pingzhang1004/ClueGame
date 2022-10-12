@@ -95,7 +95,7 @@ public class Board {
 			//grid = new BoardCell[numRows][numColumns];
 			//populate the data from the layoutConfigFile to board cells
 			for(int i =0; i < numRows; i++) {
-				for(int j =0; j< numColumns; i++) {
+				for(int j =0; j< numColumns; j++) {
 					
 					// Legend Exception----------------------
 					if (!roomMap.keySet().contains(lines.get(i).split(",")[j].charAt(0))) {
@@ -153,18 +153,20 @@ public class Board {
 		String[] strSplit; 
 		while (in.hasNextLine()) {
 			line = in.nextLine();
-			if(line.startsWith("//")){
-				continue;
-			}				
-			else{					
-				strSplit  = line.split(",");
-				if (strSplit[0] != "Room" && strSplit[0] != "Space") {
+			if(!line.startsWith("//")){
+				
+				strSplit  = line.split(", ");
+				String entry = strSplit[0];
+				System.out.println(entry);
+				if (!entry.equalsIgnoreCase("Room") && !entry.equalsIgnoreCase("Space")) {
 					throw new BadConfigFormatException("An entry in either file does not have the proper format!");
 				}
 				else {
-					room.setName(strSplit[1]);				
+					room.setName(strSplit[1]);
 					String roomName = room.getName();
+					System.out.println(roomName);
 					char roomLabel =strSplit[2].charAt(0);
+					System.out.println(roomLabel);
 					roomMap.put(roomLabel, new Room(roomName));
 				}
 			}
@@ -175,14 +177,15 @@ public class Board {
 	// Set all config files
 	public void setConfigFiles(String layout, String setup) {
 
-		theInstance.layoutConfigFile = layout;
-		theInstance.setupConfigfile = setup;
+		layoutConfigFile = layout;
+		setupConfigfile = setup;
 
 	}
 
 	// return a room object by passing a char
 	public Room getRoom(char letter) {
-		return room;
+		
+		return roomMap.get(letter);
 	}
 
 	// return a room object by passing a BoardCell
@@ -192,12 +195,12 @@ public class Board {
 
 	// return the number of rows
 	public int getNumRows() {	
-		return 0;
+		return numRows;
 	}
 
 	// return the number of columns
 	public int getNumColumns() {	
-		return 0;
+		return numColumns;
 	}
 
 	//returns the cell from the board at row, col.
