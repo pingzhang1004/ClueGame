@@ -98,48 +98,48 @@ public class Board {
 				for(int j =0; j< numColumns; j++) {
 					
 					// Legend Exception----------------------
-					if (!roomMap.keySet().contains(lines.get(i).split(",")[j].charAt(0))) {
+					char charAt_0 = lines.get(i).split(",")[j].charAt(0);
+					if (!roomMap.keySet().contains(charAt_0)) {
 				    	throw new BadConfigFormatException("The board layout refers to a room that is not in the setup file!");
 				    }
 					// Legend Exception End+++++++++++++++++++++
 					cell = new BoardCell(i,j);
 					//cell = getCell(i,j);
 					if (lines.get(i).split(",")[j].length() == 1) {						
-						cell.setInitial(lines.get(i).split(",")[j].charAt(0));
+						cell.setInitial(charAt_0);
 					}
 					else {
-						cell.setInitial(lines.get(i).split(",")[j].charAt(0));
-						if(lines.get(i).split(",")[j].charAt(1) == '*'){
+						cell.setInitial(charAt_0);
+						char charAt_1 = lines.get(i).split(",")[j].charAt(1);
+						if(charAt_1 == '*'){
 							cell.setRoomCenter(true);
 							getRoom(cell).setCenter(cell);
 						}
-						else if (lines.get(i).split(",")[j].charAt(1) == '#'){
+						else if (charAt_1 == '#'){
 							cell.setRoomLabel(true)	;
 							getRoom(cell).setLabel(cell);
 						}
-						else if(lines.get(i).split(",")[j].charAt(1) == 'v'){
+						else if(charAt_1 == 'v'){
 							cell.setDoordDirection(DoorDirection.DOWN);							
 						}
-						else if(lines.get(i).split(",")[j].charAt(1) == '^'){
+						else if(charAt_1 == '^'){
 							cell.setDoordDirection(DoorDirection.UP);							
 						}
-						else if(lines.get(i).split(",")[j].charAt(1) == '>'){
+						else if(charAt_1 == '>'){
 							cell.setDoordDirection(DoorDirection.RIGHT);							
 						}
-						else if (lines.get(i).split(",")[j].charAt(1) == '<'){
+						else if (charAt_1 == '<'){
 							cell.setDoordDirection(DoorDirection.LEFT);							
 						}
 						else{
-							cell.setSecretPassage(lines.get(i).split(",")[j].charAt(1));
+							cell.setSecretPassage(charAt_1);
 						}
 
 					}
 					grid[i][j] = cell; 		
 				}
 			}
-		}
-
-	
+		}	
 	}
 
 	// Load layout file
@@ -155,8 +155,7 @@ public class Board {
 		String[] strSplit; 
 		while (in.hasNextLine()) {
 			line = in.nextLine();
-			if(!line.startsWith("//")){
-				
+			if(!line.startsWith("//")){			
 				strSplit  = line.split(", ");
 				System.out.println(strSplit[0]);
 				if (!strSplit[0].equalsIgnoreCase("Room") && !strSplit[0].equalsIgnoreCase("Space")) {
@@ -171,7 +170,6 @@ public class Board {
 				}
 			}
 		}
-
 	}
 
 	// Set all config files
