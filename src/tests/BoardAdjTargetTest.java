@@ -59,7 +59,7 @@ class BoardAdjTargetTest {
 
 	// Ensure door locations include their rooms and also additional walkways
 	// These cells are LIGHT ORANGE on the planning spreadsheet
-	//@Test
+	@Test
 	public void testAdjacencyDoor()
 	{
 		Set<BoardCell> testList = board.getAdjList(6, 5);
@@ -85,7 +85,7 @@ class BoardAdjTargetTest {
 
 	// Test a variety of walkway scenarios
 	// These tests are Dark Orange on the planning spreadsheet
-	//@Test
+	@Test
 	public void testAdjacencyWalkways()
 	{
 		// Test on bottom edge of board, just one walkway piece
@@ -155,7 +155,7 @@ class BoardAdjTargetTest {
 		assertTrue(targets.contains(board.getCell(15, 15)));	
 	}
 
-	//@Test
+	@Test
 	public void testTargetsInBalcony() {
 		// test a roll of 1
 		board.calcTargets(board.getCell(17, 20), 1);
@@ -276,8 +276,9 @@ class BoardAdjTargetTest {
 		assertTrue(targets.contains(board.getCell(11, 5)));	
 	}
 
-	//@Test
+	
 	// test to make sure occupied locations do not cause problems
+	//@Test
 	public void testTargetsOccupied() {
 		// test a roll of 4 blocked 2 down
 		board.getCell(12, 6).setOccupied(true);

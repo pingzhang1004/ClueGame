@@ -87,8 +87,6 @@ public class Board {
 		}
 		numRows = lines.size();		
 		numColumns = lines.get(0).split(",").length;
-		System.out.println(numRows);
-		System.out.println(numColumns);
 		// Columns Exception------------------------
 		int sum = 0;
 		for (int i=0; i < numRows; i++) {
@@ -229,7 +227,7 @@ public class Board {
 
 		//add the start location to the visited list (so no cycle through this cell)
 		visited.add(startCell);
-		//call recursive function
+		//call the recursive function for targets
 		findAllTargets(startCell, pathlength); 
 	}
 
