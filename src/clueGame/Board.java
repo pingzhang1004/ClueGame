@@ -10,8 +10,10 @@ package clueGame;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TreeMap;
 
 import experiment.TestBoardCell;
@@ -24,20 +26,20 @@ public class Board {
 	private int numColumns;
 	private String layoutConfigFile;
 	private String setupConfigfile;
-	private Map<Character, Room> roomMap;
-	private Room room;
-	private BoardCell cell;
+	private Map<Character, Room> roomMap;	
 
-	// Start from Canvas
+	//A set of board cells to hold the visited list
+	//It is used to avoid backtracking.
+	private	Set<BoardCell> visited;
+	private Set<BoardCell> targets;
 	/*
 	 * variable and methods used for singleton pattern
 	 */
 	private static Board theInstance = new Board();
 	// constructor is private to ensure only one can be created
-	private Board() {
+	public Board() {
 		super();
-		roomMap = new TreeMap();
-		room = new Room();
+		//room = new Room();
 	}
 	// this method returns the only Board
 	public static Board getInstance() {
@@ -46,11 +48,19 @@ public class Board {
 	/*
 	 * initialize the board (since we are using singleton pattern)
 	 */
+
+	// Set all config files
+	public void setConfigFiles(String layout, String setup) {
+		layoutConfigFile = layout;
+		setupConfigfile = setup;
+	}
+
 	public void initialize()
 	{	
 		try {
-		    loadSetupConfig();
-		    loadLayoutConfig();
+			loadSetupConfig();
+			loadLayoutConfig();
+			calcAdjList();
 		}
 		catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
@@ -67,7 +77,7 @@ public class Board {
 		Scanner in = null;
 		String line;
 		String strSplit[];
-		
+
 		//read the layoutConfigFile first time to get the numColumns and numRows;		
 		reader = new FileReader("data/" + layoutConfigFile);
 		in = new Scanner(reader);
@@ -96,14 +106,14 @@ public class Board {
 			//populate the data from the layoutConfigFile to board cells
 			for(int i =0; i < numRows; i++) {
 				for(int j =0; j< numColumns; j++) {
-					
+
 					// Legend Exception----------------------
 					char charAt_0 = lines.get(i).split(",")[j].charAt(0);
 					if (!roomMap.keySet().contains(charAt_0)) {
-				    	throw new BadConfigFormatException("The board layout refers to a room that is not in the setup file!");
-				    }
+						throw new BadConfigFormatException("The board layout refers to a room that is not in the setup file!");
+					}
 					// Legend Exception End+++++++++++++++++++++
-					cell = new BoardCell(i,j);
+					BoardCell cell = new BoardCell(i,j);
 					//cell = getCell(i,j);
 					if (lines.get(i).split(",")[j].length() == 1) {						
 						cell.setInitial(charAt_0);
@@ -142,13 +152,15 @@ public class Board {
 		}	
 	}
 
+
 	// Load layout file
 	public void loadSetupConfig() throws FileNotFoundException, BadConfigFormatException {
 		//you need to build the grid array with the layout file. But how big do you make it, i.e. number of rows and columns?
 		//You almost need to know this information before you even read the file.
+		roomMap = new TreeMap();
 		FileReader reader = null;
 		Scanner in = null;
-		
+
 		reader = new FileReader("data/"+ setupConfigfile);
 		in = new Scanner(reader);
 		String line;
@@ -157,10 +169,8 @@ public class Board {
 			line = in.nextLine();
 			if(!line.startsWith("//")){			
 				strSplit  = line.split(", ");
-				System.out.println(strSplit[0]);
 				if (!strSplit[0].equalsIgnoreCase("Room") && !strSplit[0].equalsIgnoreCase("Space")) {
-					System.out.println("False");
-					//throw new BadConfigFormatException("An entry in either file does not have the proper format!");
+					throw new BadConfigFormatException("An entry in either file does not have the proper format!");
 				}
 				else {
 					Room room = new Room();
@@ -172,23 +182,96 @@ public class Board {
 		}
 	}
 
-	// Set all config files
-	public void setConfigFiles(String layout, String setup) {
 
-		layoutConfigFile = layout;
-		setupConfigfile = setup;
-
+	public void calcAdjList() {		
+		for(int i =0; i< numRows; i++)
+			for(int j =0; j< numColumns; j++) {				
+				calcAdj(i, j);	
+			}
 	}
+
+
+	//calculating the adjacency list in the board since the important data is the grid, 
+	//and then telling the cell what its adjacencies are
+	public void calcAdj(int row,int col) {
+		BoardCell cell = getCell(row,col);
+
+		if(row -1 >= 0) {
+			cell.addAdj(grid[row-1][col]);
+		}
+		if(row < numRows-1) {
+			cell.addAdj(grid[row+1][col]);
+		}
+		if(col-1 >= 0) {
+			cell.addAdj(grid[row][col-1]);
+		}
+		if(col< numColumns-1) {
+			cell.addAdj(grid[row][col+1]);
+		}	
+	}
+
+	public Set<BoardCell> getAdjList(int row, int col) {
+		
+		return grid[row][col].getAdjList();  	
+	}
+
+
+	//calculates legal targets for a move from startCell of length pathlength.
+	public void calcTargets(BoardCell startCell, int pathlength) 
+	{
+		//A set of board cells to hold the visited list
+		//It is used to avoid backtracking.
+		visited = new HashSet<BoardCell>();
+		//A set of board cells to hold the resulting targets from TargetCalc()
+		targets = new HashSet<BoardCell>() ;
+
+		//add the start location to the visited list (so no cycle through this cell)
+		visited.add(startCell);
+		//call recursive function
+		findAllTargets(startCell, pathlength); 
+	}
+
+	//recursive function to find all the targets
+	public void findAllTargets(BoardCell startCell, int pathlength ) 
+	{
+		Set<BoardCell> adjList = startCell.getAdjList();
+		for(BoardCell adjCell: adjList)
+		{
+			if (visited.contains(adjCell) == true ||adjCell.getOccupied()==true) {
+				continue;
+			}
+			visited.add(adjCell);
+			if (pathlength == 1 || adjCell.getIsRoom()==true) {
+				targets.add(adjCell);       		   
+			}
+			else {
+				findAllTargets(adjCell,pathlength-1);
+			}
+			visited.remove(adjCell);    
+		}
+	}
+
+
+	//return the targets
+	public Set<BoardCell> getTargets() {
+		
+		return	targets;
+	}
+
+	//returns the cell from the board at row, col.
+	public BoardCell getCell( int row, int col ) {				
+		return grid[row][col];
+	}
+
 
 	// return a room object by passing a char
 	public Room getRoom(char letter) {
-		
 		return roomMap.get(letter);
 	}
 
 	// return a room object by passing a BoardCell
 	public Room getRoom(BoardCell cell) {
-		
+
 		return roomMap.get(cell.getInitial());
 	}
 
@@ -202,26 +285,11 @@ public class Board {
 		return numColumns;
 	}
 
-	//returns the cell from the board at row, col.
-	public BoardCell getCell( int row, int col ) {
-		return  grid[row] [col];
-	}
-
 	// return 
 	public Map<Character, Room> getRoomMap() {
 
 		return roomMap;
 	}
-//	public static void main(String[] args) throws FileNotFoundException, BadConfigFormatException {
-//		Board board = Board.getInstance();
-//		board.setConfigFiles("ClueLayout.csv", "ClueSetup306.txt");
-//		
-//		//board.initialize();
-//		board.loadSetupConfig();
-//		//board.loadLayoutConfig();
-//		//System.out.println(board.getNumRows());
-//		//System.out.println(board.getNumColumns());
-//		System.out.println(board.getRoomMap().size());
-//		System.out.println(board.getRoomMap().keySet());
-//	}
+
+
 }

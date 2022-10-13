@@ -34,85 +34,15 @@ public class TestBoardCell {
 	}
 
 	//returns the adjacency list for the cell
-	public Set<TestBoardCell> getAdjList() {		
+	public Set<TestBoardCell> getAdjList() {
 		return adjList;  	
 	}
 
 
 	//calculating the adjacency list in the board since the important data is the grid, 
 	//and then telling the cell what its adjacencies are
-	public void setAdjList(TestBoard board) {		
-		if(board.getCell(row, col).getOccupied() == true || board.getCell(row, col).getIsRoom() == true) {
-			return;
-		}
-		if (row == 0) 
-		{
-			if( board.getCell(row+1, col).getOccupied() == false && board.getCell(row+1, col).getIsRoom()==false) {
-				adjList.add(board.getCell(row+1, col));
-			}
-
-			if(col ==0 && board.getCell(row, col+1).getOccupied() == false && board.getCell(row, col+1).getIsRoom() == false) {
-				adjList.add(board.getCell(row, col+1));	
-			}
-			if(col == board.COLS-1 && board.getCell(row, col-1).getOccupied() == false && board.getCell(row, col-1).getIsRoom() == false){
-				adjList.add(board.getCell(row, col-1));				
-			}
-			if((col-1) >= 0 && (col+1) <= board.COLS-1) {
-				if(board.getCell(row, col-1).getOccupied() == false && board.getCell(row, col-1).getIsRoom() == false) {
-					adjList.add(board.getCell(row, col-1));
-				}
-				if(board.getCell(row, col+1).getOccupied() == false && board.getCell(row, col+1).getIsRoom() == false) {
-					adjList.add(board.getCell(row, col+1));		
-				}			
-			}
-		}
-		if(row == board.ROWS-1) {
-
-			if(board.getCell(row-1, col).getOccupied() == false && board.getCell(row-1, col).getIsRoom() == false) {
-				adjList.add(board.getCell(row-1, col)); 
-			}
-
-			if(col ==0 && board.getCell(row, col+1).getOccupied() == false && board.getCell(row, col+1).getIsRoom() == false) {
-				adjList.add(board.getCell(row, col+1));	
-			}
-			if(col == board.COLS-1 && board.getCell(row, col-1).getOccupied() == false && board.getCell(row, col-1).getIsRoom() == false){
-				adjList.add(board.getCell(row, col-1));				
-			}
-			if((col-1) >= 0 && (col+1) <= board.COLS-1) {
-				if(board.getCell(row, col-1).getOccupied() == false && board.getCell(row, col-1).getIsRoom() == false) {
-					adjList.add(board.getCell(row, col-1));
-				}
-				if(board.getCell(row, col+1).getOccupied() == false && board.getCell(row, col+1).getIsRoom() == false) {
-					adjList.add(board.getCell(row, col+1));		
-				}			
-			}
-		}
-
-		if ((row-1) >= 0 && (row+1) <= board.ROWS-1) {
-
-			if( board.getCell(row-1, col).getOccupied() == false && board.getCell(row-1, col).getIsRoom() == false ) {
-				adjList.add(board.getCell(row-1, col));		
-			}
-
-			if( board.getCell(row+1, col).getOccupied() == false && board.getCell(row+1, col).getIsRoom() == false ) {
-				adjList.add(board.getCell(row+1, col));
-			}
-
-			if(col ==0 && board.getCell(row, col+1).getOccupied() == false && board.getCell(row, col+1).getIsRoom() == false) {
-				adjList.add(board.getCell(row, col+1));	
-			}
-			if(col == board.COLS-1 && board.getCell(row, col-1).getOccupied() == false && board.getCell(row, col-1).getIsRoom() == false){
-				adjList.add(board.getCell(row, col-1));				
-			}
-			if((col-1) >= 0 && (col+1) <= board.COLS-1) {
-				if(board.getCell(row, col-1).getOccupied() == false && board.getCell(row, col-1).getIsRoom() == false) {
-					adjList.add(board.getCell(row, col-1));
-				}
-				if(board.getCell(row, col+1).getOccupied() == false && board.getCell(row, col+1).getIsRoom() == false) {
-					adjList.add(board.getCell(row, col+1));		
-				}			
-			}
-		}
+	public void addAdj(TestBoardCell adjCell) {
+		adjList.add(adjCell);
 	}
 
 	//for indicating a cell is part of a room (void setRoom(boolean) and perhaps boolean isRoom()).	
