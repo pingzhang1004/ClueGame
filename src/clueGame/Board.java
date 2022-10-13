@@ -126,11 +126,11 @@ public class Board {
 					cell.setInitial(charAtZero);
 					char charAtOne = lines.get(i).split(",")[j].charAt(1);
 					if(charAtOne == '*'){
-						cell.setRoomCenter(true);
+						cell.setIsRoomCenter(true);
 						getRoom(cell).setCenter(cell);
 					}
 					else if (charAtOne == '#'){
-						cell.setRoomLabel(true)	;
+						cell.setIsRoomLabel(true);
 						getRoom(cell).setLabel(cell);
 					}
 					else if(charAtOne == 'v'){

@@ -56,11 +56,11 @@ public class BoardCell {
 		this.doordDirection = doordDirection;
 	}
 
-	public void setRoomLabel(boolean roomLabel) {
+	public void setIsRoomLabel(boolean roomLabel) {
 		this.roomLabel = roomLabel;
 	}
 
-	public void setRoomCenter(boolean roomCenter) {
+	public void setIsRoomCenter(boolean roomCenter) {
 		this.roomCenter = roomCenter;
 	}
 
