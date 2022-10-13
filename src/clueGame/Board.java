@@ -71,7 +71,7 @@ public class Board {
 	}
 	// End from Canvas
 
-	// Load setup file
+	// Load layout file
 	public void loadLayoutConfig() throws FileNotFoundException, BadConfigFormatException {	
 		FileReader reader = null;
 		Scanner in = null;
@@ -101,59 +101,61 @@ public class Board {
 		// Columns Exception End++++++++++++++++++++++
 
 		else {
-			//delacoate the grid size.
-			grid = new BoardCell[numRows][numColumns];			
-			//populate the data from the layoutConfigFile to board cells
-			for(int i =0; i < numRows; i++) {
-				for(int j =0; j< numColumns; j++) {
-
-					// Legend Exception----------------------
-					char charAt_0 = lines.get(i).split(",")[j].charAt(0);
-					if (!roomMap.keySet().contains(charAt_0)) {
-						throw new BadConfigFormatException("The board layout refers to a room that is not in the setup file!");
-					}
-					// Legend Exception End+++++++++++++++++++++
-					BoardCell cell = new BoardCell(i,j);
-					//cell = getCell(i,j);
-					if (lines.get(i).split(",")[j].length() == 1) {						
-						cell.setInitial(charAt_0);
-					}
-					else {
-						cell.setInitial(charAt_0);
-						char charAt_1 = lines.get(i).split(",")[j].charAt(1);
-						if(charAt_1 == '*'){
-							cell.setRoomCenter(true);
-							getRoom(cell).setCenter(cell);
-						}
-						else if (charAt_1 == '#'){
-							cell.setRoomLabel(true)	;
-							getRoom(cell).setLabel(cell);
-						}
-						else if(charAt_1 == 'v'){
-							cell.setDoordDirection(DoorDirection.DOWN);							
-						}
-						else if(charAt_1 == '^'){
-							cell.setDoordDirection(DoorDirection.UP);							
-						}
-						else if(charAt_1 == '>'){
-							cell.setDoordDirection(DoorDirection.RIGHT);							
-						}
-						else if (charAt_1 == '<'){
-							cell.setDoordDirection(DoorDirection.LEFT);							
-						}
-						else{
-							cell.setSecretPassage(charAt_1);
-						}
-
-					}
-					grid[i][j] = cell; 		
-				}
-			}
+			loadCell(lines);
 		}	
 	}
+	private void loadCell(ArrayList<String> lines) throws BadConfigFormatException {
+		//delacoate the grid size.
+		grid = new BoardCell[numRows][numColumns];			
+		//populate the data from the layoutConfigFile to board cells
+		for(int i =0; i < numRows; i++) {
+			for(int j =0; j< numColumns; j++) {
 
+				// Legend Exception----------------------
+				char charAtZero = lines.get(i).split(",")[j].charAt(0);
+				if (!roomMap.keySet().contains(charAtZero)) {
+					throw new BadConfigFormatException("The board layout refers to a room that is not in the setup file!");
+				}
+				// Legend Exception End+++++++++++++++++++++
+				BoardCell cell = new BoardCell(i,j);
+				//cell = getCell(i,j);
+				if (lines.get(i).split(",")[j].length() == 1) {						
+					cell.setInitial(charAtZero);
+				}
+				else {
+					cell.setInitial(charAtZero);
+					char charAtOne = lines.get(i).split(",")[j].charAt(1);
+					if(charAtOne == '*'){
+						cell.setRoomCenter(true);
+						getRoom(cell).setCenter(cell);
+					}
+					else if (charAtOne == '#'){
+						cell.setRoomLabel(true)	;
+						getRoom(cell).setLabel(cell);
+					}
+					else if(charAtOne == 'v'){
+						cell.setDoordDirection(DoorDirection.DOWN);							
+					}
+					else if(charAtOne == '^'){
+						cell.setDoordDirection(DoorDirection.UP);							
+					}
+					else if(charAtOne == '>'){
+						cell.setDoordDirection(DoorDirection.RIGHT);							
+					}
+					else if (charAtOne == '<'){
+						cell.setDoordDirection(DoorDirection.LEFT);							
+					}
+					else{
+						cell.setSecretPassage(charAtOne);
+					}
 
-	// Load layout file
+				}
+				grid[i][j] = cell; 		
+			}
+		}
+	}
+
+	// Load setup file
 	public void loadSetupConfig() throws FileNotFoundException, BadConfigFormatException {
 		//you need to build the grid array with the layout file. But how big do you make it, i.e. number of rows and columns?
 		//You almost need to know this information before you even read the file.
