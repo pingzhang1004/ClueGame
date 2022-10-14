@@ -10,6 +10,8 @@ public class Room {
 	private BoardCell centerCell;
 	private BoardCell lableCell;
 	
+	//private BoardCell SecretRoomCell;
+	
 	
 	// default constructor
 	public Room() {
@@ -31,6 +33,15 @@ public class Room {
 //	}
 //	
 	
+//	public BoardCell getSecretCell() {
+//		return SecretRoomCell;
+//	}
+//
+//	public void setSecretCell(BoardCell secretCell) {
+//		SecretRoomCell = secretCell;
+//		
+//	}
+
 	public void setName(String name) {
 		this.name = name;
 	}

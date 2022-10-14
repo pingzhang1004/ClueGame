@@ -105,6 +105,7 @@ public class BoardCell {
 
 	// return a secret passage
 	public char getSecretPassage() {
+		
 		return secretPassage;
 	}
 	

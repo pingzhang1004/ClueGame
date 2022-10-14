@@ -120,7 +120,7 @@ class BoardAdjTargetTest {
 
 	// Tests out of room center, 1, 3 and 4
 	// These are LIGHT BLUE on the planning spreadsheet
-	//@Test
+	@Test
 	public void testTargetsInPlayRoom() {
 		// test a roll of 1
 		board.calcTargets(board.getCell(18, 6), 1);
@@ -184,7 +184,7 @@ class BoardAdjTargetTest {
 
 	// Tests out of room center, 1, 3 and 4
 	// These are LIGHT BLUE on the planning spreadsheet
-	//@Test
+	@Test
 	public void testTargetsAtDoor() {
 		// test a roll of 1, at door
 		board.calcTargets(board.getCell(8, 17), 1);
@@ -218,7 +218,7 @@ class BoardAdjTargetTest {
 		assertTrue(targets.contains(board.getCell(5, 16)));	
 	}
 
-	//@Test
+	@Test
 	public void testTargetsInWalkway1() {
 		// test a roll of 1
 		board.calcTargets(board.getCell(6, 11), 1);
@@ -247,7 +247,7 @@ class BoardAdjTargetTest {
 		assertTrue(targets.contains(board.getCell(11, 6)));	
 	}
 
-	//@Test
+	@Test
 	public void testTargetsInWalkway2() {
 		// test a roll of 1
 		board.calcTargets(board.getCell(17, 17), 1);
@@ -278,7 +278,7 @@ class BoardAdjTargetTest {
 
 	
 	// test to make sure occupied locations do not cause problems
-	//@Test
+	@Test
 	public void testTargetsOccupied() {
 		// test a roll of 4 blocked 2 down
 		board.getCell(12, 6).setOccupied(true);

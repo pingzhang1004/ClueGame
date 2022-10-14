@@ -116,7 +116,6 @@ public class Board {
 				}
 				// Legend Exception End+++++++++++++++++++++
 				BoardCell cell = new BoardCell(i,j);
-				//cell = getCell(i,j);
 				if (lines.get(i).split(",")[j].length() == 1) {						
 					cell.setInitial(charAtZero);
 				}
@@ -145,8 +144,10 @@ public class Board {
 					}
 					else{
 						cell.setSecretPassage(charAtOne);
+						
+					    //roomMap.get(charAtZero).setSecretCell(cell);
+					    
 					}
-
 				}
 				grid[i][j] = cell; 		
 			}
@@ -195,101 +196,212 @@ public class Board {
 	//and then telling the cell what its adjacencies are
 	public void calcAdj(int row,int col) {
 		BoardCell cell = getCell(row,col);
+		BoardCell roomCenterCell = new BoardCell();
+		char roomLabel = cell.getInitial();
 
-		if(row -1 >= 0) {
-			cell.addAdj(grid[row-1][col]);
+		if(roomLabel == 'X') {
+			return;
 		}
-		if(row < numRows-1) {
-			cell.addAdj(grid[row+1][col]);
-		}
-		if(col-1 >= 0) {
-			cell.addAdj(grid[row][col-1]);
-		}
-		if(col< numColumns-1) {
-			cell.addAdj(grid[row][col+1]);
-		}	
-	}
 
-	public Set<BoardCell> getAdjList(int row, int col) {
-		
-		return grid[row][col].getAdjList();  	
-	}
-
-
-	//calculates legal targets for a move from startCell of length pathlength.
-	public void calcTargets(BoardCell startCell, int pathlength) 
-	{
-		//A set of board cells to hold the visited list
-		//It is used to avoid backtracking.
-		visited = new HashSet<BoardCell>();
-		//A set of board cells to hold the resulting targets from TargetCalc()
-		targets = new HashSet<BoardCell>() ;
-
-		//add the start location to the visited list (so no cycle through this cell)
-		visited.add(startCell);
-		//call the recursive function for targets
-		findAllTargets(startCell, pathlength); 
-	}
-
-	//recursive function to find all the targets
-	public void findAllTargets(BoardCell startCell, int pathlength ) 
-	{
-		Set<BoardCell> adjList = startCell.getAdjList();
-		for(BoardCell adjCell: adjList)
-		{
-			if (visited.contains(adjCell) == true ||adjCell.getOccupied()==true) {
-				continue;
+		if(roomLabel != 'W' ) {
+			if(cell.isRoomCenter() == false) {
+				return;
 			}
-			visited.add(adjCell);
-			if (pathlength == 1 || adjCell.getIsRoom()==true) {
-				targets.add(adjCell);       		   
+			if (cell.isRoomCenter() == true)
+			{
+				//可以遍历所有当前room的cell，
+				//（1）room和secret room的判断
+			    //找到secrect cell，然后通过secret char，将secret room的center cell 加到当前的room center cell的 adjency List
+				//（2）这里需要加上room和door相邻的判断
+				//思路是遍历当前的room cell的时候，计算邻接的cell有没有door cell，
+				//如果有door cell，遍历后把door cell组成一个list，然后根绝door list里面个door cell的方向， 来判断是不是属于这个房间的门。
+				//如果是这个房间的门，就给room加上一个doorList的变量，这个list里面是这个room的所有door。
+				
+				
+				if(cell.getSecretPassage()!= '\0') {
+					char secret = cell.getSecretPassage();				
+					roomCenterCell = roomMap.get(secret).getCenterCell();
+					cell.addAdj(roomCenterCell);	
+				
+
+				}		
+			}
+		}
+		
+		if (roomLabel == 'W') {
+			if(cell.isDoorway()== true) {
+				DoorDirection doorDiret = cell.getDoorDirection();
+				if(doorDiret == DoorDirection.DOWN)
+				{
+					roomLabel =  grid[row+1][col].getInitial();
+					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
+					cell.addAdj(roomCenterCell);
+
+					if (row -1 >= 0 && grid[row-1][col].getInitial() == 'W') {
+						cell.addAdj(grid[row-1][col]);
+					}				
+					if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W') {
+						cell.addAdj(grid[row][col-1]);
+					}
+					if(col< numColumns-1 && grid[row-1][col+1].getInitial() == 'W') {
+						cell.addAdj(grid[row][col+1]);
+					}					
+				}
+				if(doorDiret == DoorDirection.UP)
+				{
+					roomLabel =  grid[row+1][col].getInitial();
+					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
+					cell.addAdj(roomCenterCell);
+
+					if(row < numRows-1 && grid[row+1][col].getInitial() == 'W') {
+						cell.addAdj(grid[row+1][col]);
+					}				
+					if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W') {
+						cell.addAdj(grid[row][col-1]);
+					}
+					if(col< numColumns-1 && grid[row-1][col+1].getInitial() == 'W') {
+						cell.addAdj(grid[row][col+1]);
+					}	
+				}
+				if(doorDiret == DoorDirection.LEFT) {
+					roomLabel =  grid[row][col-1].getInitial();
+					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
+					cell.addAdj(roomCenterCell);
+
+					if (row -1 >= 0 && grid[row-1][col].getInitial() == 'W') {
+						cell.addAdj(grid[row-1][col]);
+					}
+					if(row < numRows-1 && grid[row+1][col].getInitial() == 'W') {
+						cell.addAdj(grid[row+1][col]);
+					}				
+					if(col< numColumns-1 && grid[row-1][col+1].getInitial() == 'W') {
+						cell.addAdj(grid[row][col+1]);
+					}			
+				}
+				if(doorDiret == DoorDirection.RIGHT) {
+					roomLabel =  grid[row][col+1].getInitial();
+					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
+					cell.addAdj(roomCenterCell);				
+
+					if (row -1 >= 0 && grid[row-1][col].getInitial() == 'W') {
+						cell.addAdj(grid[row-1][col]);
+					}
+					if(row < numRows-1 && grid[row+1][col].getInitial() == 'W') {
+						cell.addAdj(grid[row+1][col]);
+					}				
+					if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W') {
+						cell.addAdj(grid[row][col-1]);
+					}
+				}			
 			}
 			else {
-				findAllTargets(adjCell,pathlength-1);
+
+				if(row -1 >= 0 && grid[row-1][col].getInitial() == 'W') {
+					cell.addAdj(grid[row-1][col]);
+				}
+				if(row < numRows-1 && grid[row+1][col].getInitial() == 'W') {
+					cell.addAdj(grid[row+1][col]);
+				}
+				if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W') {
+					cell.addAdj(grid[row][col-1]);
+				}
+				if(col< numColumns-1 && grid[row][col+1].getInitial() == 'W') {
+					cell.addAdj(grid[row][col+1]);
+				}	
 			}
-			visited.remove(adjCell);    
+
 		}
+
 	}
+	
+	
+private void addRoomCenterCell(BoardCell cell, char secret) {
+	BoardCell roomCenterCell = roomMap.get(secret).getCenterCell();
+	cell.addAdj(roomCenterCell);
+}
+
+public Set<BoardCell> getAdjList(int row, int col) {
+
+	return grid[row][col].getAdjList();  	
+}
 
 
-	//return the targets
-	public Set<BoardCell> getTargets() {
+//calculates legal targets for a move from startCell of length pathlength.
+public void calcTargets(BoardCell startCell, int pathlength) 
+{
+	//A set of board cells to hold the visited list
+	//It is used to avoid backtracking.
+	visited = new HashSet<BoardCell>();
+	//A set of board cells to hold the resulting targets from TargetCalc()
+	targets = new HashSet<BoardCell>() ;
+
+	//add the start location to the visited list (so no cycle through this cell)
+	visited.add(startCell);
+	//call the recursive function for targets
+	findAllTargets(startCell, pathlength); 
+}
+
+//recursive function to find all the targets
+public void findAllTargets(BoardCell startCell, int pathlength ) 
+{
+	Set<BoardCell> adjList = startCell.getAdjList();
+	for(BoardCell adjCell: adjList)
+	{
+		if (visited.contains(adjCell) == true ||adjCell.getOccupied()==true) {
+			continue;
+		}
+		visited.add(adjCell);
 		
-		return	targets;
+		//这一句可能需要将 adjCell.getIsRoom()==true的判断去掉，我不确定
+		if (pathlength == 1 || adjCell.getIsRoom()==true) {
+			targets.add(adjCell);       		   
+		}
+		else {
+			findAllTargets(adjCell,pathlength-1);
+		}
+		visited.remove(adjCell);    
 	}
-
-	//returns the cell from the board at row, col.
-	public BoardCell getCell( int row, int col ) {				
-		return grid[row][col];
-	}
+}
 
 
-	// return a room object by passing a char
-	public Room getRoom(char letter) {
-		return roomMap.get(letter);
-	}
+//return the targets
+public Set<BoardCell> getTargets() {
 
-	// return a room object by passing a BoardCell
-	public Room getRoom(BoardCell cell) {
+	return	targets;
+}
 
-		return roomMap.get(cell.getInitial());
-	}
+//returns the cell from the board at row, col.
+public BoardCell getCell( int row, int col ) {				
+	return grid[row][col];
+}
 
-	// return the number of rows
-	public int getNumRows() {	
-		return numRows;
-	}
 
-	// return the number of columns
-	public int getNumColumns() {	
-		return numColumns;
-	}
+// return a room object by passing a char
+public Room getRoom(char letter) {
+	return roomMap.get(letter);
+}
 
-	// return 
-	public Map<Character, Room> getRoomMap() {
+// return a room object by passing a BoardCell
+public Room getRoom(BoardCell cell) {
 
-		return roomMap;
-	}
+	return roomMap.get(cell.getInitial());
+}
+
+// return the number of rows
+public int getNumRows() {	
+	return numRows;
+}
+
+// return the number of columns
+public int getNumColumns() {	
+	return numColumns;
+}
+
+// return 
+public Map<Character, Room> getRoomMap() {
+
+	return roomMap;
+}
 
 
 }
