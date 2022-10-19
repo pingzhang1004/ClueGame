@@ -69,7 +69,7 @@ public class Board {
 		catch (BadConfigFormatException e) {
 			System.out.println(e.getMessage());
 		}
-		roomDoor();
+		roomEnter();
 		calcAdjList();
 		
 	}
@@ -91,34 +91,34 @@ public class Board {
 		}
 		numRows = lines.size();		
 		numColumns = lines.get(0).split(",").length;
+		
 		// Columns Exception------------------------
 		int sum = 0;
 		for (int i=0; i < numRows; i++) {
 			sum = sum + lines.get(i).split(",").length;
 		}
-
 		if (sum / numRows != numColumns) {
 			throw new BadConfigFormatException("The board layout file does not have the same number of columns in every row!");
 		}
-		// Columns Exception End++++++++++++++++++++++
-
 		else {
 			loadCell(lines);
 		}	
 	}
+	
+	// Load all cells into the game board
 	private void loadCell(ArrayList<String> lines) throws BadConfigFormatException {
-		//delacoate the grid size.
+		//allocate the grid size.
 		grid = new BoardCell[numRows][numColumns];			
 		//populate the data from the layoutConfigFile to board cells
 		for(int i =0; i < numRows; i++) {
 			for(int j =0; j< numColumns; j++) {
 
-				// Legend Exception----------------------
+				// Legend Exception
 				char charAtZero = lines.get(i).split(",")[j].charAt(0);
 				if (!roomMap.keySet().contains(charAtZero)) {
 					throw new BadConfigFormatException("The board layout refers to a room that is not in the setup file!");
 				}
-				// Legend Exception End+++++++++++++++++++++
+				
 				BoardCell cell = new BoardCell(i,j);
 				if (lines.get(i).split(",")[j].length() == 1) {						
 					cell.setInitial(charAtZero);
@@ -178,6 +178,7 @@ public class Board {
 			line = in.nextLine();
 			if(!line.startsWith("//")){			
 				strSplit  = line.split(", ");
+				// Entry Exception
 				if (!strSplit[0].equalsIgnoreCase("Room") && !strSplit[0].equalsIgnoreCase("Space")) {
 					throw new BadConfigFormatException("An entry in either file does not have the proper format!");
 				}
@@ -190,7 +191,8 @@ public class Board {
 			}
 		}
 	}
-
+    
+	// Calculate adjacency list for all cells
 	public void calcAdjList() {	
 		for(int i =0; i< numRows; i++) {
 			for(int j =0; j< numColumns; j++) {				
@@ -199,13 +201,13 @@ public class Board {
 		}
 	}
 	
-    public void roomDoor() {
+	// Get door and secret passage for all rooms
+    public void roomEnter() {
     	for(int i =0; i< numRows; i++) {
 			for(int j =0; j< numColumns; j++) {	
 				
 				BoardCell cell = grid[i][j];
 				DoorDirection doorDiret = cell.getDoorDirection();
-				BoardCell roomCenterCell;
 				char roomLabel = cell.getInitial();
 				
 				if (cell.isDoorway()) {
@@ -213,26 +215,23 @@ public class Board {
 					{
 						roomLabel =  grid[i+1][j].getInitial();
 						roomMap.get(roomLabel).setDoorList(cell);
-						
 					}
 					else if(doorDiret == DoorDirection.UP)
 					{
 						roomLabel =  grid[i-1][j].getInitial();
 						roomMap.get(roomLabel).setDoorList(cell);
-				
 					}
 					else if(doorDiret == DoorDirection.LEFT) {
 						roomLabel =  grid[i][j-1].getInitial();
 						roomMap.get(roomLabel).setDoorList(cell);
-
 					}
 					else if(doorDiret == DoorDirection.RIGHT) {
 						roomLabel =  grid[i][j+1].getInitial();
 						roomMap.get(roomLabel).setDoorList(cell);
 					}
 				}
+				
 				if(cell.isSecretPassage()) {
-					//roomLabel =  grid[i][j].getInitial();
 					roomMap.get(roomLabel).setDoorList(cell);
 				}
 			}
@@ -240,18 +239,15 @@ public class Board {
     	
 	}
 
-
 	//calculating the adjacency list in the board since the important data is the grid, 
 	//and then telling the cell what its adjacencies are
 	public void calcAdj(int row,int col) {
 		BoardCell cell = getCell(row,col);
-		
-		//BoardCell roomCenterCell = new BoardCell();
 		BoardCell roomCenterCell;
 		char roomLabel = cell.getInitial();
 
+		// Cell is a center
 		if(cell.isRoomCenter()) {
-			
 			for (BoardCell c : roomMap.get(roomLabel).getDoorList()) {
 				if (c.isSecretPassage()) {
 					cell.addAdj(roomMap.get(c.getSecretPassage()).getCenterCell());
@@ -262,6 +258,7 @@ public class Board {
 			}
 		}
 		else {
+			// Cell is a door way
 			if(cell.isDoorway()== true) {
 				DoorDirection doorDiret = cell.getDoorDirection();
 				if(doorDiret == DoorDirection.DOWN)
@@ -327,8 +324,9 @@ public class Board {
 					}
 				}			
 			}
+			
+			// Cell is walkway
 			else {
-
 				if(row-1 >= 0 && grid[row-1][col].getInitial() == 'W' && !grid[row-1][col].getOccupied() && !grid[row-1][col].getIsRoom()) {
 					cell.addAdj(grid[row-1][col]);
 				}
@@ -342,22 +340,13 @@ public class Board {
 					cell.addAdj(grid[row][col+1]);
 				}	
 			}
-
 		}
-
 	}
-	
-	
-	//private void addRoomCenterCell(BoardCell cell, char secret) {
-	//	BoardCell roomCenterCell = roomMap.get(secret).getCenterCell();
-	//	cell.addAdj(roomCenterCell);
-	//}
 
+	// return adjacency list for a cell
 	public Set<BoardCell> getAdjList(int row, int col) {
-
 		return grid[row][col].getAdjList();  	
 	}
-
 
 	//calculates legal targets for a move from startCell of length pathlength.
 	public void calcTargets(BoardCell startCell, int pathlength) 
@@ -397,7 +386,6 @@ public class Board {
 
 	//return the targets
 	public Set<BoardCell> getTargets() {
-
 		return	targets;
 	}
 

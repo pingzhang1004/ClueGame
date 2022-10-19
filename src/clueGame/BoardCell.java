@@ -58,6 +58,7 @@ public class BoardCell {
 		return initial;
 	}
 
+	// All setters
 	public void setDoordDirection(DoorDirection doordDirection) {
 		this.doordDirection = doordDirection;
 	}
@@ -82,6 +83,7 @@ public class BoardCell {
 		this.secretPassage = secretPassage;
 	}
 
+	// add adjacency cell
 	public void addAdj(BoardCell adj) {
 		adjList.add(adj);
 	}
@@ -117,17 +119,14 @@ public class BoardCell {
 
 	// return a secret passage
 	public char getSecretPassage() {
-		
 		return secretPassage;
 	}
-	
 	
 	//for indicating a cell is part of a room (void setRoom(boolean) and perhaps boolean isRoom()).	
 	public void setIsRoom(boolean isRoom)
 	{
 		this.isRoom = isRoom;
 	}
-
 
 	public boolean getIsRoom()
 	{
