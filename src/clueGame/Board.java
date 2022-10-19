@@ -431,24 +431,5 @@ public class Board {
 		return roomMap;
 	}
 
-	public static void main(String[] args) {
-	
-		Board board = Board.getInstance();
-		// set the file names to use my config files
-		board.setConfigFiles("ClueLayout306.csv", "ClueSetup306.txt");		
-		// Initialize will load config files 
-		board.initialize();
-		System.out.println(board.getRoomMap().get('K').getDoorList().size());
-		Set<BoardCell> testList = board.getAdjList(2, 2);
-		for (BoardCell c : board.getRoomMap().get('K').getDoorList()) {
-			System.out.println(c.row);
-			System.out.println(c.col);
-		}
-		System.out.println(testList.size());
-		for (BoardCell c : testList) {
-			System.out.println(c.row);
-			System.out.println(c.col);
-		}
-	}
 
 }
