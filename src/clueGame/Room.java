@@ -1,5 +1,8 @@
 package clueGame;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import experiment.TestBoardCell;
 
 public class Room {
@@ -9,12 +12,14 @@ public class Room {
 	//private char label;
 	private BoardCell centerCell;
 	private BoardCell lableCell;
+	private Set<BoardCell> doorList;
 	
 	//private BoardCell SecretRoomCell;
 	
 	
 	// default constructor
 	public Room() {
+		doorList = new HashSet();
 	}
 	
 //	public Room(String name) {
@@ -63,6 +68,13 @@ public class Room {
 	public BoardCell getCenterCell() {
 		return centerCell;
 	}
+	
+	public void setDoorList(BoardCell cell) {
+		doorList.add(cell);
+	}
 
+    public Set<BoardCell> getDoorList() {
+		return doorList;
+	}
 }
 

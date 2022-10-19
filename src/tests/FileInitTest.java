@@ -46,7 +46,7 @@ public class FileInitTest {
 		assertEquals("Home Office", board.getRoom('H').getName());
 		assertEquals("Living Room", board.getRoom('I').getName());
 		assertEquals("Reception", board.getRoom('R').getName());
-		assertEquals("Walkway", board.getRoom('X').getName());
+		assertEquals("Walkway", board.getRoom('W').getName());
 	}
 	
 	//ensure the correct number of rows/columns have been read

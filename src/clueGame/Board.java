@@ -27,6 +27,8 @@ public class Board {
 	private String layoutConfigFile;
 	private String setupConfigfile;
 	private Map<Character, Room> roomMap;	
+	
+	//private Map<Character, Set<BoardCell>> doorMap;
 
 	//A set of board cells to hold the visited list
 	//It is used to avoid backtracking.
@@ -60,7 +62,6 @@ public class Board {
 		try {
 			loadSetupConfig();
 			loadLayoutConfig();
-			calcAdjList();
 		}
 		catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
@@ -68,6 +69,9 @@ public class Board {
 		catch (BadConfigFormatException e) {
 			System.out.println(e.getMessage());
 		}
+		roomDoor();
+		calcAdjList();
+		
 	}
 	// End from Canvas
 
@@ -125,27 +129,31 @@ public class Board {
 					if(charAtOne == '*'){
 						cell.setIsRoomCenter(true);
 						getRoom(cell).setCenter(cell);
+						roomMap.get(charAtZero);
 					}
 					else if (charAtOne == '#'){
 						cell.setIsRoomLabel(true);
 						getRoom(cell).setLabel(cell);
 					}
 					else if(charAtOne == 'v'){
-						cell.setDoordDirection(DoorDirection.DOWN);							
+						cell.setDoordDirection(DoorDirection.DOWN);
+						
 					}
 					else if(charAtOne == '^'){
-						cell.setDoordDirection(DoorDirection.UP);							
+						cell.setDoordDirection(DoorDirection.UP);
+						
 					}
 					else if(charAtOne == '>'){
-						cell.setDoordDirection(DoorDirection.RIGHT);							
+						cell.setDoordDirection(DoorDirection.RIGHT);
+						
 					}
 					else if (charAtOne == '<'){
-						cell.setDoordDirection(DoorDirection.LEFT);							
+						cell.setDoordDirection(DoorDirection.LEFT);
+						
 					}
 					else{
 						cell.setSecretPassage(charAtOne);
-						
-					    //roomMap.get(charAtZero).setSecretCell(cell);
+						cell.setIsSecretPassage(true);
 					    
 					}
 				}
@@ -183,12 +191,53 @@ public class Board {
 		}
 	}
 
-
-	public void calcAdjList() {		
-		for(int i =0; i< numRows; i++)
+	public void calcAdjList() {	
+		for(int i =0; i< numRows; i++) {
 			for(int j =0; j< numColumns; j++) {				
-				calcAdj(i, j);	
+				calcAdj(i, j);
 			}
+		}
+	}
+	
+    public void roomDoor() {
+    	for(int i =0; i< numRows; i++) {
+			for(int j =0; j< numColumns; j++) {	
+				
+				BoardCell cell = grid[i][j];
+				DoorDirection doorDiret = cell.getDoorDirection();
+				BoardCell roomCenterCell;
+				char roomLabel = cell.getInitial();
+				
+				if (cell.isDoorway()) {
+					if(doorDiret == DoorDirection.DOWN)
+					{
+						roomLabel =  grid[i+1][j].getInitial();
+						roomMap.get(roomLabel).setDoorList(cell);
+						
+					}
+					else if(doorDiret == DoorDirection.UP)
+					{
+						roomLabel =  grid[i-1][j].getInitial();
+						roomMap.get(roomLabel).setDoorList(cell);
+				
+					}
+					else if(doorDiret == DoorDirection.LEFT) {
+						roomLabel =  grid[i][j-1].getInitial();
+						roomMap.get(roomLabel).setDoorList(cell);
+
+					}
+					else if(doorDiret == DoorDirection.RIGHT) {
+						roomLabel =  grid[i][j+1].getInitial();
+						roomMap.get(roomLabel).setDoorList(cell);
+					}
+				}
+				if(cell.isSecretPassage()) {
+					//roomLabel =  grid[i][j].getInitial();
+					roomMap.get(roomLabel).setDoorList(cell);
+				}
+			}
+		}
+    	
 	}
 
 
@@ -196,39 +245,23 @@ public class Board {
 	//and then telling the cell what its adjacencies are
 	public void calcAdj(int row,int col) {
 		BoardCell cell = getCell(row,col);
-		BoardCell roomCenterCell = new BoardCell();
+		
+		//BoardCell roomCenterCell = new BoardCell();
+		BoardCell roomCenterCell;
 		char roomLabel = cell.getInitial();
 
-		if(roomLabel == 'X') {
-			return;
-		}
-
-		if(roomLabel != 'W' ) {
-			if(cell.isRoomCenter() == false) {
-				return;
-			}
-			if (cell.isRoomCenter() == true)
-			{
-				//可以遍历所有当前room的cell，
-				//（1）room和secret room的判断
-			    //找到secrect cell，然后通过secret char，将secret room的center cell 加到当前的room center cell的 adjency List
-				//（2）这里需要加上room和door相邻的判断
-				//思路是遍历当前的room cell的时候，计算邻接的cell有没有door cell，
-				//如果有door cell，遍历后把door cell组成一个list，然后根绝door list里面个door cell的方向， 来判断是不是属于这个房间的门。
-				//如果是这个房间的门，就给room加上一个doorList的变量，这个list里面是这个room的所有door。
-				
-				
-				if(cell.getSecretPassage()!= '\0') {
-					char secret = cell.getSecretPassage();				
-					roomCenterCell = roomMap.get(secret).getCenterCell();
-					cell.addAdj(roomCenterCell);	
-				
-
-				}		
+		if(cell.isRoomCenter()) {
+			
+			for (BoardCell c : roomMap.get(roomLabel).getDoorList()) {
+				if (c.isSecretPassage()) {
+					cell.addAdj(roomMap.get(c.getSecretPassage()).getCenterCell());
+				}
+				else {
+					cell.addAdj(c);
+				}
 			}
 		}
-		
-		if (roomLabel == 'W') {
+		else {
 			if(cell.isDoorway()== true) {
 				DoorDirection doorDiret = cell.getDoorDirection();
 				if(doorDiret == DoorDirection.DOWN)
@@ -237,29 +270,29 @@ public class Board {
 					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
 					cell.addAdj(roomCenterCell);
 
-					if (row -1 >= 0 && grid[row-1][col].getInitial() == 'W') {
+					if (row-1 >= 0 && grid[row-1][col].getInitial() == 'W' && !grid[row-1][col].getOccupied() && !grid[row-1][col].getIsRoom()) {
 						cell.addAdj(grid[row-1][col]);
 					}				
-					if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W') {
+					if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W' && !grid[row][col-1].getOccupied() && !grid[row][col-1].getIsRoom()) {
 						cell.addAdj(grid[row][col-1]);
 					}
-					if(col< numColumns-1 && grid[row-1][col+1].getInitial() == 'W') {
+					if(col< numColumns-1 && grid[row][col+1].getInitial() == 'W' && !grid[row][col+1].getOccupied() && !grid[row][col+1].getIsRoom()) {
 						cell.addAdj(grid[row][col+1]);
 					}					
 				}
 				if(doorDiret == DoorDirection.UP)
 				{
-					roomLabel =  grid[row+1][col].getInitial();
+					roomLabel =  grid[row-1][col].getInitial();
 					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
 					cell.addAdj(roomCenterCell);
 
-					if(row < numRows-1 && grid[row+1][col].getInitial() == 'W') {
+					if(row < numRows-1 && grid[row+1][col].getInitial() == 'W' && !grid[row+1][col].getOccupied() && !grid[row+1][col].getIsRoom()) {
 						cell.addAdj(grid[row+1][col]);
 					}				
-					if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W') {
+					if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W' && !grid[row][col-1].getOccupied() && !grid[row][col-1].getIsRoom()) {
 						cell.addAdj(grid[row][col-1]);
 					}
-					if(col< numColumns-1 && grid[row-1][col+1].getInitial() == 'W') {
+					if(col< numColumns-1 && grid[row][col+1].getInitial() == 'W' && !grid[row][col+1].getOccupied() && !grid[row][col+1].getIsRoom()) {
 						cell.addAdj(grid[row][col+1]);
 					}	
 				}
@@ -268,13 +301,13 @@ public class Board {
 					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
 					cell.addAdj(roomCenterCell);
 
-					if (row -1 >= 0 && grid[row-1][col].getInitial() == 'W') {
+					if (row -1 >= 0 && grid[row-1][col].getInitial() == 'W' && !grid[row-1][col].getOccupied() && !grid[row-1][col].getIsRoom()) {
 						cell.addAdj(grid[row-1][col]);
 					}
-					if(row < numRows-1 && grid[row+1][col].getInitial() == 'W') {
+					if(row < numRows-1 && grid[row+1][col].getInitial() == 'W' && !grid[row+1][col].getOccupied() && !grid[row+1][col].getIsRoom()) {
 						cell.addAdj(grid[row+1][col]);
 					}				
-					if(col< numColumns-1 && grid[row-1][col+1].getInitial() == 'W') {
+					if(col< numColumns-1 && grid[row][col+1].getInitial() == 'W' && !grid[row][col+1].getOccupied() && !grid[row][col+1].getIsRoom()) {
 						cell.addAdj(grid[row][col+1]);
 					}			
 				}
@@ -283,29 +316,29 @@ public class Board {
 					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
 					cell.addAdj(roomCenterCell);				
 
-					if (row -1 >= 0 && grid[row-1][col].getInitial() == 'W') {
+					if (row -1 >= 0 && grid[row-1][col].getInitial() == 'W' && !grid[row-1][col].getOccupied() && !grid[row-1][col].getIsRoom()) {
 						cell.addAdj(grid[row-1][col]);
 					}
-					if(row < numRows-1 && grid[row+1][col].getInitial() == 'W') {
+					if(row < numRows-1 && grid[row+1][col].getInitial() == 'W' && !grid[row+1][col].getOccupied() && !grid[row+1][col].getIsRoom()) {
 						cell.addAdj(grid[row+1][col]);
 					}				
-					if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W') {
+					if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W' && !grid[row][col-1].getOccupied() && !grid[row][col-1].getIsRoom()) {
 						cell.addAdj(grid[row][col-1]);
 					}
 				}			
 			}
 			else {
 
-				if(row -1 >= 0 && grid[row-1][col].getInitial() == 'W') {
+				if(row-1 >= 0 && grid[row-1][col].getInitial() == 'W' && !grid[row-1][col].getOccupied() && !grid[row-1][col].getIsRoom()) {
 					cell.addAdj(grid[row-1][col]);
 				}
-				if(row < numRows-1 && grid[row+1][col].getInitial() == 'W') {
+				if(row < numRows-1 && grid[row+1][col].getInitial() == 'W' && !grid[row+1][col].getOccupied() && !grid[row+1][col].getIsRoom()) {
 					cell.addAdj(grid[row+1][col]);
 				}
-				if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W') {
+				if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W' && !grid[row][col-1].getOccupied() && !grid[row][col-1].getIsRoom()) {
 					cell.addAdj(grid[row][col-1]);
 				}
-				if(col< numColumns-1 && grid[row][col+1].getInitial() == 'W') {
+				if(col< numColumns-1 && grid[row][col+1].getInitial() == 'W' && !grid[row][col+1].getOccupied() && !grid[row][col+1].getIsRoom()) {
 					cell.addAdj(grid[row][col+1]);
 				}	
 			}
@@ -315,93 +348,107 @@ public class Board {
 	}
 	
 	
-private void addRoomCenterCell(BoardCell cell, char secret) {
-	BoardCell roomCenterCell = roomMap.get(secret).getCenterCell();
-	cell.addAdj(roomCenterCell);
-}
+	//private void addRoomCenterCell(BoardCell cell, char secret) {
+	//	BoardCell roomCenterCell = roomMap.get(secret).getCenterCell();
+	//	cell.addAdj(roomCenterCell);
+	//}
 
-public Set<BoardCell> getAdjList(int row, int col) {
+	public Set<BoardCell> getAdjList(int row, int col) {
 
-	return grid[row][col].getAdjList();  	
-}
-
-
-//calculates legal targets for a move from startCell of length pathlength.
-public void calcTargets(BoardCell startCell, int pathlength) 
-{
-	//A set of board cells to hold the visited list
-	//It is used to avoid backtracking.
-	visited = new HashSet<BoardCell>();
-	//A set of board cells to hold the resulting targets from TargetCalc()
-	targets = new HashSet<BoardCell>() ;
-
-	//add the start location to the visited list (so no cycle through this cell)
-	visited.add(startCell);
-	//call the recursive function for targets
-	findAllTargets(startCell, pathlength); 
-}
-
-//recursive function to find all the targets
-public void findAllTargets(BoardCell startCell, int pathlength ) 
-{
-	Set<BoardCell> adjList = startCell.getAdjList();
-	for(BoardCell adjCell: adjList)
-	{
-		if (visited.contains(adjCell) == true ||adjCell.getOccupied()==true) {
-			continue;
-		}
-		visited.add(adjCell);
-		
-		//这一句可能需要将 adjCell.getIsRoom()==true的判断去掉，我不确定
-		if (pathlength == 1 || adjCell.getIsRoom()==true) {
-			targets.add(adjCell);       		   
-		}
-		else {
-			findAllTargets(adjCell,pathlength-1);
-		}
-		visited.remove(adjCell);    
+		return grid[row][col].getAdjList();  	
 	}
-}
 
 
-//return the targets
-public Set<BoardCell> getTargets() {
+	//calculates legal targets for a move from startCell of length pathlength.
+	public void calcTargets(BoardCell startCell, int pathlength) 
+	{
+		//A set of board cells to hold the visited list
+		//It is used to avoid backtracking.
+		visited = new HashSet<BoardCell>();
+		//A set of board cells to hold the resulting targets from TargetCalc()
+		targets = new HashSet<BoardCell>() ;
 
-	return	targets;
-}
+		//add the start location to the visited list (so no cycle through this cell)
+		visited.add(startCell);
+		//call the recursive function for targets
+		findAllTargets(startCell, pathlength); 
+	}
 
-//returns the cell from the board at row, col.
-public BoardCell getCell( int row, int col ) {				
-	return grid[row][col];
-}
+	//recursive function to find all the targets
+	public void findAllTargets(BoardCell startCell, int pathlength ) 
+	{
+		Set<BoardCell> adjList = startCell.getAdjList();
+		for(BoardCell adjCell: adjList)
+		{
+			if (visited.contains(adjCell) == true || adjCell.getOccupied()==true) {
+				continue;
+			}
+			visited.add(adjCell);
 
+			if (pathlength == 1 || adjCell.isRoomCenter()) {
+				targets.add(adjCell);       		   
+			}
+			else {
+				findAllTargets(adjCell,pathlength-1);
+			}
+			visited.remove(adjCell);    
+		}
+	}
 
-// return a room object by passing a char
-public Room getRoom(char letter) {
-	return roomMap.get(letter);
-}
+	//return the targets
+	public Set<BoardCell> getTargets() {
 
-// return a room object by passing a BoardCell
-public Room getRoom(BoardCell cell) {
+		return	targets;
+	}
 
-	return roomMap.get(cell.getInitial());
-}
+	//returns the cell from the board at row, col.
+	public BoardCell getCell(int row, int col) {				
+		return grid[row][col];
+	}
 
-// return the number of rows
-public int getNumRows() {	
-	return numRows;
-}
+	// return a room object by passing a char
+	public Room getRoom(char letter) {
+		return roomMap.get(letter);
+	}
 
-// return the number of columns
-public int getNumColumns() {	
-	return numColumns;
-}
+	// return a room object by passing a BoardCell
+	public Room getRoom(BoardCell cell) {
+		return roomMap.get(cell.getInitial());
+	}
 
-// return 
-public Map<Character, Room> getRoomMap() {
+	// return the number of rows
+	public int getNumRows() {	
+		return numRows;
+	}
 
-	return roomMap;
-}
+	// return the number of columns
+	public int getNumColumns() {	
+		return numColumns;
+	}
 
+	// return 
+	public Map<Character, Room> getRoomMap() {
+		return roomMap;
+	}
+
+	public static void main(String[] args) {
+	
+		Board board = Board.getInstance();
+		// set the file names to use my config files
+		board.setConfigFiles("ClueLayout306.csv", "ClueSetup306.txt");		
+		// Initialize will load config files 
+		board.initialize();
+		System.out.println(board.getRoomMap().get('K').getDoorList().size());
+		Set<BoardCell> testList = board.getAdjList(2, 2);
+		for (BoardCell c : board.getRoomMap().get('K').getDoorList()) {
+			System.out.println(c.row);
+			System.out.println(c.col);
+		}
+		System.out.println(testList.size());
+		for (BoardCell c : testList) {
+			System.out.println(c.row);
+			System.out.println(c.col);
+		}
+	}
 
 }

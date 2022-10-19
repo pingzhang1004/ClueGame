@@ -15,12 +15,13 @@ import experiment.TestBoardCell;
 public class BoardCell {
 
 	// Variables
-	private int row;
-	private int col;
+	public int row;
+	public int col;
 	private char initial;
 	private DoorDirection doordDirection;
 	private boolean roomLabel;
 	private boolean roomCenter;
+	private boolean secret;
 	private char secretPassage;
 
 	//hold the cells room status.
@@ -38,8 +39,11 @@ public class BoardCell {
 	// constructor
 	public BoardCell(int row, int col) {
 		super();
+		this.row = row;
+		this.col = col;
 		roomLabel = false;
 		roomCenter = false;
+		secret = false;
 		doordDirection= DoorDirection.NONE;
 		adjList = new HashSet();
 		isOccupied = false;
@@ -65,7 +69,15 @@ public class BoardCell {
 	public void setIsRoomCenter(boolean roomCenter) {
 		this.roomCenter = roomCenter;
 	}
-
+    
+	public void setIsSecretPassage(boolean secret) {
+		this.secret = secret;
+	}
+	
+	public boolean isSecretPassage() {
+		return secret;
+	}
+	
 	public void setSecretPassage(char secretPassage) {
 		this.secretPassage = secretPassage;
 	}
@@ -122,7 +134,7 @@ public class BoardCell {
 		return isRoom;
 	}
 
-	//for seting a cell is occupied
+	//for setting a cell is occupied
 	public void setOccupied(boolean isOccupied) {
 
 		this.isOccupied = isOccupied;
@@ -130,7 +142,9 @@ public class BoardCell {
 
 	//for indicating a cell is occupied by another player 
 	public boolean getOccupied() {
-
+		if (roomCenter) {
+			return false;
+		}
 		return isOccupied;
 	}
 

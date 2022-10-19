@@ -147,7 +147,7 @@ class BoardAdjTargetTest {
 		// test a roll of 4
 		board.calcTargets(board.getCell(18, 6), 4);
 		targets= board.getTargets();
-		//did not caculate by hand
+		//did not calculate by hand
 		assertEquals(17, targets.size());
 		assertTrue(targets.contains(board.getCell(3, 20)));
 		assertTrue(targets.contains(board.getCell(7, 17)));	
@@ -174,7 +174,7 @@ class BoardAdjTargetTest {
 		// test a roll of 4
 		board.calcTargets(board.getCell(17, 20), 4);
 		targets= board.getTargets();
-		//did not caculate by hand
+		//did not calculate by hand
 		assertEquals(9, targets.size());
 		assertTrue(targets.contains(board.getCell(16, 18)));
 		assertTrue(targets.contains(board.getCell(18, 16)));	
@@ -198,7 +198,7 @@ class BoardAdjTargetTest {
 		// test a roll of 3
 		board.calcTargets(board.getCell(8, 17), 3);
 		targets= board.getTargets();
-		//did not caculate by hand
+		//did not calculate by hand
 		assertEquals(12, targets.size());
 		assertTrue(targets.contains(board.getCell(12, 20)));
 		assertTrue(targets.contains(board.getCell(3, 20)));
@@ -209,7 +209,7 @@ class BoardAdjTargetTest {
 		// test a roll of 4
 		board.calcTargets(board.getCell(8, 17), 4);
 		targets= board.getTargets();
-		//did not caculate by hand
+		//did not calculate by hand
 		assertEquals(15, targets.size());
 		assertTrue(targets.contains(board.getCell(12, 20)));
 		assertTrue(targets.contains(board.getCell(3, 20)));
@@ -231,7 +231,7 @@ class BoardAdjTargetTest {
 		// test a roll of 3
 		board.calcTargets(board.getCell(11, 2), 3);
 		targets= board.getTargets();
-		//did not caculate by hand
+		//did not calculate by hand
 		assertEquals(3, targets.size());
 		assertTrue(targets.contains(board.getCell(14, 2)));
 		assertTrue(targets.contains(board.getCell(8, 2)));
@@ -240,7 +240,7 @@ class BoardAdjTargetTest {
 		// test a roll of 4
 		board.calcTargets(board.getCell(11, 2), 4);
 		targets= board.getTargets();
-		//did not caculate by hand
+		//did not calculate by hand
 		assertEquals(3, targets.size());
 		assertTrue(targets.contains(board.getCell(14, 2)));
 		assertTrue(targets.contains(board.getCell(8, 2)));
@@ -260,7 +260,7 @@ class BoardAdjTargetTest {
 		// test a roll of 3
 		board.calcTargets(board.getCell(13, 7), 3);
 		targets= board.getTargets();
-		//did not caculate by hand
+		//did not calculate by hand
 		assertEquals(10, targets.size());
 		assertTrue(targets.contains(board.getCell(15, 6)));
 		assertTrue(targets.contains(board.getCell(14, 7)));
@@ -269,7 +269,7 @@ class BoardAdjTargetTest {
 		// test a roll of 4
 		board.calcTargets(board.getCell(13, 7), 4);
 		targets= board.getTargets();
-		//did not caculate by hand
+		//did not calculate by hand
 		assertEquals(15, targets.size());
 		assertTrue(targets.contains(board.getCell(14, 2)));
 		assertTrue(targets.contains(board.getCell(15, 9)));
@@ -298,7 +298,7 @@ class BoardAdjTargetTest {
 		board.getCell(20, 17).setOccupied(false);
 		board.getCell(13, 16).setOccupied(false);
 		targets= board.getTargets();
-		//did not caculate by hand
+		//did not calculate by hand
 		assertEquals(3, targets.size());
 		assertTrue(targets.contains(board.getCell(7, 17)));	
 		assertTrue(targets.contains(board.getCell(8, 16)));	
@@ -309,7 +309,7 @@ class BoardAdjTargetTest {
 		board.calcTargets(board.getCell(2, 19), 2);
 		board.getCell(5, 17).setOccupied(false);
 		targets= board.getTargets();
-		//did not caculate by hand
+		//did not calculate by hand
 		assertEquals(5, targets.size());
 		assertTrue(targets.contains(board.getCell(6, 17)));
 		assertTrue(targets.contains(board.getCell(8, 19)));	
