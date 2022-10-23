@@ -50,37 +50,50 @@ public class BoardCell {
 		isRoom = false;
 	}
 
+	// Get room letter
 	public void setInitial(char initial) {
 		this.initial = initial;
 	}
 
+	// return a room letter
 	public char getInitial() {
 		return initial;
 	}
 
-	// All setters
+	// ASet door direction
 	public void setDoordDirection(DoorDirection doordDirection) {
 		this.doordDirection = doordDirection;
 	}
 
+	// Set is room label
 	public void setIsRoomLabel(boolean roomLabel) {
 		this.roomLabel = roomLabel;
 	}
 
+	// Set is room center
 	public void setIsRoomCenter(boolean roomCenter) {
 		this.roomCenter = roomCenter;
 	}
     
+	// Set secret passage 
 	public void setIsSecretPassage(boolean secret) {
 		this.secret = secret;
 	}
 	
-	public boolean isSecretPassage() {
-		return secret;
-	}
-	
+	// set secret passage letter
 	public void setSecretPassage(char secretPassage) {
 		this.secretPassage = secretPassage;
+	}
+	
+	//for indicating a cell is part of a room (void setRoom(boolean) and perhaps boolean isRoom()).	
+	public void setIsRoom(boolean isRoom)
+	{
+		this.isRoom = isRoom;
+	}
+
+	//for setting a cell is occupied
+	public void setOccupied(boolean isOccupied) {
+		this.isOccupied = isOccupied;
 	}
 
 	// add adjacency cell
@@ -121,24 +134,18 @@ public class BoardCell {
 	public char getSecretPassage() {
 		return secretPassage;
 	}
-	
-	//for indicating a cell is part of a room (void setRoom(boolean) and perhaps boolean isRoom()).	
-	public void setIsRoom(boolean isRoom)
-	{
-		this.isRoom = isRoom;
-	}
 
+	// return room status
 	public boolean getIsRoom()
 	{
 		return isRoom;
 	}
 
-	//for setting a cell is occupied
-	public void setOccupied(boolean isOccupied) {
-
-		this.isOccupied = isOccupied;
+	// return secret passage status
+	public boolean isSecretPassage() {
+		return secret;
 	}
-
+		
 	//for indicating a cell is occupied by another player 
 	public boolean getOccupied() {
 		if (roomCenter) {

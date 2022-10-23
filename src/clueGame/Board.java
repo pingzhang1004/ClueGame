@@ -19,16 +19,15 @@ import java.util.TreeMap;
 import experiment.TestBoardCell;
 
 public class Board {
-
+	
 	// Variables
+	private static final char walkwayChar = 'W';
 	private BoardCell[][] grid;
 	private int numRows;
 	private int numColumns;
 	private String layoutConfigFile;
 	private String setupConfigfile;
 	private Map<Character, Room> roomMap;	
-	
-	//private Map<Character, Set<BoardCell>> doorMap;
 
 	//A set of board cells to hold the visited list
 	//It is used to avoid backtracking.
@@ -41,7 +40,6 @@ public class Board {
 	// constructor is private to ensure only one can be created
 	public Board() {
 		super();
-		//room = new Room();
 	}
 	// this method returns the only Board
 	public static Board getInstance() {
@@ -209,7 +207,7 @@ public class Board {
 				BoardCell cell = grid[i][j];
 				DoorDirection doorDiret = cell.getDoorDirection();
 				char roomLabel = cell.getInitial();
-				
+				// Add cell into door list
 				if (cell.isDoorway()) {
 					if(doorDiret == DoorDirection.DOWN)
 					{
@@ -267,13 +265,13 @@ public class Board {
 					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
 					cell.addAdj(roomCenterCell);
 
-					if (row-1 >= 0 && grid[row-1][col].getInitial() == 'W' && !grid[row-1][col].getOccupied() && !grid[row-1][col].getIsRoom()) {
+					if (row-1 >= 0 && grid[row-1][col].getInitial() == walkwayChar && !grid[row-1][col].getOccupied() && !grid[row-1][col].getIsRoom()) {
 						cell.addAdj(grid[row-1][col]);
 					}				
-					if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W' && !grid[row][col-1].getOccupied() && !grid[row][col-1].getIsRoom()) {
+					if(col-1 >= 0 && grid[row][col-1].getInitial() == walkwayChar && !grid[row][col-1].getOccupied() && !grid[row][col-1].getIsRoom()) {
 						cell.addAdj(grid[row][col-1]);
 					}
-					if(col< numColumns-1 && grid[row][col+1].getInitial() == 'W' && !grid[row][col+1].getOccupied() && !grid[row][col+1].getIsRoom()) {
+					if(col< numColumns-1 && grid[row][col+1].getInitial() == walkwayChar && !grid[row][col+1].getOccupied() && !grid[row][col+1].getIsRoom()) {
 						cell.addAdj(grid[row][col+1]);
 					}					
 				}
@@ -283,13 +281,13 @@ public class Board {
 					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
 					cell.addAdj(roomCenterCell);
 
-					if(row < numRows-1 && grid[row+1][col].getInitial() == 'W' && !grid[row+1][col].getOccupied() && !grid[row+1][col].getIsRoom()) {
+					if(row < numRows-1 && grid[row+1][col].getInitial() == walkwayChar && !grid[row+1][col].getOccupied() && !grid[row+1][col].getIsRoom()) {
 						cell.addAdj(grid[row+1][col]);
 					}				
-					if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W' && !grid[row][col-1].getOccupied() && !grid[row][col-1].getIsRoom()) {
+					if(col-1 >= 0 && grid[row][col-1].getInitial() == walkwayChar && !grid[row][col-1].getOccupied() && !grid[row][col-1].getIsRoom()) {
 						cell.addAdj(grid[row][col-1]);
 					}
-					if(col< numColumns-1 && grid[row][col+1].getInitial() == 'W' && !grid[row][col+1].getOccupied() && !grid[row][col+1].getIsRoom()) {
+					if(col< numColumns-1 && grid[row][col+1].getInitial() == walkwayChar && !grid[row][col+1].getOccupied() && !grid[row][col+1].getIsRoom()) {
 						cell.addAdj(grid[row][col+1]);
 					}	
 				}
@@ -298,13 +296,13 @@ public class Board {
 					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
 					cell.addAdj(roomCenterCell);
 
-					if (row -1 >= 0 && grid[row-1][col].getInitial() == 'W' && !grid[row-1][col].getOccupied() && !grid[row-1][col].getIsRoom()) {
+					if (row -1 >= 0 && grid[row-1][col].getInitial() == walkwayChar && !grid[row-1][col].getOccupied() && !grid[row-1][col].getIsRoom()) {
 						cell.addAdj(grid[row-1][col]);
 					}
-					if(row < numRows-1 && grid[row+1][col].getInitial() == 'W' && !grid[row+1][col].getOccupied() && !grid[row+1][col].getIsRoom()) {
+					if(row < numRows-1 && grid[row+1][col].getInitial() == walkwayChar && !grid[row+1][col].getOccupied() && !grid[row+1][col].getIsRoom()) {
 						cell.addAdj(grid[row+1][col]);
 					}				
-					if(col< numColumns-1 && grid[row][col+1].getInitial() == 'W' && !grid[row][col+1].getOccupied() && !grid[row][col+1].getIsRoom()) {
+					if(col< numColumns-1 && grid[row][col+1].getInitial() == walkwayChar && !grid[row][col+1].getOccupied() && !grid[row][col+1].getIsRoom()) {
 						cell.addAdj(grid[row][col+1]);
 					}			
 				}
@@ -313,13 +311,13 @@ public class Board {
 					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
 					cell.addAdj(roomCenterCell);				
 
-					if (row -1 >= 0 && grid[row-1][col].getInitial() == 'W' && !grid[row-1][col].getOccupied() && !grid[row-1][col].getIsRoom()) {
+					if (row -1 >= 0 && grid[row-1][col].getInitial() == walkwayChar && !grid[row-1][col].getOccupied() && !grid[row-1][col].getIsRoom()) {
 						cell.addAdj(grid[row-1][col]);
 					}
-					if(row < numRows-1 && grid[row+1][col].getInitial() == 'W' && !grid[row+1][col].getOccupied() && !grid[row+1][col].getIsRoom()) {
+					if(row < numRows-1 && grid[row+1][col].getInitial() == walkwayChar && !grid[row+1][col].getOccupied() && !grid[row+1][col].getIsRoom()) {
 						cell.addAdj(grid[row+1][col]);
 					}				
-					if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W' && !grid[row][col-1].getOccupied() && !grid[row][col-1].getIsRoom()) {
+					if(col-1 >= 0 && grid[row][col-1].getInitial() == walkwayChar && !grid[row][col-1].getOccupied() && !grid[row][col-1].getIsRoom()) {
 						cell.addAdj(grid[row][col-1]);
 					}
 				}			
@@ -327,16 +325,16 @@ public class Board {
 			
 			// Cell is walkway
 			else {
-				if(row-1 >= 0 && grid[row-1][col].getInitial() == 'W' && !grid[row-1][col].getOccupied() && !grid[row-1][col].getIsRoom()) {
+				if(row-1 >= 0 && grid[row-1][col].getInitial() == walkwayChar && !grid[row-1][col].getOccupied() && !grid[row-1][col].getIsRoom()) {
 					cell.addAdj(grid[row-1][col]);
 				}
-				if(row < numRows-1 && grid[row+1][col].getInitial() == 'W' && !grid[row+1][col].getOccupied() && !grid[row+1][col].getIsRoom()) {
+				if(row < numRows-1 && grid[row+1][col].getInitial() == walkwayChar && !grid[row+1][col].getOccupied() && !grid[row+1][col].getIsRoom()) {
 					cell.addAdj(grid[row+1][col]);
 				}
-				if(col-1 >= 0 && grid[row][col-1].getInitial() == 'W' && !grid[row][col-1].getOccupied() && !grid[row][col-1].getIsRoom()) {
+				if(col-1 >= 0 && grid[row][col-1].getInitial() == walkwayChar && !grid[row][col-1].getOccupied() && !grid[row][col-1].getIsRoom()) {
 					cell.addAdj(grid[row][col-1]);
 				}
-				if(col< numColumns-1 && grid[row][col+1].getInitial() == 'W' && !grid[row][col+1].getOccupied() && !grid[row][col+1].getIsRoom()) {
+				if(col< numColumns-1 && grid[row][col+1].getInitial() == walkwayChar && !grid[row][col+1].getOccupied() && !grid[row][col+1].getIsRoom()) {
 					cell.addAdj(grid[row][col+1]);
 				}	
 			}

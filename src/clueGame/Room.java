@@ -11,57 +11,37 @@ public class Room {
 	private String name;
 	//private char label;
 	private BoardCell centerCell;
-	private BoardCell lableCell;
+	private BoardCell labelCell;
 	private Set<BoardCell> doorList;
-	
-	//private BoardCell SecretRoomCell;
-	
 	
 	// default constructor
 	public Room() {
 		doorList = new HashSet();
 	}
-	
-//	public Room(String name) {
-//		//this.label = label;
-//		this.name = name;
-//	}
-	
-	
+
 	// return a room name
 	public String getName() {
 		return name;
 	}
-	
-//	public char getLabel() {
-//		return label;
-//	}
-//	
-	
-//	public BoardCell getSecretCell() {
-//		return SecretRoomCell;
-//	}
-//
-//	public void setSecretCell(BoardCell secretCell) {
-//		SecretRoomCell = secretCell;
-//		
-//	}
 
+	// Set room name
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public void setLabel(BoardCell lableCell) {
-		this.lableCell = lableCell;
+	// Set label cell
+	public void setLabel(BoardCell labelCell) {
+		this.labelCell = labelCell;
 	}
 	
+	// Set center cell
 	public void setCenter(BoardCell centerCell) {
 		this.centerCell = centerCell;
 	}
 
 	// return a label cell
 	public BoardCell getLabelCell() {
-		return lableCell;
+		return labelCell;
 	}
 	
 	// return a center cell
@@ -69,10 +49,12 @@ public class Room {
 		return centerCell;
 	}
 	
+	// Add cell into door list
 	public void setDoorList(BoardCell cell) {
 		doorList.add(cell);
 	}
 
+	// return door list
     public Set<BoardCell> getDoorList() {
 		return doorList;
 	}
