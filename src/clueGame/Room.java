@@ -16,7 +16,7 @@ public class Room {
 	
 	// default constructor
 	public Room() {
-		doorList = new HashSet();
+		doorList = new HashSet<BoardCell>();
 	}
 
 	// return a room name

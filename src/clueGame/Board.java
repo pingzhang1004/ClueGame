@@ -81,8 +81,6 @@ public class Board {
 	public void loadLayoutConfig() throws FileNotFoundException, BadConfigFormatException {	
 		FileReader reader = null;
 		Scanner in = null;
-		String line;
-		String strSplit[];
 
 		//read the layoutConfigFile first time to get the numColumns and numRows;		
 		reader = new FileReader("data/" + layoutConfigFile);
@@ -104,7 +102,7 @@ public class Board {
 		}
 		else {
 			loadCells(lines);
-		}	
+		}
 	}
 	
 	// Load all cells into the game board
@@ -172,7 +170,7 @@ public class Board {
 	public void loadSetupConfig() throws FileNotFoundException, BadConfigFormatException {
 		//you need to build the grid array with the layout file. But how big do you make it, i.e. number of rows and columns?
 		//You almost need to know this information before you even read the file.
-		roomMap = new TreeMap();
+		roomMap = new TreeMap<Character, Room>();
 		FileReader reader = null;
 		Scanner in = null;
 
@@ -218,23 +216,27 @@ public class Board {
 				// Add cell into door list
 				if (cell.isDoorway()) {
 					switch (doorDiret) {
+					    
 					    case DOWN:
 						    roomLabel =  grid[i+1][j].getInitial();
 						    roomMap.get(roomLabel).setDoorList(cell);
 						    break;
+					    
 					    case UP:
-					
 					    	roomLabel =  grid[i-1][j].getInitial();
 					    	roomMap.get(roomLabel).setDoorList(cell);
 					    	break;
+					    
 					    case LEFT:
 						    roomLabel =  grid[i][j-1].getInitial();
 						    roomMap.get(roomLabel).setDoorList(cell);
 					        break;
+					    
 					    case RIGHT:
 					    	roomLabel =  grid[i][j+1].getInitial();
 					    	roomMap.get(roomLabel).setDoorList(cell);
 					    	break;
+					    
 					    default:
 						    break;
 					}

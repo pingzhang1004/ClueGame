@@ -45,7 +45,7 @@ public class BoardCell {
 		roomCenter = false;
 		secret = false;
 		doordDirection= DoorDirection.NONE;
-		adjList = new HashSet();
+		adjList = new HashSet<BoardCell>();
 		isOccupied = false;
 		isRoom = false;
 	}
