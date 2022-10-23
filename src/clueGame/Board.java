@@ -33,6 +33,8 @@ public class Board {
 	//It is used to avoid backtracking.
 	private	Set<BoardCell> visited;
 	private Set<BoardCell> targets;
+	
+	
 	/*
 	 * variable and methods used for singleton pattern
 	 */
@@ -49,6 +51,7 @@ public class Board {
 	 * initialize the board (since we are using singleton pattern)
 	 */
 
+	
 	// Set all config files
 	public void setConfigFiles(String layout, String setup) {
 		layoutConfigFile = layout;
@@ -125,7 +128,7 @@ public class Board {
 					cell.setInitial(charAtZero);
 					char charAtOne = lines.get(i).split(",")[j].charAt(1);
 					
-					switch(charAtOne){
+					switch (charAtOne) {
 					    
 					    case '*':
 						    cell.setIsRoomCenter(true);
@@ -213,23 +216,24 @@ public class Board {
 				char roomLabel = cell.getInitial();
 				// Add cell into door list
 				if (cell.isDoorway()) {
-					if(doorDiret == DoorDirection.DOWN)
-					{
-						roomLabel =  grid[i+1][j].getInitial();
-						roomMap.get(roomLabel).setDoorList(cell);
-					}
-					else if(doorDiret == DoorDirection.UP)
-					{
-						roomLabel =  grid[i-1][j].getInitial();
-						roomMap.get(roomLabel).setDoorList(cell);
-					}
-					else if(doorDiret == DoorDirection.LEFT) {
-						roomLabel =  grid[i][j-1].getInitial();
-						roomMap.get(roomLabel).setDoorList(cell);
-					}
-					else if(doorDiret == DoorDirection.RIGHT) {
-						roomLabel =  grid[i][j+1].getInitial();
-						roomMap.get(roomLabel).setDoorList(cell);
+					switch (doorDiret) {
+					    case DOWN:
+						    roomLabel =  grid[i+1][j].getInitial();
+						    roomMap.get(roomLabel).setDoorList(cell);
+						    break;
+					    case UP:
+					
+					    	roomLabel =  grid[i-1][j].getInitial();
+					    	roomMap.get(roomLabel).setDoorList(cell);
+					    	break;
+					    case LEFT:
+						    roomLabel =  grid[i][j-1].getInitial();
+						    roomMap.get(roomLabel).setDoorList(cell);
+					        break;
+					    case RIGHT:
+					    	roomLabel =  grid[i][j+1].getInitial();
+					    	roomMap.get(roomLabel).setDoorList(cell);
+					    	break;
 					}
 				}
 				
