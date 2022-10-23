@@ -99,12 +99,12 @@ public class Board {
 			throw new BadConfigFormatException("The board layout file does not have the same number of columns in every row!");
 		}
 		else {
-			loadCell(lines);
+			loadCells(lines);
 		}	
 	}
 	
 	// Load all cells into the game board
-	private void loadCell(ArrayList<String> lines) throws BadConfigFormatException {
+	private void loadCells(ArrayList<String> lines) throws BadConfigFormatException {
 		//allocate the grid size.
 		grid = new BoardCell[numRows][numColumns];			
 		//populate the data from the layoutConfigFile to board cells
