@@ -58,6 +58,7 @@ public class Board {
 		setupConfigfile = setup;
 	}
 
+	// Initialize the game board
 	public void initialize()
 	{	
 		try {
