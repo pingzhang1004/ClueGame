@@ -124,35 +124,39 @@ public class Board {
 				else {
 					cell.setInitial(charAtZero);
 					char charAtOne = lines.get(i).split(",")[j].charAt(1);
-					if(charAtOne == '*'){
-						cell.setIsRoomCenter(true);
-						getRoom(cell).setCenter(cell);
-						roomMap.get(charAtZero);
-					}
-					else if (charAtOne == '#'){
-						cell.setIsRoomLabel(true);
-						getRoom(cell).setLabel(cell);
-					}
-					else if(charAtOne == 'v'){
-						cell.setDoordDirection(DoorDirection.DOWN);
-						
-					}
-					else if(charAtOne == '^'){
-						cell.setDoordDirection(DoorDirection.UP);
-						
-					}
-					else if(charAtOne == '>'){
-						cell.setDoordDirection(DoorDirection.RIGHT);
-						
-					}
-					else if (charAtOne == '<'){
-						cell.setDoordDirection(DoorDirection.LEFT);
-						
-					}
-					else{
-						cell.setSecretPassage(charAtOne);
-						cell.setIsSecretPassage(true);
+					
+					switch(charAtOne){
 					    
+					    case '*':
+						    cell.setIsRoomCenter(true);
+						    getRoom(cell).setCenter(cell);
+						    roomMap.get(charAtZero);
+						    break;
+					    
+					    case '#':
+					    	cell.setIsRoomLabel(true);
+					    	getRoom(cell).setLabel(cell);
+					    	break;
+					    
+					    case 'v':
+					    	cell.setDoordDirection(DoorDirection.DOWN);
+					    	break;
+					    
+					    case '^':
+					    	cell.setDoordDirection(DoorDirection.UP);
+					    	break;
+					    
+					    case '>':
+					    	cell.setDoordDirection(DoorDirection.RIGHT);
+					    	break;
+					    
+					    case '<':
+					    	cell.setDoordDirection(DoorDirection.LEFT);
+					    	break;
+					    
+					    default:
+					    	cell.setSecretPassage(charAtOne);
+					    	cell.setIsSecretPassage(true);
 					}
 				}
 				grid[i][j] = cell; 		
