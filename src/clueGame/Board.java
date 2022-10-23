@@ -412,7 +412,7 @@ public class Board {
 		return numColumns;
 	}
 
-	// return 
+	// return a room list
 	public Map<Character, Room> getRoomMap() {
 		return roomMap;
 	}
