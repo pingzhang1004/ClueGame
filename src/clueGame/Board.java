@@ -152,9 +152,7 @@ public class Board {
 					    	break;					    
 					    default:
 					    	cell.setSecretPassage(charAtOne);
-					    	cell.setIsSecretPassage(true);
-					    	roomMap.get(cell.getInitial()).setSecretPassage(cell);
-					    	
+					    	cell.setIsSecretPassage(true);					    	
 					}
 				}
 				grid[i][j] = cell; 		
@@ -257,8 +255,7 @@ public class Board {
 		if(cell.isRoomCenter()) {
 			for (BoardCell c : roomMap.get(roomLabel).getDoorList()) {
 				if (c.isSecretPassage()) {
-					//cell.addAdj(roomMap.get(c.getSecretPassage()).getCenterCell());
-					roomMap.get(roomMap.get(c.getInitial()).getSecretPassage().getSecretPassage()).getCenterCell();
+					cell.addAdj(roomMap.get(c.getSecretPassage()).getCenterCell());
 				}
 				else {
 					cell.addAdj(c);

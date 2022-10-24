@@ -14,12 +14,6 @@ public class Room {
 	private BoardCell labelCell;
 	private Set<BoardCell> doorList;
 	
-	
-	// assumed not to be a room (to account for spaces)
-		//private boolean Room = false;
-		private boolean hasSecretPassage = false;
-		private BoardCell secretPassage;
-	
 	// default constructor
 	public Room() {
 		doorList = new HashSet<BoardCell>();
@@ -66,21 +60,6 @@ public class Room {
 	}
     
     
-    public BoardCell getSecretPassage() {
-		return secretPassage;
-	}
-
-	public void setSecretPassage(BoardCell secretPassage) {
-		this.secretPassage = secretPassage;
-	}
-
-	public void setHasSecretPassage(boolean hasSecretPassage) {
-		this.hasSecretPassage = hasSecretPassage;
-	}
-	
-	public boolean roomHasSecretPassage() {
-		return hasSecretPassage;
-	}
 	
 }
 
