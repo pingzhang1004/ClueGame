@@ -133,32 +133,28 @@ public class Board {
 						    cell.setIsRoomCenter(true);
 						    getRoom(cell).setCenter(cell);
 						    roomMap.get(charAtZero);
-						    break;
-					    
+						    break;    
 					    case '#':
 					    	cell.setIsRoomLabel(true);
 					    	getRoom(cell).setLabel(cell);
-					    	break;
-					    
+					    	break;				    
 					    case 'v':
 					    	cell.setDoordDirection(DoorDirection.DOWN);
-					    	break;
-					    
+					    	break;					    
 					    case '^':
 					    	cell.setDoordDirection(DoorDirection.UP);
-					    	break;
-					    
+					    	break;					    
 					    case '>':
 					    	cell.setDoordDirection(DoorDirection.RIGHT);
-					    	break;
-					    
+					    	break;					    
 					    case '<':
 					    	cell.setDoordDirection(DoorDirection.LEFT);
-					    	break;
-					    
+					    	break;					    
 					    default:
 					    	cell.setSecretPassage(charAtOne);
 					    	cell.setIsSecretPassage(true);
+					    	roomMap.get(cell.getInitial()).setSecretPassage(cell);
+					    	
 					}
 				}
 				grid[i][j] = cell; 		
@@ -261,13 +257,15 @@ public class Board {
 		if(cell.isRoomCenter()) {
 			for (BoardCell c : roomMap.get(roomLabel).getDoorList()) {
 				if (c.isSecretPassage()) {
-					cell.addAdj(roomMap.get(c.getSecretPassage()).getCenterCell());
+					//cell.addAdj(roomMap.get(c.getSecretPassage()).getCenterCell());
+					roomMap.get(roomMap.get(c.getInitial()).getSecretPassage().getSecretPassage()).getCenterCell();
 				}
 				else {
 					cell.addAdj(c);
 				}
 			}
 		}
+		//Cell is doorway or walkway
 		else {
 			// Cell is a door way
 			if(cell.isDoorway()== true) {
