@@ -243,7 +243,9 @@ public class Board {
 				}
 				
 				if(cell.isSecretPassage()) {
-					roomMap.get(roomLabel).setDoorList(cell);
+					BoardCell secretPassageCell = roomMap.get(cell.getSecretPassage()).getCenterCell();
+					roomMap.get(roomLabel).setSecretPassageCell(secretPassageCell);
+					roomMap.get(roomLabel).setDoorList(roomMap.get(roomLabel).getSecretPassageCell());
 				}
 			}
 		}
@@ -260,12 +262,7 @@ public class Board {
 		// Cell is a center
 		if(cell.isRoomCenter()) {
 			for (BoardCell c : roomMap.get(roomLabel).getDoorList()) {
-				if (c.isSecretPassage()) {
-					cell.addAdj(roomMap.get(c.getSecretPassage()).getCenterCell());
-				}
-				else {
-					cell.addAdj(c);
-				}
+				cell.addAdj(c);
 			}
 		}
 		else {
