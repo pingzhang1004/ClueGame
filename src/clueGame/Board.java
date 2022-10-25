@@ -256,7 +256,7 @@ public class Board {
 	//and then telling the cell what its adjacencies are
 	public void calcAdj(int row,int col) {
 		BoardCell cell = getCell(row,col);
-		BoardCell roomCenterCell;
+//		BoardCell roomCenterCell;
 		char roomLabel = cell.getInitial();
 
 		// Cell is a center
@@ -265,89 +265,24 @@ public class Board {
 				cell.addAdj(c);
 			}
 		}
+		// Cell is a walkway
 		else {
-			// Cell is a door way
-			if(cell.isDoorway()== true) {
-				DoorDirection doorDiret = cell.getDoorDirection();
-				if(doorDiret == DoorDirection.DOWN)
-				{
-					roomLabel =  grid[row+1][col].getInitial();
-					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
-					cell.addAdj(roomCenterCell);
-
-					if (row-1 >= 0 && checkCell(grid[row-1][col])) {
-						cell.addAdj(grid[row-1][col]);
-					}				
-					if(col-1 >= 0 && checkCell(grid[row][col-1])) {
-						cell.addAdj(grid[row][col-1]);
-					}
-					if(col< numColumns-1 && checkCell(grid[row][col+1])) {
-						cell.addAdj(grid[row][col+1]);
-					}					
-				}
-				if(doorDiret == DoorDirection.UP)
-				{
-					roomLabel =  grid[row-1][col].getInitial();
-					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
-					cell.addAdj(roomCenterCell);
-
-					if(row < numRows-1 && checkCell(grid[row+1][col])) {
-						cell.addAdj(grid[row+1][col]);
-					}				
-					if(col-1 >= 0 && checkCell(grid[row][col-1])) {
-						cell.addAdj(grid[row][col-1]);
-					}
-					if(col< numColumns-1 && checkCell(grid[row][col+1])) {
-						cell.addAdj(grid[row][col+1]);
-					}	
-				}
-				if(doorDiret == DoorDirection.LEFT) {
-					roomLabel =  grid[row][col-1].getInitial();
-					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
-					cell.addAdj(roomCenterCell);
-
-					if (row -1 >= 0 && checkCell(grid[row-1][col])) {
-						cell.addAdj(grid[row-1][col]);
-					}
-					if(row < numRows-1 && checkCell(grid[row+1][col])) {
-						cell.addAdj(grid[row+1][col]);
-					}				
-					if(col< numColumns-1 && checkCell(grid[row][col+1])) {
-						cell.addAdj(grid[row][col+1]);
-					}			
-				}
-				if(doorDiret == DoorDirection.RIGHT) {
-					roomLabel =  grid[row][col+1].getInitial();
-					roomCenterCell = roomMap.get(roomLabel).getCenterCell();
-					cell.addAdj(roomCenterCell);				
-
-					if (row -1 >= 0 && checkCell(grid[row-1][col])) {
-						cell.addAdj(grid[row-1][col]);
-					}
-					if(row < numRows-1 && checkCell(grid[row+1][col])) {
-						cell.addAdj(grid[row+1][col]);
-					}				
-					if(col-1 >= 0 && checkCell(grid[row][col-1])) {
-						cell.addAdj(grid[row][col-1]);
-					}
-				}			
-			}
+			// cell is a doorway
+			addDoorwayAdj(cell, row, col);
 			
-			// Cell is walkway
-			else {
-				if(row-1 >= 0 && checkCell(grid[row-1][col])) {
-					cell.addAdj(grid[row-1][col]);
-				}
-				if(row < numRows-1 && checkCell(grid[row+1][col])) {
-					cell.addAdj(grid[row+1][col]);
-				}
-				if(col-1 >= 0 && checkCell(grid[row][col-1])) {
-					cell.addAdj(grid[row][col-1]);
-				}
-				if(col< numColumns-1 && checkCell(grid[row][col+1])) {
-					cell.addAdj(grid[row][col+1]);
-				}	
+			// add adjacency of a walkway
+			if (row < numRows-1 && checkCell(grid[row+1][col])) {
+				cell.addAdj(grid[row+1][col]);
+			}	
+			if (row-1 >= 0 && checkCell(grid[row-1][col])) {
+				cell.addAdj(grid[row-1][col]);
+			}				
+			if(col-1 >= 0 && checkCell(grid[row][col-1])) {
+				cell.addAdj(grid[row][col-1]);
 			}
+			if(col< numColumns-1 && checkCell(grid[row][col+1])) {
+				cell.addAdj(grid[row][col+1]);
+			}			
 		}
 	}
 	
@@ -358,6 +293,30 @@ public class Board {
 			valid = true;
 		}
 		return valid;
+	}
+	
+	// Add doorway adjacency
+	public void addDoorwayAdj(BoardCell cell, int row, int col) {
+		BoardCell roomCenterCell;
+		char roomLabel = cell.getInitial();
+		switch (cell.getDoorDirection()) {
+		    case UP:
+		    	roomLabel = grid[row-1][col].getInitial();
+				break;
+		    case DOWN:
+		    	roomLabel = grid[row+1][col].getInitial();
+		    	break;
+		    case LEFT:
+		    	roomLabel = grid[row][col-1].getInitial();
+		    	break;
+		    case RIGHT:
+		    	roomLabel = grid[row][col+1].getInitial();
+		        break;
+		    default:
+			    return;
+		}
+		roomCenterCell = roomMap.get(roomLabel).getCenterCell();
+		cell.addAdj(roomCenterCell);
 	}
 
 	// return adjacency list for a cell
