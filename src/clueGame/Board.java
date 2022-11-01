@@ -133,26 +133,32 @@ public class Board {
 						    cell.setIsRoomCenter(true);
 						    getRoom(cell).setCenter(cell);
 						    roomMap.get(charAtZero);
-						    break;    
+						    break;
+					    
 					    case '#':
 					    	cell.setIsRoomLabel(true);
 					    	getRoom(cell).setLabel(cell);
-					    	break;				    
+					    	break;
+					    
 					    case 'v':
 					    	cell.setDoordDirection(DoorDirection.DOWN);
-					    	break;					    
+					    	break;
+					    
 					    case '^':
 					    	cell.setDoordDirection(DoorDirection.UP);
-					    	break;					    
+					    	break;
+					    
 					    case '>':
 					    	cell.setDoordDirection(DoorDirection.RIGHT);
-					    	break;					    
+					    	break;
+					    
 					    case '<':
 					    	cell.setDoordDirection(DoorDirection.LEFT);
-					    	break;					    
+					    	break;
+					    
 					    default:
 					    	cell.setSecretPassage(charAtOne);
-					    	cell.setIsSecretPassage(true);					    	
+					    	cell.setIsSecretPassage(true);
 					}
 				}
 				grid[i][j] = cell; 		
@@ -259,11 +265,7 @@ public class Board {
 				cell.addAdj(c);
 			}
 		}
-<<<<<<< HEAD
-		//Cell is doorway or walkway
-=======
 		// Cell is a walkway
->>>>>>> 4232820c2d70adcfe59e3dc4947944167547a18f
 		else {
 			// cell is a doorway
 			addDoorwayAdj(cell, row, col);
