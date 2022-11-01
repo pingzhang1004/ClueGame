@@ -35,6 +35,11 @@ public class Board {
 	private Set<BoardCell> targets;
 	
 	
+	//the answer is for store the suggestion
+	private Solution theAnswer;
+	// There 6 plyaers, one HumanPlayer, 5 computerPlayer
+	private ArrayList<Player> players;
+	
 	/*
 	 * variable and methods used for singleton pattern
 	 */
@@ -187,6 +192,9 @@ public class Board {
 					throw new BadConfigFormatException("An entry in either file does not have the proper format!");
 				}
 				else {
+					//create room cards at the time we load the room info.
+					
+					
 					Room room = new Room();
 					room.setName(strSplit[1]);	
 					char roomLabel =strSplit[2].charAt(0);
