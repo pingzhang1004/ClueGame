@@ -1,3 +1,4 @@
+
 package clueGame;
 
 import java.util.HashSet;
@@ -13,6 +14,7 @@ public class Room {
 	private BoardCell centerCell;
 	private BoardCell labelCell;
 	private Set<BoardCell> doorList;
+	private BoardCell secretPassageCell;
 	
 	// default constructor
 	public Room() {
@@ -59,7 +61,13 @@ public class Room {
 		return doorList;
 	}
     
+    // Set secret passage cell
+    public void setSecretPassageCell(BoardCell secretPassageCell) {
+    	this.secretPassageCell = secretPassageCell;
+    }
     
-	
+    // return a secret passage cell
+    public BoardCell getSecretPassageCell() {
+    	return secretPassageCell;
+    }
 }
-
