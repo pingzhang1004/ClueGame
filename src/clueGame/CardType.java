@@ -2,6 +2,19 @@ package clueGame;
 
 public enum CardType {
 
-	ROOM, PERSON, WEAPON;
+	ROOM("Room"), PERSON("Person"), WEAPON("Weapon");
+	private String value;
+	
+	CardType(String value) {
+		this.value = value;
+
+	}
+
+	public String toString() {
+		return value;
+	}
+	
+	
+	
 	
 }

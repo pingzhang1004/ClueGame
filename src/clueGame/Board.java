@@ -7,6 +7,7 @@
 
 package clueGame;
 
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.TreeMap;
 import experiment.TestBoardCell;
 
 public class Board {
-	
+
 	// Variables
 	private static final char walkwayChar = 'W';
 	private BoardCell[][] grid;
@@ -33,13 +34,15 @@ public class Board {
 	//It is used to avoid backtracking.
 	private	Set<BoardCell> visited;
 	private Set<BoardCell> targets;
-	
-	
+
+
 	//the answer is for store the suggestion
 	private Solution theAnswer;
-	// There 6 plyaers, one HumanPlayer, 5 computerPlayer
+	// There are 6 players, one HumanPlayer, 5 computerPlayer
 	private ArrayList<Player> players;
-	
+	//There are 21 cards：9 room cards, 6 player cards, 6 weapon cards
+	private  ArrayList<Card> cards;
+
 	/*
 	 * variable and methods used for singleton pattern
 	 */
@@ -56,7 +59,7 @@ public class Board {
 	 * initialize the board (since we are using singleton pattern)
 	 */
 
-	
+
 	// Set all config files
 	public void setConfigFiles(String layout, String setup) {
 		layoutConfigFile = layout;
@@ -78,7 +81,7 @@ public class Board {
 		}
 		roomEnter();
 		calcAdjList();
-		
+
 	}
 	// End from Canvas
 
@@ -96,7 +99,7 @@ public class Board {
 		}
 		numRows = lines.size();		
 		numColumns = lines.get(0).split(",").length;
-		
+
 		// Columns Exception------------------------
 		int sum = 0;
 		for (int i=0; i < numRows; i++) {
@@ -109,7 +112,7 @@ public class Board {
 			loadCells(lines);
 		}
 	}
-	
+
 	// Load all cells into the game board
 	private void loadCells(ArrayList<String> lines) throws BadConfigFormatException {
 		//allocate the grid size.
@@ -123,7 +126,7 @@ public class Board {
 				if (!roomMap.keySet().contains(charAtZero)) {
 					throw new BadConfigFormatException("The board layout refers to a room that is not in the setup file!");
 				}
-				
+
 				BoardCell cell = new BoardCell(i,j);
 				if (lines.get(i).split(",")[j].length() == 1) {						
 					cell.setInitial(charAtZero);
@@ -131,39 +134,39 @@ public class Board {
 				else {
 					cell.setInitial(charAtZero);
 					char charAtOne = lines.get(i).split(",")[j].charAt(1);
-					
+
 					switch (charAtOne) {
-					    
-					    case '*':
-						    cell.setIsRoomCenter(true);
-						    getRoom(cell).setCenter(cell);
-						    roomMap.get(charAtZero);
-						    break;
-					    
-					    case '#':
-					    	cell.setIsRoomLabel(true);
-					    	getRoom(cell).setLabel(cell);
-					    	break;
-					    
-					    case 'v':
-					    	cell.setDoordDirection(DoorDirection.DOWN);
-					    	break;
-					    
-					    case '^':
-					    	cell.setDoordDirection(DoorDirection.UP);
-					    	break;
-					    
-					    case '>':
-					    	cell.setDoordDirection(DoorDirection.RIGHT);
-					    	break;
-					    
-					    case '<':
-					    	cell.setDoordDirection(DoorDirection.LEFT);
-					    	break;
-					    
-					    default:
-					    	cell.setSecretPassage(charAtOne);
-					    	cell.setIsSecretPassage(true);
+
+					case '*':
+						cell.setIsRoomCenter(true);
+						getRoom(cell).setCenter(cell);
+						roomMap.get(charAtZero);
+						break;
+
+					case '#':
+						cell.setIsRoomLabel(true);
+						getRoom(cell).setLabel(cell);
+						break;
+
+					case 'v':
+						cell.setDoordDirection(DoorDirection.DOWN);
+						break;
+
+					case '^':
+						cell.setDoordDirection(DoorDirection.UP);
+						break;
+
+					case '>':
+						cell.setDoordDirection(DoorDirection.RIGHT);
+						break;
+
+					case '<':
+						cell.setDoordDirection(DoorDirection.LEFT);
+						break;
+
+					default:
+						cell.setSecretPassage(charAtOne);
+						cell.setIsSecretPassage(true);
 					}
 				}
 				grid[i][j] = cell; 		
@@ -176,6 +179,8 @@ public class Board {
 		//you need to build the grid array with the layout file. But how big do you make it, i.e. number of rows and columns?
 		//You almost need to know this information before you even read the file.
 		roomMap = new TreeMap<Character, Room>();
+		players = new ArrayList<Player>();
+		cards = new ArrayList<Card>();
 		FileReader reader = null;
 		Scanner in = null;
 
@@ -187,23 +192,54 @@ public class Board {
 			line = in.nextLine();
 			if(!line.startsWith("//")){			
 				strSplit  = line.split(", ");
-				// Entry Exception
-				if (!strSplit[0].equalsIgnoreCase("Room") && !strSplit[0].equalsIgnoreCase("Space")) {
-					throw new BadConfigFormatException("An entry in either file does not have the proper format!");
-				}
-				else {
-					//create room cards at the time we load the room info.
-					
-					
-					Room room = new Room();
+				//Entry Exception
+				//				if (!strSplit[0].equalsIgnoreCase("Room") && !strSplit[0].equalsIgnoreCase("Space")) {
+				//					throw new BadConfigFormatException("An entry in either file does not have the proper format!");
+				//				}
+				//				else {
+				Room room;
+				char roomLabel;
+				//Card card;	
+				//Player player;
+				switch(strSplit[0]){					 
+				case "Room": 
+					//						//create Room
+					room = new Room();
 					room.setName(strSplit[1]);	
-					char roomLabel =strSplit[2].charAt(0);
-					roomMap.put(roomLabel, room);
-				}
+					roomLabel =strSplit[2].charAt(0);
+					roomMap.put(roomLabel, room);						
+					//create Person cards at the time we load the room info.
+					//card = new Card(CardType.ROOM,strSplit[1]);
+					cards.add(new Card(CardType.ROOM,strSplit[1]));
+					break;  
+				case "HumanPlayer":
+					//create HumanPlayer
+					players.add(new HumanPlayer(strSplit[1],strSplit[2], Integer.parseInt(strSplit[3]),Integer.parseInt(strSplit[4])));
+					cards.add(new Card(CardType.PERSON,strSplit[1]));
+					break; 
+				case "ComputerPlayer": 
+					//create ComputerPlayer
+					players.add(new ComputerPlayer(strSplit[1],strSplit[2], Integer.parseInt(strSplit[3]),Integer.parseInt(strSplit[4])));
+					cards.add(new Card(CardType.PERSON,strSplit[1]));
+					break;         
+				case "Weapon":
+					//create Weapon cards
+					cards.add(new Card(CardType.WEAPON,strSplit[1]));
+					break; 
+				case "Space":
+					room = new Room();
+					room.setName(strSplit[1]);	
+					roomLabel =strSplit[2].charAt(0);
+					roomMap.put(roomLabel, room);	
+					break;
+				default:
+					throw new BadConfigFormatException("An entry in either file does not have the proper format!");						//break;
+				}					
 			}
 		}
 	}
-    
+	//	}
+
 	// Calculate adjacency list for all cells
 	public void calcAdjList() {	
 		for(int i =0; i< numRows; i++) {
@@ -212,44 +248,44 @@ public class Board {
 			}
 		}
 	}
-	
+
 	// Get door and secret passage for all rooms
-    public void roomEnter() {
-    	for(int i =0; i< numRows; i++) {
+	public void roomEnter() {
+		for(int i =0; i< numRows; i++) {
 			for(int j =0; j< numColumns; j++) {	
-				
+
 				BoardCell cell = grid[i][j];
 				DoorDirection doorDiret = cell.getDoorDirection();
 				char roomLabel = cell.getInitial();
 				// Add cell into door list
 				if (cell.isDoorway()) {
 					switch (doorDiret) {
-					    
-					    case DOWN:
-						    roomLabel =  grid[i+1][j].getInitial();
-						    roomMap.get(roomLabel).setDoorList(cell);
-						    break;
-					    
-					    case UP:
-					    	roomLabel =  grid[i-1][j].getInitial();
-					    	roomMap.get(roomLabel).setDoorList(cell);
-					    	break;
-					    
-					    case LEFT:
-						    roomLabel =  grid[i][j-1].getInitial();
-						    roomMap.get(roomLabel).setDoorList(cell);
-					        break;
-					    
-					    case RIGHT:
-					    	roomLabel =  grid[i][j+1].getInitial();
-					    	roomMap.get(roomLabel).setDoorList(cell);
-					    	break;
-					    
-					    default:
-						    break;
+
+					case DOWN:
+						roomLabel =  grid[i+1][j].getInitial();
+						roomMap.get(roomLabel).setDoorList(cell);
+						break;
+
+					case UP:
+						roomLabel =  grid[i-1][j].getInitial();
+						roomMap.get(roomLabel).setDoorList(cell);
+						break;
+
+					case LEFT:
+						roomLabel =  grid[i][j-1].getInitial();
+						roomMap.get(roomLabel).setDoorList(cell);
+						break;
+
+					case RIGHT:
+						roomLabel =  grid[i][j+1].getInitial();
+						roomMap.get(roomLabel).setDoorList(cell);
+						break;
+
+					default:
+						break;
 					}
 				}
-				
+
 				if(cell.isSecretPassage()) {
 					BoardCell secretPassageCell = roomMap.get(cell.getSecretPassage()).getCenterCell();
 					roomMap.get(roomLabel).setSecretPassageCell(secretPassageCell);
@@ -257,14 +293,14 @@ public class Board {
 				}
 			}
 		}
-    	
+
 	}
 
 	//calculating the adjacency list in the board since the important data is the grid, 
 	//and then telling the cell what its adjacencies are
 	public void calcAdj(int row,int col) {
 		BoardCell cell = getCell(row,col);
-//		BoardCell roomCenterCell;
+		//		BoardCell roomCenterCell;
 		char roomLabel = cell.getInitial();
 
 		// Cell is a center
@@ -277,7 +313,7 @@ public class Board {
 		else {
 			// cell is a doorway
 			addDoorwayAdj(cell, row, col);
-			
+
 			// add adjacency of a walkway
 			if (row < numRows-1 && checkCell(grid[row+1][col])) {
 				cell.addAdj(grid[row+1][col]);
@@ -293,7 +329,7 @@ public class Board {
 			}			
 		}
 	}
-	
+
 	// Check if a cell is valid
 	public boolean checkCell(BoardCell cell) {
 		boolean valid = false;
@@ -302,26 +338,26 @@ public class Board {
 		}
 		return valid;
 	}
-	
+
 	// Add doorway adjacency
 	public void addDoorwayAdj(BoardCell cell, int row, int col) {
 		BoardCell roomCenterCell;
 		char roomLabel = cell.getInitial();
 		switch (cell.getDoorDirection()) {
-		    case UP:
-		    	roomLabel = grid[row-1][col].getInitial();
-				break;
-		    case DOWN:
-		    	roomLabel = grid[row+1][col].getInitial();
-		    	break;
-		    case LEFT:
-		    	roomLabel = grid[row][col-1].getInitial();
-		    	break;
-		    case RIGHT:
-		    	roomLabel = grid[row][col+1].getInitial();
-		        break;
-		    default:
-			    return;
+		case UP:
+			roomLabel = grid[row-1][col].getInitial();
+			break;
+		case DOWN:
+			roomLabel = grid[row+1][col].getInitial();
+			break;
+		case LEFT:
+			roomLabel = grid[row][col-1].getInitial();
+			break;
+		case RIGHT:
+			roomLabel = grid[row][col+1].getInitial();
+			break;
+		default:
+			return;
 		}
 		roomCenterCell = roomMap.get(roomLabel).getCenterCell();
 		cell.addAdj(roomCenterCell);

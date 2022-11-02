@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public abstract class Player {
 
 	private String name;
+	private String strColor;
 	private Color color;
 	
 	//player Strating location
@@ -15,7 +16,19 @@ public abstract class Player {
 	//each player hold multiple cards
 	private ArrayList<Card> cards;	
 	
-	 abstract public void updateHand(Card card) ;	 
+	
+	
+	
+	 public Player(String name, String strColor, int row, int column) {
+		super();
+		this.name = name;
+		this.strColor = strColor;
+		this.row = row;
+		this.column = column;
+	}
+
+
+	abstract public void updateHand(Card card) ;	 
 	 
 
 	//Either way, it will need to be converted to a Java AWT color value.
