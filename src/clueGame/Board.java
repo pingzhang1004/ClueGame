@@ -83,8 +83,8 @@ public class Board {
 		roomEnter();
 		calcAdjList();
 		deal();
-//		Card testCard = new Card();
-//		testCard =  getCard("Miss Kate");
+		Card testCard = new Card();
+		testCard =  getCard("Miss Kate",CardType.PERSON);
 	}
 	// End from Canvas
 
@@ -525,7 +525,7 @@ public class Board {
 
 	// When we needed a card, we would use our getCard() to return a reference from the deck. 
 	//parameter(s) might be for getCard() without creating fixed constants to reference the cards.  
-	public Card getCard(String cardName) {
+	public Card getCard(String cardName, CardType cardTpye) {
 		
 //		Card selectedCard = new Card(cardTpye,cardName);
 //		for(Card currentCard : cards) {
@@ -533,12 +533,12 @@ public class Board {
 //				return currentCard;
 //		}
 //		return null;
-		Card selectedCard = new Card();
+		//Card selectedCard = new Card();
 		for(Card currentCard : cards) {
-			if(cardName.equals(currentCard.getCardName()))
-				selectedCard =  currentCard ;
+			if(cardName.equals(currentCard.getCardName()) && cardTpye.equals(currentCard.getCardType()))
+				return currentCard ;
 		}
-		return selectedCard;
+		return null;
 		
 	//return cards.get(cards.indexOf(cardName));
 	}
