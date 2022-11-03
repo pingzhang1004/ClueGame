@@ -1,17 +1,20 @@
 package clueGame;
 
+import java.util.ArrayList;
+
 public class ComputerPlayer extends Player {
 
+	private ArrayList<Card> cards;
 	
 	
 	public ComputerPlayer(String name, String strColor, int row, int column) {
 		super(name, strColor, row, column);
-		// TODO Auto-generated constructor stub
+		cards = new ArrayList<Card>(); 
 	}
 
 	@Override
 	public void updateHand(Card card) {
-		super.cards.add(card);
+		cards.add(card);
 		
 	}
 

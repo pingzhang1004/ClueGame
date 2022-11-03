@@ -208,7 +208,7 @@ public class Board {
 					cards.add(new Card(CardType.ROOM,strSplit[1]));
 					break;  
 				case "HumanPlayer":
-					//create HumanPlayer
+					//create HumanPlayer				
 					players.add(new HumanPlayer(strSplit[1],strSplit[2], Integer.parseInt(strSplit[3]),Integer.parseInt(strSplit[4])));
 					cards.add(new Card(CardType.PERSON,strSplit[1]));
 					break; 
@@ -457,15 +457,16 @@ public class Board {
 		dealPlayCards.remove(solutionWeaponCard);
 		}
 		//using the random room card,random player card and random weapon card to assign a solution
-		theAnswer = new Solution(solutionRoomCard,solutionPlayerCard,solutionPlayerCard);
+		theAnswer = new Solution(solutionRoomCard,solutionPlayerCard,solutionWeaponCard);
 
 		//deal the left card randomly to 6 players, each player has 3 cards
-		Card randomPlayerCard = new Card();		
+		//Card randomPlayerCard = new Card();		
 		for(Player currentPlayer : players) {			
 			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);		
 			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);			
 			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);				
-		}			
+		}
+   		
 	}
 	
 	//deal the left card randomly to each player,no card dealt twice
@@ -473,7 +474,7 @@ public class Board {
 		Random randomGenerator = new Random();
 		int RandomIndex;
 		Card randomPlayerCard;
-		if(dealPlayCards.isEmpty()) {
+		if(!dealPlayCards.isEmpty()) {
 		RandomIndex = randomGenerator.nextInt(dealPlayCards.size());
 		randomPlayerCard = dealPlayCards.get(RandomIndex);
 		currentPlayer.updateHand(randomPlayerCard);

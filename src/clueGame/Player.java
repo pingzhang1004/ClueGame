@@ -14,7 +14,7 @@ public abstract class Player {
 	private int column;
 	
 	//each player hold multiple cards
-	protected ArrayList<Card> cards;	
+	//protected ArrayList<Card> cards;	
 
 	
 	 public Player(String name, String strColor, int row, int column) {
@@ -23,6 +23,8 @@ public abstract class Player {
 		this.strColor = strColor;
 		this.row = row;
 		this.column = column;
+		this.convertStrToColor(strColor);
+		
 	}
 
 	abstract public void updateHand(Card card) ;	 
