@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
@@ -404,6 +405,78 @@ public class Board {
 		}
 	}
 
+
+	//deal The solution to the game,
+	//deal other cards to the players.
+	public void deal() {
+
+		//solution card include 1 Room Card, 1 player Card, 1 weapon Card
+		Card solutionRoomCard = new Card();		
+		Card solutionPlayerCard  = new Card();
+		Card solutionWeaponCard  = new Card();
+
+		//sort the cards by card type
+		ArrayList<Card> roomCards = new ArrayList<Card>();
+		ArrayList<Card> playerCards = new ArrayList<Card>();
+		ArrayList<Card> WeaponCards = new ArrayList<Card>();
+
+		ArrayList<Card> dealPlayCards = new ArrayList<Card>();
+		dealPlayCards = cards;
+
+		for(Card cardSort :cards) {
+			switch(cardSort.getCardType()) {
+			case ROOM:
+				roomCards.add(cardSort);
+				break;
+			case PERSON:
+				playerCards.add(cardSort);
+				break;
+			case WEAPON:	
+				WeaponCards.add(cardSort);
+				break;
+			}
+
+			// generating different type cards Randomly to get the solution
+			Random randomGenerator = new Random();	
+			int RandomIndex;
+
+			//generating RoomCard Randomly
+			RandomIndex = randomGenerator.nextInt(roomCards.size());
+			solutionRoomCard = roomCards.get(RandomIndex);
+			dealPlayCards.remove(solutionRoomCard);
+
+			//generating PlayCard Randomly
+			RandomIndex = randomGenerator.nextInt(playerCards.size());
+			solutionPlayerCard = playerCards.get(RandomIndex);
+			dealPlayCards.remove(solutionPlayerCard);
+
+			//generating WeaponCard Randomly
+			RandomIndex = randomGenerator.nextInt(WeaponCards.size());
+			solutionWeaponCard = WeaponCards.get(RandomIndex);
+			dealPlayCards.remove(solutionWeaponCard);
+
+			//using the random room card,random player card and random weapon card to assign a solution
+			theAnswer = new Solution(solutionRoomCard,solutionPlayerCard,solutionPlayerCard);
+
+			//deal the left card randomly to 6 players
+			Card randomPlayerCard = new Card();		
+			for(Player currentPlayer : players) {			
+				assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);		
+				assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);			
+				assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);				
+			}		
+		}
+	}
+	private void assignCardsToPlayerRandomly(ArrayList<Card> dealPlayCards,  Player currentPlayer) {
+		Random randomGenerator = new Random();
+		int RandomIndex;
+		Card randomPlayerCard;
+		RandomIndex = randomGenerator.nextInt(dealPlayCards.size());
+		randomPlayerCard = dealPlayCards.get(RandomIndex);
+		currentPlayer.updateHand(randomPlayerCard);
+		dealPlayCards.remove(randomPlayerCard);
+	}
+
 	//return the targets
 	public Set<BoardCell> getTargets() {
 		return	targets;
@@ -439,5 +512,10 @@ public class Board {
 		return roomMap;
 	}
 
+	// When we needed a card, we would use our getCard() to return a reference from the deck. 
+	//parameter(s) might be for getCard() without creating fixed constants to reference the cards.  
+	public Card getCard(String cardName) {
+		return cards.get(cards.indexOf(cardName));
+	}
 
 }

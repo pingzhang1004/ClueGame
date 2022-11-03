@@ -14,10 +14,8 @@ public abstract class Player {
 	private int column;
 	
 	//each player hold multiple cards
-	private ArrayList<Card> cards;	
-	
-	
-	
+	protected ArrayList<Card> cards;	
+
 	
 	 public Player(String name, String strColor, int row, int column) {
 		super();
@@ -27,12 +25,10 @@ public abstract class Player {
 		this.column = column;
 	}
 
-
 	abstract public void updateHand(Card card) ;	 
 	 
-
 	//Either way, it will need to be converted to a Java AWT color value.
-	public void strColor(String strColor) {		 
+	public void convertStrToColor(String strColor) {		 
 		 switch(strColor){
 	       case "blue": 
 	    	  color = Color.blue;

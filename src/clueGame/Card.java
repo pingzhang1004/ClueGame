@@ -8,6 +8,11 @@ public class Card {
 	
 	
 	
+	public Card() {
+		super();
+	}
+
+
 	public Card(CardType cardType,String cardName) {
 		super();
 		this.cardName = cardName;
@@ -15,7 +20,23 @@ public class Card {
 	}
 
 
-	public boolean equals(Card target) {
-		return true;
+	//returned a reference to the specific card we wanted
+	//compare Cards which were the same, yet had two different references
+	public boolean equals(Card target) {		
+		
+		if(target.cardName.equals(cardName))			
+				return true;
+		else
+			return false;
 	}
+
+
+	public CardType getCardType() {
+		return cardType;
+	}
+	
+	
+	
+	 
+	
 }
