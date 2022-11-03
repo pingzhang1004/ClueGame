@@ -82,6 +82,7 @@ public class Board {
 		}
 		roomEnter();
 		calcAdjList();
+		deal();
 
 	}
 	// End from Canvas
@@ -193,15 +194,8 @@ public class Board {
 			line = in.nextLine();
 			if(!line.startsWith("//")){			
 				strSplit  = line.split(", ");
-				//Entry Exception
-				//				if (!strSplit[0].equalsIgnoreCase("Room") && !strSplit[0].equalsIgnoreCase("Space")) {
-				//					throw new BadConfigFormatException("An entry in either file does not have the proper format!");
-				//				}
-				//				else {
 				Room room;
 				char roomLabel;
-				//Card card;	
-				//Player player;
 				switch(strSplit[0]){					 
 				case "Room": 
 					//						//create Room
@@ -435,46 +429,56 @@ public class Board {
 				WeaponCards.add(cardSort);
 				break;
 			}
+		}
+		
+		// generating different type cards Randomly to get the solution
+		Random randomGenerator = new Random();	
+		int RandomIndex;
 
-			// generating different type cards Randomly to get the solution
-			Random randomGenerator = new Random();	
-			int RandomIndex;
-
-			//generating RoomCard Randomly
+		//generating RoomCard Randomly		
+		if(!roomCards.isEmpty()) {
 			RandomIndex = randomGenerator.nextInt(roomCards.size());
 			solutionRoomCard = roomCards.get(RandomIndex);
 			dealPlayCards.remove(solutionRoomCard);
-
-			//generating PlayCard Randomly
-			RandomIndex = randomGenerator.nextInt(playerCards.size());
-			solutionPlayerCard = playerCards.get(RandomIndex);
-			dealPlayCards.remove(solutionPlayerCard);
-
-			//generating WeaponCard Randomly
-			RandomIndex = randomGenerator.nextInt(WeaponCards.size());
-			solutionWeaponCard = WeaponCards.get(RandomIndex);
-			dealPlayCards.remove(solutionWeaponCard);
-
-			//using the random room card,random player card and random weapon card to assign a solution
-			theAnswer = new Solution(solutionRoomCard,solutionPlayerCard,solutionPlayerCard);
-
-			//deal the left card randomly to 6 players
-			Card randomPlayerCard = new Card();		
-			for(Player currentPlayer : players) {			
-				assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);		
-				assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);			
-				assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);				
-			}		
 		}
+		
+
+		//generating PlayCard Randomly
+		if(!playerCards.isEmpty()) {
+		RandomIndex = randomGenerator.nextInt(playerCards.size());
+		solutionPlayerCard = playerCards.get(RandomIndex);
+		dealPlayCards.remove(solutionPlayerCard);
+		}
+
+		//generating WeaponCard Randomly
+		if(!WeaponCards.isEmpty()) {
+		RandomIndex = randomGenerator.nextInt(WeaponCards.size());
+		solutionWeaponCard = WeaponCards.get(RandomIndex);
+		dealPlayCards.remove(solutionWeaponCard);
+		}
+		//using the random room card,random player card and random weapon card to assign a solution
+		theAnswer = new Solution(solutionRoomCard,solutionPlayerCard,solutionPlayerCard);
+
+		//deal the left card randomly to 6 players, each player has 3 cards
+		Card randomPlayerCard = new Card();		
+		for(Player currentPlayer : players) {			
+			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);		
+			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);			
+			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);				
+		}			
 	}
+	
+	//deal the left card randomly to each player,no card dealt twice
 	private void assignCardsToPlayerRandomly(ArrayList<Card> dealPlayCards,  Player currentPlayer) {
 		Random randomGenerator = new Random();
 		int RandomIndex;
 		Card randomPlayerCard;
+		if(dealPlayCards.isEmpty()) {
 		RandomIndex = randomGenerator.nextInt(dealPlayCards.size());
 		randomPlayerCard = dealPlayCards.get(RandomIndex);
 		currentPlayer.updateHand(randomPlayerCard);
 		dealPlayCards.remove(randomPlayerCard);
+		}
 	}
 
 	//return the targets
