@@ -22,12 +22,16 @@ public class Card {
 
 	//returned a reference to the specific card we wanted
 	//compare Cards which were the same, yet had two different references
-	public boolean equals(Card target) {		
-		
-		if(target.cardName.equals(cardName))			
+	public boolean equals(Card target) {				
+		if(target.cardName.equals(this.cardName) && target.cardType.equals(this.cardType))			
 				return true;
 		else
 			return false;
+	}
+
+	
+	public String getCardName() {
+		return cardName;
 	}
 
 

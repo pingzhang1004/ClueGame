@@ -14,7 +14,7 @@ public abstract class Player {
 	private int column;
 	
 	//each player hold multiple cards
-	//protected ArrayList<Card> cards;	
+	private ArrayList<Card> cards;	
 
 	
 	 public Player(String name, String strColor, int row, int column) {
@@ -23,12 +23,12 @@ public abstract class Player {
 		this.strColor = strColor;
 		this.row = row;
 		this.column = column;
+		cards = new ArrayList<Card>(); 
 		this.convertStrToColor(strColor);
 		
 	}
 
-	abstract public void updateHand(Card card) ;	 
-	 
+
 	//Either way, it will need to be converted to a Java AWT color value.
 	public void convertStrToColor(String strColor) {		 
 		 switch(strColor){
@@ -49,8 +49,20 @@ public abstract class Player {
 	           break;   
 	       case "white":
 	    	   color = Color.white;
-	           break;   
+	           break;
+	       default:
+	    	   color = Color.GRAY;
+	           
 	    }				
 	}
 	 
+	//adding cards to the players after initializing the setup.txt
+	public void updateHand(Card card) {		
+		cards.add(card);
+	}
+	 
+	public ArrayList<Card> getCards() {
+		return cards;
+	}
+	
 }

@@ -83,7 +83,8 @@ public class Board {
 		roomEnter();
 		calcAdjList();
 		deal();
-
+//		Card testCard = new Card();
+//		testCard =  getCard("Miss Kate");
 	}
 	// End from Canvas
 
@@ -415,22 +416,27 @@ public class Board {
 		ArrayList<Card> WeaponCards = new ArrayList<Card>();
 
 		ArrayList<Card> dealPlayCards = new ArrayList<Card>();
-		dealPlayCards = cards;
-
+			//dealPlayCards = cards;
+		
 		for(Card cardSort :cards) {
 			switch(cardSort.getCardType()) {
 			case ROOM:
 				roomCards.add(cardSort);
+				dealPlayCards.add(cardSort);
 				break;
 			case PERSON:
 				playerCards.add(cardSort);
+				dealPlayCards.add(cardSort);
 				break;
 			case WEAPON:	
 				WeaponCards.add(cardSort);
+				dealPlayCards.add(cardSort);
+				break;
+			default:
 				break;
 			}
 		}
-		
+
 		// generating different type cards Randomly to get the solution
 		Random randomGenerator = new Random();	
 		int RandomIndex;
@@ -441,20 +447,20 @@ public class Board {
 			solutionRoomCard = roomCards.get(RandomIndex);
 			dealPlayCards.remove(solutionRoomCard);
 		}
-		
+
 
 		//generating PlayCard Randomly
 		if(!playerCards.isEmpty()) {
-		RandomIndex = randomGenerator.nextInt(playerCards.size());
-		solutionPlayerCard = playerCards.get(RandomIndex);
-		dealPlayCards.remove(solutionPlayerCard);
+			RandomIndex = randomGenerator.nextInt(playerCards.size());
+			solutionPlayerCard = playerCards.get(RandomIndex);
+			dealPlayCards.remove(solutionPlayerCard);
 		}
 
 		//generating WeaponCard Randomly
 		if(!WeaponCards.isEmpty()) {
-		RandomIndex = randomGenerator.nextInt(WeaponCards.size());
-		solutionWeaponCard = WeaponCards.get(RandomIndex);
-		dealPlayCards.remove(solutionWeaponCard);
+			RandomIndex = randomGenerator.nextInt(WeaponCards.size());
+			solutionWeaponCard = WeaponCards.get(RandomIndex);
+			dealPlayCards.remove(solutionWeaponCard);
 		}
 		//using the random room card,random player card and random weapon card to assign a solution
 		theAnswer = new Solution(solutionRoomCard,solutionPlayerCard,solutionWeaponCard);
@@ -466,19 +472,19 @@ public class Board {
 			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);			
 			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);				
 		}
-   		
+		
 	}
-	
+
 	//deal the left card randomly to each player,no card dealt twice
 	private void assignCardsToPlayerRandomly(ArrayList<Card> dealPlayCards,  Player currentPlayer) {
 		Random randomGenerator = new Random();
 		int RandomIndex;
 		Card randomPlayerCard;
 		if(!dealPlayCards.isEmpty()) {
-		RandomIndex = randomGenerator.nextInt(dealPlayCards.size());
-		randomPlayerCard = dealPlayCards.get(RandomIndex);
-		currentPlayer.updateHand(randomPlayerCard);
-		dealPlayCards.remove(randomPlayerCard);
+			RandomIndex = randomGenerator.nextInt(dealPlayCards.size());
+			randomPlayerCard = dealPlayCards.get(RandomIndex);
+			currentPlayer.updateHand(randomPlayerCard);
+			dealPlayCards.remove(randomPlayerCard);
 		}
 	}
 
@@ -520,7 +526,21 @@ public class Board {
 	// When we needed a card, we would use our getCard() to return a reference from the deck. 
 	//parameter(s) might be for getCard() without creating fixed constants to reference the cards.  
 	public Card getCard(String cardName) {
-		return cards.get(cards.indexOf(cardName));
+		
+//		Card selectedCard = new Card(cardTpye,cardName);
+//		for(Card currentCard : cards) {
+//			if(selectedCard.equals(currentCard))
+//				return currentCard;
+//		}
+//		return null;
+		Card selectedCard = new Card();
+		for(Card currentCard : cards) {
+			if(cardName.equals(currentCard.getCardName()))
+				selectedCard =  currentCard ;
+		}
+		return selectedCard;
+		
+	//return cards.get(cards.indexOf(cardName));
 	}
 
 }
