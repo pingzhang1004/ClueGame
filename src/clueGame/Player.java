@@ -64,5 +64,24 @@ public abstract class Player {
 	public ArrayList<Card> getCards() {
 		return cards;
 	}
+
+
+	public String getName() {
+		return name;
+	}
+
+	public String getStrColor() {
+		return strColor;
+	}
+
+	public int getRow() {
+		return row;
+	}
+
+	public int getColumn() {
+		return column;
+	}
+	
+	
 	
 }

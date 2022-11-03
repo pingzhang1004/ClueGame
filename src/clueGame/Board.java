@@ -83,8 +83,8 @@ public class Board {
 		roomEnter();
 		calcAdjList();
 		deal();
-		Card testCard = new Card();
-		testCard =  getCard("Miss Kate",CardType.PERSON);
+//		Card testCard = new Card();
+//		testCard =  getCard("Miss Kate",CardType.PERSON);
 	}
 	// End from Canvas
 
@@ -518,22 +518,31 @@ public class Board {
 		return numColumns;
 	}
 
+	public ArrayList<Player> getPlayersList() {
+		return players;
+	}
+	public ArrayList<Card> getCardsList() {
+		return cards;
+	}
 	// return a room list
 	public Map<Character, Room> getRoomMap() {
 		return roomMap;
 	}
 
+	
+	public Player getPlayer(String Name, String color, int row, int column) {
+		
+		for(Player currentPlayer : players) {
+			if(Name.equals(currentPlayer.getName()) && color.equals(currentPlayer.getStrColor()) && row==(currentPlayer.getRow()) && column==(currentPlayer.getColumn())) {
+				return currentPlayer ;
+			}
+		}
+		return null;
+	}
+	
 	// When we needed a card, we would use our getCard() to return a reference from the deck. 
 	//parameter(s) might be for getCard() without creating fixed constants to reference the cards.  
 	public Card getCard(String cardName, CardType cardTpye) {
-		
-//		Card selectedCard = new Card(cardTpye,cardName);
-//		for(Card currentCard : cards) {
-//			if(selectedCard.equals(currentCard))
-//				return currentCard;
-//		}
-//		return null;
-		//Card selectedCard = new Card();
 		for(Card currentCard : cards) {
 			if(cardName.equals(currentCard.getCardName()) && cardTpye.equals(currentCard.getCardType()))
 				return currentCard ;
