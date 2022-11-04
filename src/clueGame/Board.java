@@ -39,6 +39,7 @@ public class Board {
 
 	//the answer is for store the suggestion
 	private Solution theAnswer;
+
 	// There are 6 players, one HumanPlayer, 5 computerPlayer
 	private ArrayList<Player> players;
 	//There are 21 cards：9 room cards, 6 player cards, 6 weapon cards
@@ -413,7 +414,7 @@ public class Board {
 		//sort the cards by card type
 		ArrayList<Card> roomCards = new ArrayList<Card>();
 		ArrayList<Card> playerCards = new ArrayList<Card>();
-		ArrayList<Card> WeaponCards = new ArrayList<Card>();
+		ArrayList<Card> weaponCards = new ArrayList<Card>();
 
 		ArrayList<Card> dealPlayCards = new ArrayList<Card>();
 			//dealPlayCards = cards;
@@ -429,7 +430,7 @@ public class Board {
 				dealPlayCards.add(cardSort);
 				break;
 			case WEAPON:	
-				WeaponCards.add(cardSort);
+				weaponCards.add(cardSort);
 				dealPlayCards.add(cardSort);
 				break;
 			default:
@@ -457,9 +458,9 @@ public class Board {
 		}
 
 		//generating WeaponCard Randomly
-		if(!WeaponCards.isEmpty()) {
-			RandomIndex = randomGenerator.nextInt(WeaponCards.size());
-			solutionWeaponCard = WeaponCards.get(RandomIndex);
+		if(!weaponCards.isEmpty()) {
+			RandomIndex = randomGenerator.nextInt(weaponCards.size());
+			solutionWeaponCard = weaponCards.get(RandomIndex);
 			dealPlayCards.remove(solutionWeaponCard);
 		}
 		//using the random room card,random player card and random weapon card to assign a solution
@@ -518,17 +519,25 @@ public class Board {
 		return numColumns;
 	}
 
+	//return playerList
 	public ArrayList<Player> getPlayersList() {
 		return players;
 	}
+	
+	//return CardList
 	public ArrayList<Card> getCardsList() {
 		return cards;
 	}
+	
 	// return a room list
 	public Map<Character, Room> getRoomMap() {
 		return roomMap;
 	}
 
+	//return solution
+	public Solution getTheAnswer() {
+		return theAnswer;
+	}
 	
 	public Player getPlayer(String Name, String color, int row, int column) {
 		
