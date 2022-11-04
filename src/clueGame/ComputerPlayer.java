@@ -32,7 +32,6 @@ public class ComputerPlayer extends Player {
 		ArrayList<BoardCell> roomTargets = new ArrayList<BoardCell>();
 		String roomName;
 
-
 		//char roomChar;
 		for (Card card : getUnseenRooms()) {
 			roomName = card.getCardName();

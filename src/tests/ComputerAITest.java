@@ -42,6 +42,15 @@ public class ComputerAITest {
 
 
 	@Test
+	public void selectTargetsTest() {
+		board.setAnswer(williamCard, garageCard, batCard);
+		assertTrue(board.checkAccusation(new Solution(garageCard, williamCard, batCard)));
+		assertFalse(board.checkAccusation(new Solution(balconyCard, williamCard, batCard)));
+		assertFalse(board.checkAccusation(new Solution(garageCard, kateCard, batCard)));
+		assertFalse(board.checkAccusation(new Solution(garageCard, williamCard, ropeCard)));
+	}
+	
+	@Test
 	public void createSuggestionTest() {
 		board.setAnswer(williamCard, garageCard, batCard);
 		assertTrue(board.checkAccusation(new Solution(garageCard, williamCard, batCard)));
@@ -49,4 +58,5 @@ public class ComputerAITest {
 		assertFalse(board.checkAccusation(new Solution(garageCard, kateCard, batCard)));
 		assertFalse(board.checkAccusation(new Solution(garageCard, williamCard, ropeCard)));
 	}
+	
 }
