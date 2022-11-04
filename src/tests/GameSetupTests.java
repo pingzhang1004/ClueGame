@@ -90,9 +90,9 @@ class GameSetupTests {
 			}
 		}
 
-		assertTrue(roomCardList.contains(solutionTest.getRoom()));
-		assertTrue(personCardList.contains(solutionTest.getPerson()));
-		assertTrue(weaponCardList.contains(solutionTest.getWeapon()));			
+		assertTrue(roomCardList.contains(solutionTest.getRoomCard()));
+		assertTrue(personCardList.contains(solutionTest.getPersonCard()));
+		assertTrue(weaponCardList.contains(solutionTest.getWeaponCard()));			
 	}
 
 	//There is 6 players, each player has 3  random cards,the total include 18 cards.
@@ -103,16 +103,16 @@ class GameSetupTests {
 
 		for(Player player :testPlayersList) {
 			//each player has 3  random cards
-			assertEquals(3, player.getCards().size());			
+			assertEquals(3, player.getMyCards().size());			
 		}
 
 		//The same card should not be given to >1 player
 		for(int i=0; i< 6; i++)
 		{
-			for(Card playerCard : testPlayersList.get(i).getCards()) {				
+			for(Card playerCard : testPlayersList.get(i).getMyCards()) {				
 				//any two players don't have same card
 				for (int j =i+1; j<6; j++)
-					assertFalse(testPlayersList.get(j).getCards().contains(playerCard));
+					assertFalse(testPlayersList.get(j).getMyCards().contains(playerCard));
 			}
 		}
 	}
@@ -136,19 +136,19 @@ class GameSetupTests {
 		//if a solution has 3 cards in the 21 cards, 
 		// Then add the solution card ,the card list size will be 18
 		Solution solutionTest = board.getTheAnswer();
-		assertTrue(dealAllCardList.contains(solutionTest.getRoom()));
-		assertTrue(dealAllCardList.contains(solutionTest.getPerson()));
-		assertTrue(dealAllCardList.contains(solutionTest.getWeapon()));
-		dealAllCardList.remove(solutionTest.getRoom());
-		dealAllCardList.remove(solutionTest.getPerson());
-		dealAllCardList.remove(solutionTest.getWeapon());
+		assertTrue(dealAllCardList.contains(solutionTest.getRoomCard()));
+		assertTrue(dealAllCardList.contains(solutionTest.getPersonCard()));
+		assertTrue(dealAllCardList.contains(solutionTest.getWeaponCard()));
+		dealAllCardList.remove(solutionTest.getRoomCard());
+		dealAllCardList.remove(solutionTest.getPersonCard());
+		dealAllCardList.remove(solutionTest.getWeaponCard());
 		//The 18 means the solution cards in the crad list has been dealt
 		assertEquals(18, dealAllCardList.size());
 		
 		//if any player hold a card that is in the 18 cards, delete the card
 		//then the card list size will be 0
 		for(Player player: testPlayersList) {
-			for(Card card :player.getCards()) {
+			for(Card card :player.getMyCards()) {
 				assertTrue(dealAllCardList.contains(card));
 				dealAllCardList.remove(card);
 			}				

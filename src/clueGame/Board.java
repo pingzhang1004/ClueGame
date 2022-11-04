@@ -539,6 +539,11 @@ public class Board {
 		return theAnswer;
 	}
 	
+	// Set the solution
+	public void setAnswer(Card person, Card room, Card weapon) {
+		theAnswer = new Solution(room, person, weapon);
+	}
+	
 	public Player getPlayer(String Name, String color, int row, int column) {
 		
 		for(Player currentPlayer : players) {
@@ -561,4 +566,31 @@ public class Board {
 	//return cards.get(cards.indexOf(cardName));
 	}
 
+	public boolean checkAccusation(Solution accusation) {
+		boolean checkPerson = theAnswer.getPersonCard().equals(accusation.getPersonCard());
+		boolean checkRoom = theAnswer.getRoomCard().equals(accusation.getRoomCard());
+		boolean checkWeapon = theAnswer.getWeaponCard().equals(accusation.getWeaponCard());
+		if (checkPerson && checkRoom && checkWeapon) {
+			return true;
+		}
+		return false;
+	}
+
+	public Card handleSuggestion(Player player, Solution suggestion) {
+		int index = players.indexOf(player);
+		for (int i=index+1; i<players.size(); i++) {
+			Card disproveCard = players.get(i).disproveSuggestion(suggestion);
+			if (disproveCard != null) {
+				return disproveCard;
+			}
+		}
+		for (int i=0; i<index; i++) {
+			Card disproveCard = players.get(i).disproveSuggestion(suggestion);
+			if (disproveCard == null) {
+				return disproveCard;
+
+			}
+		}
+		return null;
+	}
 }
