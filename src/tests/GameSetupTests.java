@@ -89,9 +89,46 @@ class GameSetupTests {
 				break;
 			}
 		}
-
 		assertTrue(roomCardList.contains(solutionTest.getRoom()));
 		assertTrue(personCardList.contains(solutionTest.getPerson()));
 		assertTrue(weaponCardList.contains(solutionTest.getWeapon()));			
 	}
+
+	//There is 6 players, each player has 3  random cards,the total include 18 cards.
+	@Test
+	public void dealPlayerCardTest() {		
+		ArrayList<Player> testPlayersList = board.getPlayersList();
+		assertEquals(6, testPlayersList.size());
+
+		for(Player player :testPlayersList) {
+			//each player has 3  random cards
+			assertEquals(3, player.getCards().size());			
+		}
+
+		//The same card should not be given to >1 player
+		for(int i=0; i< 6; i++)
+		{
+			for(Card playerCard : testPlayersList.get(i).getCards()) {				
+				for (int j =i+1; j<6; j++)
+				//any two player do not have the same card
+				assertFalse(testPlayersList.get(j).getCards().contains(playerCard));
+			}
+		}
+	}
+
+
+
+
+	//What are the requirements for a correct deal?
+
+	//All cards should be dealt.
+	//The other cards are dealt to the players.
+
+
+	//All players should have roughly the same number of cards
+
+	//The same card should not be given to >1 player
+
+
+
 }
