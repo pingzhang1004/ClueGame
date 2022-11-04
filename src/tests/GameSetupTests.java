@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import clueGame.Board;
 import clueGame.BoardCell;
+import clueGame.CardType;
 import clueGame.ComputerPlayer;
 import clueGame.HumanPlayer;
 import clueGame.Player;
@@ -31,10 +32,10 @@ class GameSetupTests {
 		board.initialize();
 	}
 
-	//ensure People are loaded in
+	//ensure People are loaded in, each player at the correct start location
 	//6 player objects should there be, 1 hunman player and 5 computer player
 	@Test
-	public void test() {		
+	public void PeopleLoadtest() {		
 		ArrayList testList = board.getPlayersList();		
 		assertEquals(6, testList.size());
 		assertTrue(testList.contains(board.getPlayer("Mr William", "blue", 0, 7)));
@@ -45,20 +46,27 @@ class GameSetupTests {
 		assertTrue(testList.contains(board.getPlayer("Miss Elizabeth", "white", 6, 0)));
 	}
 	
-	
-//How many player objects should there be and of what type?
-	
-//Proper Human or Computer player is initialized based on people data
 
-
-//Are the number of players correct?
-//Is Player 0 human and the others computer (you don’t need to test all of them)?
-//Is the player at the correct start location?
-//Is the players name and color correct?
+	//There are 21 cards are in the deck, 9 room cards, 6 weapon cards, 6 people cards
+	@Test
+	public void CardsLoadtest() {		
+		ArrayList testList = board.getCardsList();		
+		assertEquals(21, testList.size());
+		assertTrue(testList.contains(board.getCard("Balcony", CardType.ROOM)));
+		assertTrue(testList.contains(board.getCard("Home Office", CardType.ROOM)));
+		assertTrue(testList.contains(board.getCard("Reception", CardType.ROOM)));
+		
+		assertTrue(testList.contains(board.getCard("Mr William", CardType.PERSON)));
+		assertTrue(testList.contains(board.getCard("Mr Harry", CardType.PERSON)));
+		assertTrue(testList.contains(board.getCard("Miss Elizabeth", CardType.PERSON)));
+		
+		assertTrue(testList.contains(board.getCard("rope", CardType.WEAPON)));
+		assertTrue(testList.contains(board.getCard("scissor", CardType.WEAPON)));
+		assertTrue(testList.contains(board.getCard("hammer", CardType.WEAPON)));		
+	}
 
 	
-//Deck of all cards is created (composed of rooms, weapons, and people)	
-//How many cards are in the deck? Are they represented properly?
+
 
 
 	
