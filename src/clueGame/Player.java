@@ -72,6 +72,7 @@ public abstract class Player {
 		myCards.add(card);
 	}
 
+	// update seem card list
 	public void updateSeen(Card card) {
 		seenCards.add(card);
 		switch (card.getCardType()) {
@@ -88,6 +89,8 @@ public abstract class Player {
 			break;
 		}
 	}
+	
+	// Set unseen card list
 	public void setUnseenCard(ArrayList<Card> cards) {
 		ArrayList<Card> unseenCards = new ArrayList<Card>();
 		unseenCards.addAll(cards);
@@ -96,11 +99,7 @@ public abstract class Player {
 			unseenCards.remove(card);
 			seenCards.add(card);
 		}
-
-		//		for (Card card : seenCards) {
-		//			unseenCards.remove(card);
-		//		}
-		//		
+	
 		for (Card card : unseenCards) {
 			switch (card.getCardType()) {
 			case ROOM:
@@ -118,8 +117,13 @@ public abstract class Player {
 		}
 	}
 	
+	// A player tries to dispute a suggestion with the cards in their hand. 
+	// If the player cannot, null is returned. 
+	// If a player can, the player returns the card. 
+	// If is more than one card that can dispute the suggestion, one is randomly chosen.
 	public Card disproveSuggestion(Solution suggestion) {
 		ArrayList<Card> disproveCards = new ArrayList<Card>();
+		// If the card can be disprove, then add into the disprove card list
 		if (myCards.contains(suggestion.getPersonCard())) {
 			disproveCards.add(suggestion.getPersonCard());
 		}
@@ -130,9 +134,11 @@ public abstract class Player {
 			disproveCards.add(suggestion.getWeaponCard());
 		}
 	
+		// No card can be disproved
 		if (disproveCards.size() == 0) {
 			return null;
 		}
+		// Card can be disproved
 		else {
 			int randomNum = (int)(Math.random() * disproveCards.size());
 			return disproveCards.get(randomNum);
