@@ -24,6 +24,7 @@ public abstract class Player {
 	private ArrayList<Card> unseenRooms;
 	private ArrayList<Card> unseenWeapons;
 	
+	// Constructor
 	public Player(String name, String strColor, int row, int column) {
 		super();
 		this.name = name;
@@ -145,6 +146,7 @@ public abstract class Player {
 		}
 	}
 	
+	// getters
 	public ArrayList<Card> getSeenCards() {
 		return seenCards;
 	}
@@ -169,7 +171,7 @@ public abstract class Player {
 	public String getName() {
 		return name;
 	}
-
+	
 	public String getStrColor() {
 		return strColor;
 	}
@@ -177,7 +179,6 @@ public abstract class Player {
 	public int getRow() {
 		return row;
 	}
-
 	public int getColumn() {
 		return column;
 	}
