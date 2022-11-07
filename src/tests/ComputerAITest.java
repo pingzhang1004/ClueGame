@@ -76,7 +76,6 @@ public class ComputerAITest {
 		int count2 = 0;
 		int count3 = 0;
 		int count4 = 0;
-		
 		for (int i=0; i<100; i++) {
 			BoardCell cell = kate.selectTarget(targets, board.getRoomMap());
 			if (board.getCell(6, 10).equals(cell)) {
