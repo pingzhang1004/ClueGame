@@ -120,7 +120,6 @@ public class GameSolutionTest {
 			assert(countBat > 15);
 		}
 
-
 		@Test
 		public void handleSuggestionTest() {
 			board.setPlayers(players);
