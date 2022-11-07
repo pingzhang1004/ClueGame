@@ -2,6 +2,8 @@ package clueGame;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class Player {
 
@@ -28,7 +30,11 @@ public abstract class Player {
 		this.strColor = strColor;
 		this.row = row;
 		this.column = column;
-		myCards = new ArrayList<Card>(); 
+		myCards = new ArrayList<Card>();
+		seenCards = new ArrayList<Card>();
+		unseenRooms = new ArrayList<Card>(); 
+		unseenPeople = new ArrayList<Card>(); 
+		unseenWeapons = new ArrayList<Card>(); 
 		this.convertStrToColor(strColor);
 
 	}
@@ -82,7 +88,10 @@ public abstract class Player {
 			break;
 		}
 	}
-	public void setUnseenCard(ArrayList<Card> unseenCards) {
+	public void setUnseenCard(ArrayList<Card> cards) {
+		ArrayList<Card> unseenCards = new ArrayList<Card>();
+		unseenCards.addAll(cards);
+		
 		for (Card card : myCards) {
 			unseenCards.remove(card);
 			seenCards.add(card);
@@ -168,5 +177,7 @@ public abstract class Player {
 	}
 
 
+	abstract public BoardCell selectTarget(Set<BoardCell> targets, Map<Character, Room> roomMap);
 
+	abstract public Solution createSuggestion(Room room);
 }

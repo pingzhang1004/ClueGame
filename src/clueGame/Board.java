@@ -471,7 +471,8 @@ public class Board {
 		for(Player currentPlayer : players) {			
 			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);		
 			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);			
-			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);				
+			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);
+			currentPlayer.setUnseenCard(cards);
 		}
 		
 	}
@@ -566,6 +567,11 @@ public class Board {
 	//return cards.get(cards.indexOf(cardName));
 	}
 
+	// Set players for testing
+	public void setPlayers(ArrayList<Player> testPlayers) {
+		this.players = testPlayers;
+	}
+	
 	public boolean checkAccusation(Solution accusation) {
 		boolean checkPerson = theAnswer.getPersonCard().equals(accusation.getPersonCard());
 		boolean checkRoom = theAnswer.getRoomCard().equals(accusation.getRoomCard());
@@ -586,7 +592,7 @@ public class Board {
 		}
 		for (int i=0; i<index; i++) {
 			Card disproveCard = players.get(i).disproveSuggestion(suggestion);
-			if (disproveCard == null) {
+			if (disproveCard != null) {
 				return disproveCard;
 
 			}
