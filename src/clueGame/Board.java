@@ -572,10 +572,12 @@ public class Board {
 		this.players = testPlayers;
 	}
 	
+	// returns true if accusation matches theAnswer
 	public boolean checkAccusation(Solution accusation) {
 		boolean checkPerson = theAnswer.getPersonCard().equals(accusation.getPersonCard());
 		boolean checkRoom = theAnswer.getRoomCard().equals(accusation.getRoomCard());
 		boolean checkWeapon = theAnswer.getWeaponCard().equals(accusation.getWeaponCard());
+		// Check the answer
 		if (checkPerson && checkRoom && checkWeapon) {
 			return true;
 		}
