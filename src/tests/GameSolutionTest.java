@@ -101,7 +101,6 @@ public class GameSolutionTest {
 			int countGarage = 0;
 			int countWilliam = 0;
 			int countBat = 0;
-			
 			for (int i=0; i<100; i++) {
 				Card disproveCard = harry.disproveSuggestion(suggestion);
 				if (garageCard.equals(disproveCard)) {
