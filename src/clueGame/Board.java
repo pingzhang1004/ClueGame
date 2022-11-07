@@ -584,14 +584,19 @@ public class Board {
 		return false;
 	}
 
+	// Process all the players in turn, each to see if they can dispute the suggestion. 
+	// If return null, no player can dispute the suggestion. 
+	// Otherwise return the first card that disputed the suggestion.
 	public Card handleSuggestion(Player player, Solution suggestion) {
 		int index = players.indexOf(player);
+		// Check players after the current player
 		for (int i=index+1; i<players.size(); i++) {
 			Card disproveCard = players.get(i).disproveSuggestion(suggestion);
 			if (disproveCard != null) {
 				return disproveCard;
 			}
 		}
+		// Check players before the current player
 		for (int i=0; i<index; i++) {
 			Card disproveCard = players.get(i).disproveSuggestion(suggestion);
 			if (disproveCard != null) {
