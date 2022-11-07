@@ -27,18 +27,21 @@ public class ComputerPlayer extends Player {
 		return suggestion;
 	}
 
+	// If a target is in a room and the room is not in that player's seen list, select the room (or if multiple rooms select randomly).
+	// Otherwise, select a target randomly from the target list.
 	public BoardCell selectTarget(Set<BoardCell> targets, Map<Character, Room> roomMap) {
 		ArrayList<String> nameList = new ArrayList<String>();
 		ArrayList<BoardCell> roomTargets = new ArrayList<BoardCell>();
 		String roomName;
 
-		//char roomChar;
+		// Get unseen rooms
 		for (Card card : getUnseenRooms()) {
 			roomName = card.getCardName();
 			nameList.add(roomName);
 
 		}
 
+		// Get valid targets
 		for (BoardCell cell : targets) {
 			if (cell.isRoomCenter()) {
 				roomName = roomMap.get(cell.getInitial()).getName();
@@ -48,10 +51,12 @@ public class ComputerPlayer extends Player {
 			}
 		}
 
+		// rooms can be selected
 		if (roomTargets.size() != 0) {
 			int randomRoom = (int)(Math.random() * roomTargets.size()); 
 			return roomTargets.get(randomRoom);
 		}
+		// room can not be selected
 		else {
 			int randomRoom = (int)(Math.random() * targets.size()); 
 			ArrayList<BoardCell> targetsList = new ArrayList<BoardCell>();
