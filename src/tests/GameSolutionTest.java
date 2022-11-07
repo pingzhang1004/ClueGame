@@ -114,9 +114,9 @@ public class GameSolutionTest {
 				}
 			}
 			assertEquals(100, countGarage+countWilliam+countBat);
-			assert(countGarage > 15);
-			assert(countWilliam > 15);
-			assert(countBat > 15);
+			assert(countGarage > 10);
+			assert(countWilliam > 10);
+			assert(countBat > 10);
 		}
 
 		@Test

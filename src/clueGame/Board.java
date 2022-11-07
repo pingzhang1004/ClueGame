@@ -464,7 +464,7 @@ public class Board {
 			dealPlayCards.remove(solutionWeaponCard);
 		}
 		//using the random room card,random player card and random weapon card to assign a solution
-		theAnswer = new Solution(solutionRoomCard,solutionPlayerCard,solutionWeaponCard);
+		setAnswer(solutionPlayerCard, solutionRoomCard, solutionWeaponCard);
 
 		//deal the left card randomly to 6 players, each player has 3 cards
 		//Card randomPlayerCard = new Card();		

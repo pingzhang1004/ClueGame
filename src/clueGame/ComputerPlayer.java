@@ -10,11 +10,13 @@ public class ComputerPlayer extends Player {
 		super(name, strColor, row, column);
 	}
 
+	// Given a room, the computer player will create a suggestion composed of that room, a weapon and player from those cards the computer player has not seen.
 	public Solution createSuggestion(Room room) {
 
 		int randomPerson = (int)(Math.random() * getUnseenPeople().size());
 		int randomWeapon = (int)(Math.random() * getUnseenWeapons().size());
 
+		// Get random person and weapon
 		String roomName = room.getName();
 		String personName = getUnseenPeople().get(randomPerson).getCardName();
 		String weaponName = getUnseenWeapons().get(randomWeapon).getCardName();

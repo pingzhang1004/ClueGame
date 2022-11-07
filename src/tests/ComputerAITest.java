@@ -89,9 +89,9 @@ public class ComputerAITest {
 			}
 		}
 		assertEquals(100, count1+count2+count3);
-		assert(count1 > 15);
-		assert(count2 > 15);
-		assert(count3 > 15);
+		assert(count1 > 10);
+		assert(count2 > 10);
+		assert(count3 > 10);
 		
 		// if room in list 
 		board.calcTargets(board.getCell(17, 20), 2);
