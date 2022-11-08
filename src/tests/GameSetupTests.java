@@ -51,16 +51,28 @@ class GameSetupTests {
 		ArrayList<Card> testList = board.getCardsList();		
 		assertEquals(21, testList.size());
 		assertTrue(testList.contains(board.getCard("Balcony", CardType.ROOM)));
+		assertTrue(testList.contains(board.getCard("Garage", CardType.ROOM)));
+		assertTrue(testList.contains(board.getCard("Play Room", CardType.ROOM)));
+		assertTrue(testList.contains(board.getCard("Fitness Room", CardType.ROOM)));
 		assertTrue(testList.contains(board.getCard("Home Office", CardType.ROOM)));
+		assertTrue(testList.contains(board.getCard("Laundry", CardType.ROOM)));
+		assertTrue(testList.contains(board.getCard("Living Room", CardType.ROOM)));
+		assertTrue(testList.contains(board.getCard("Movie Room", CardType.ROOM)));
 		assertTrue(testList.contains(board.getCard("Reception", CardType.ROOM)));
-
+		
 		assertTrue(testList.contains(board.getCard("Mr William", CardType.PERSON)));
 		assertTrue(testList.contains(board.getCard("Mr Harry", CardType.PERSON)));
+		assertTrue(testList.contains(board.getCard("Miss Kate", CardType.PERSON)));
+		assertTrue(testList.contains(board.getCard("Mr Charles", CardType.PERSON)));
+		assertTrue(testList.contains(board.getCard("Miss Megan", CardType.PERSON)));
 		assertTrue(testList.contains(board.getCard("Miss Elizabeth", CardType.PERSON)));
 
 		assertTrue(testList.contains(board.getCard("rope", CardType.WEAPON)));
 		assertTrue(testList.contains(board.getCard("scissor", CardType.WEAPON)));
-		assertTrue(testList.contains(board.getCard("hammer", CardType.WEAPON)));		
+		assertTrue(testList.contains(board.getCard("hammer", CardType.WEAPON)));
+		assertTrue(testList.contains(board.getCard("gun", CardType.WEAPON)));
+		assertTrue(testList.contains(board.getCard("dagger", CardType.WEAPON)));
+		assertTrue(testList.contains(board.getCard("bat", CardType.WEAPON)));
 	}
 
 	//There is 1 random solution, the solution includes 1 room card, 1 weapon card, 1 people card
