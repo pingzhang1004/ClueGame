@@ -1,10 +1,14 @@
 package clueGame;
 
+import java.awt.Color;
+
 public class Card {
 
 	//The standard deck of cards is composed on 9 rooms, 6 players and 6 weapons.  
 	private String cardName;
 	private CardType cardType;
+	
+	//private Color cardColor;
 	
 	
 	

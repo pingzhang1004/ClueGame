@@ -17,7 +17,6 @@ public abstract class Player {
 	
 	//each player hold multiple cards
 	private ArrayList<Card> myCards;	
-
 	private ArrayList<Card> seenCards;
 
 	private ArrayList<Card> unseenPeople;
@@ -73,7 +72,7 @@ public abstract class Player {
 		myCards.add(card);
 	}
 
-	// update seem card list
+	// update seen card list
 	public void updateSeen(Card card) {
 		seenCards.add(card);
 		switch (card.getCardType()) {
@@ -183,6 +182,9 @@ public abstract class Player {
 		return column;
 	}
 
+	public Color getColor() {
+		return color;
+	}
 
 	abstract public BoardCell selectTarget(Set<BoardCell> targets, Map<Character, Room> roomMap);
 

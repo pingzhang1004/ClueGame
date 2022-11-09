@@ -1,6 +1,8 @@
 package clueGame;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
@@ -14,15 +16,27 @@ import javax.swing.border.TitledBorder;
 
 public class GameControlPanel extends JPanel {
 
-	private JPanel controlPanel;
 	private JTextField theGuess;
 	private JTextField theGuessResult;
 	private JTextField theCurrentPlayer;
 	private JTextField theRoll;
+	private Color playerColor;
 
 	//Constructor for the panel, it does 90% of the work
 	public GameControlPanel()  {
-	
+		theGuess = new JTextField(20);
+		theGuess.setEditable(false);
+		//theGuess.setPreferredSize(new Dimension(40, 40));
+		theGuessResult = new JTextField(20);
+		theGuessResult.setEditable(false);
+		//theGuessResult.setPreferredSize(new Dimension(40, 40));
+		theRoll = new JTextField(5);
+		theRoll.setEditable(false);
+		//theRoll.setPreferredSize(new Dimension(5, 5));
+		theCurrentPlayer = new JTextField(20);
+		theCurrentPlayer.setEditable(false);
+		//theCurrentPlayer.setPreferredSize(new Dimension(20, 20));
+		
 		JPanel panel  = createControlPanel();
 		add(panel);
 	}
@@ -33,16 +47,8 @@ public class GameControlPanel extends JPanel {
 	//	
 
 	private JPanel createControlPanel() {
-		theGuess = new JTextField(5);
-		theGuess.setEditable(false);
-		theGuessResult = new JTextField(5);
-		theGuessResult.setEditable(false);
-		theRoll = new JTextField(3);
-		theRoll.setEditable(false);
-		theCurrentPlayer =  new JTextField(5);
-		theCurrentPlayer.setEditable(false);
-
-        //
+	
+		//initialize the  createControlPane 
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new GridLayout(2,0));		
 		// Use a grid layout, 1 row, 4 columns
@@ -53,13 +59,13 @@ public class GameControlPanel extends JPanel {
 		currentPlayPanel.setLayout(new GridLayout(2,0));
 		JLabel playTurnLable= new JLabel("Whose Turn?");
 		currentPlayPanel.add(playTurnLable);
-		currentPlayPanel.add(theCurrentPlayer);	    
+		currentPlayPanel.add(theCurrentPlayer);
 		// Use a grid layout,  0 row, 20 columns
 		JPanel rollPanel = new JPanel();	
 		rollPanel.setLayout(new GridLayout(0,2));
 		JLabel rollLable = new JLabel("Roll:");
 		rollPanel.add(rollLable);
-		rollPanel.add(theRoll,BorderLayout.WEST);
+		rollPanel.add(theRoll);
 		// new two buttons for the "Make Accusation" and "Next!"
 		JButton accusationButton = new JButton("Make Accusation");								
 		JButton nextButton = new JButton("Next!");
@@ -108,6 +114,8 @@ public class GameControlPanel extends JPanel {
 		panel.setTurn(new ComputerPlayer("Miss Kate", "red", 0, 15), 5);
 		panel.setGuess( "I have no guess!");
 		panel.setGuessResult( "So you have nothing?");
+		//panel.setPreferredSize(frame.getSize());
+		//panel.set
 	}
 
 	public void setGuess(String guess) {		
@@ -124,8 +132,8 @@ public class GameControlPanel extends JPanel {
 
 		theCurrentPlayer.setText(currentPlayer.getName());		
 		theRoll.setText(String.valueOf(roll));
+		playerColor= currentPlayer.getColor();
+		theCurrentPlayer.setBackground(playerColor);
+		
 	}
-
-
-
 }
