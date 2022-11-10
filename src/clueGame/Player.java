@@ -44,7 +44,7 @@ public abstract class Player {
 	public void convertStrToColor(String strColor) {		 
 		switch(strColor){
 		case "blue": 
-			color = Color.blue;
+			color = Color.cyan;
 			break;  
 		case "green": 
 			color = Color.green;

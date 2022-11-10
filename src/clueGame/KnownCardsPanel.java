@@ -30,7 +30,7 @@ public class KnownCardsPanel extends JPanel {
 		weaponPanel  = new JPanel();
 		knownCardsPanel = createKnownCardPanel();
 		add(knownCardsPanel);
-		
+
 	}
 
 	private JPanel createKnownCardPanel() {
@@ -50,7 +50,7 @@ public class KnownCardsPanel extends JPanel {
 		displayCardFields(testBoard.getPlayersList().get(0).getMyCards(),peoplePanel);
 		peoplePanel.add(peopleSeenLabel);
 		displayCardFields(testBoard.getPlayersList().get(0).getSeenCards(),peoplePanel);
-		
+
 		//initialize the Room Panel	
 		roomPanel.setLayout(new GridLayout(0,1));
 		roomPanel.setBorder(new TitledBorder (new EtchedBorder(), "Rooms"));	
@@ -77,7 +77,7 @@ public class KnownCardsPanel extends JPanel {
 		displayCardFields(testBoard.getPlayersList().get(0).getMyCards(),weaponPanel);
 		weaponPanel.add(weaponSeenLabel);
 		displayCardFields(testBoard.getPlayersList().get(0).getSeenCards(),weaponPanel);
-		
+
 		return knownCardsPanel;
 	}
 
@@ -86,59 +86,73 @@ public class KnownCardsPanel extends JPanel {
 	//add CardFields in different size automatically 
 	public void displayCardFields(ArrayList<Card> cards, JPanel currentPanel) { 
 		JTextField	textFiled;
-		if(cards.size()==0) {
-			textFiled = new JTextField("None");
-			textFiled.setEditable(false);
-			textFiled.setBackground(Color.GRAY);
-			currentPanel.add(textFiled);
+		int cardTypeNum =0;
+		//add panels number changing to roomPanel
+		if(currentPanel == peoplePanel) {
+			for(Card card : cards) {
+				if(card.getCardType() == CardType.PERSON) {
+					cardTypeNum = addFilledField(currentPanel, cardTypeNum, card);
+				}
+			}
+			addNoneField(currentPanel, cardTypeNum);
 		}
-		else {
-			if(currentPanel == peoplePanel) {
-				for(Card card : cards) {
-					if(card.getCardType() == CardType.PERSON) {
-						textFiled = new JTextField();
-						textFiled.setEditable(false);
-						textFiled.setText(card.getCardName());
-						if(card.getCardHolder()!= null)
-						textFiled.setBackground(card.getCardHolder().getColor());
-						else
-							textFiled.setBackground(Color.gray);
-						currentPanel.add(textFiled);
-					}					
-				}			
+		//add panels number changing to roomPanel
+		if(currentPanel == roomPanel) {
+			for(Card card : cards) {
+				if(card.getCardType() == CardType.ROOM) {
+					cardTypeNum = addFilledField(currentPanel, cardTypeNum, card);
+				}					
+			}	
+			addNoneField(currentPanel, cardTypeNum);			
+		}
+		//add panels number changing to rweaponPanel
+		if(currentPanel == weaponPanel) {
+			for(Card card : cards) {
+				if(card.getCardType() == CardType.WEAPON) {
+					cardTypeNum = addFilledField(currentPanel, cardTypeNum, card);
+				}
 			}
-			if(currentPanel == roomPanel) {
-				for(Card card : cards) {
-					if(card.getCardType() == CardType.ROOM) {
-						textFiled = new JTextField();
-						textFiled.setEditable(false);
-						textFiled.setText(card.getCardName());
-						if(card.getCardHolder()!= null)
-							textFiled.setBackground(card.getCardHolder().getColor());
-							else
-								textFiled.setBackground(Color.gray);
-						currentPanel.add(textFiled);
-					}					
-				}			
-			}
-			if(currentPanel == weaponPanel) {
-				for(Card card : cards) {
-					if(card.getCardType() == CardType.WEAPON) {
-						textFiled = new JTextField();
-						textFiled.setEditable(false);
-						textFiled.setText(card.getCardName());
-						if(card.getCardHolder()!= null)
-							textFiled.setBackground(card.getCardHolder().getColor());
-							else
-								textFiled.setBackground(Color.gray);
-						currentPanel.add(textFiled);
-					}
-
-				}			
-			}
+			addNoneField(currentPanel, cardTypeNum);
 		}
 	}
 
+	private int addFilledField(JPanel currentPanel, int cardTypeNum, Card card) {
+		JTextField textFiled;
+		textFiled = new JTextField(15);
+		textFiled.setEditable(false);
+		textFiled.setText(card.getCardName());
+		if(card.getCardHolder()!= null)
+			textFiled.setBackground(card.getCardHolder().getColor());
+		else
+			textFiled.setBackground(Color.gray);//it means the card is a solution card
+		currentPanel.add(textFiled);
+		cardTypeNum = cardTypeNum+1;
+		return cardTypeNum;
+	}
+
+	private void addNoneField(JPanel currentPanel, int cardTypeNum) {
+		JTextField textFiled;
+		if(cardTypeNum == 0) {
+			textFiled = new JTextField(15);
+			textFiled.setEditable(false);
+			textFiled.setText("None");
+			textFiled.setBackground(Color.white);
+			currentPanel.add(textFiled);
+		}
+	}
+
+    //update the Known Cards panel when add a new seenCard to the hunmanPlayer
+	public void updatePanels() {
+		updatePanel(peoplePanel,CardType.PERSON);
+		updatePanel(roomPanel,CardType.ROOM);
+		updatePanel(weaponPanel,CardType.WEAPON);
+	}
+
+	//rebuild the people panel/room panel/ weapon panel
+	public void updatePanel(JPanel currentPanel,CardType cardType) {
+		currentPanel.removeAll();
+		currentPanel.add(currentPanel);
+	};
 
 	// Main to test the panel
 	public static void main(String[] args) {
@@ -154,16 +168,14 @@ public class KnownCardsPanel extends JPanel {
 		for(Card card : testBoard.getCardsList()) {					
 			testBoard.getPlayersList().get(0).updateSeen(card);					
 		}
-//		
-//		for(Card card : testBoard.getPlayersList().get(0).getUnseenRooms()) {					
-//			testBoard.getPlayersList().get(0).updateSeen(card);					
-//		}
-
-		
+		//		
+		//		for(Card card : testBoard.getPlayersList().get(0).getUnseenRooms()) {					
+		//			testBoard.getPlayersList().get(0).updateSeen(card);					
+		//		}
 
 		// create the panel
 		KnownCardsPanel panel = new KnownCardsPanel(); 
-		 // create the frame 
+		// create the frame 
 		JFrame frame = new JFrame(); 
 		// put the panel in the frame
 		frame.setContentPane(panel); 
@@ -174,6 +186,8 @@ public class KnownCardsPanel extends JPanel {
 		frame.setVisible(true); 
 		//		
 	}
+
+
 
 
 }
