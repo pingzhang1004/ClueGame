@@ -133,7 +133,6 @@ public class GameControlPanel extends JPanel {
 		theCurrentPlayer.setText(currentPlayer.getName());		
 		theRoll.setText(String.valueOf(roll));
 		playerColor= currentPlayer.getColor();
-		theCurrentPlayer.setBackground(playerColor);
-		
+		theCurrentPlayer.setBackground(playerColor);		
 	}
 }

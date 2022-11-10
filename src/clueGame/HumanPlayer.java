@@ -11,6 +11,7 @@ public class HumanPlayer extends Player {
 		
 	}
 
+	
 	@Override
 	public BoardCell selectTarget(Set<BoardCell> targets, Map<Character, Room> roomMap) {
 		// TODO Auto-generated method stub
