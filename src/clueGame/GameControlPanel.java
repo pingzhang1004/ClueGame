@@ -24,28 +24,20 @@ public class GameControlPanel extends JPanel {
 
 	//Constructor for the panel, it does 90% of the work
 	public GameControlPanel()  {
+		//initialize the Panel
 		theGuess = new JTextField(20);
 		theGuess.setEditable(false);
-		//theGuess.setPreferredSize(new Dimension(40, 40));
 		theGuessResult = new JTextField(20);
 		theGuessResult.setEditable(false);
-		//theGuessResult.setPreferredSize(new Dimension(40, 40));
 		theRoll = new JTextField(5);
 		theRoll.setEditable(false);
-		//theRoll.setPreferredSize(new Dimension(5, 5));
 		theCurrentPlayer = new JTextField(20);
 		theCurrentPlayer.setEditable(false);
-		//theCurrentPlayer.setPreferredSize(new Dimension(20, 20));
 		
 		JPanel panel  = createControlPanel();
 		add(panel);
 	}
-
-	//	private JPanel createKnownCardPanel() {
-	//	 return null;
-	//	}
-	//	
-
+	
 	private JPanel createControlPanel() {
 	
 		//initialize the  createControlPane 

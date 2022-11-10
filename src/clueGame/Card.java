@@ -7,11 +7,21 @@ public class Card {
 	//The standard deck of cards is composed on 9 rooms, 6 players and 6 weapons.  
 	private String cardName;
 	private CardType cardType;
-	
+	private Player cardHolder;
 	//private Color cardColor;
 	
 	
 	
+	public Player getCardHolder() {
+		return cardHolder;
+	}
+
+
+	public void setCardHolder(Player cardHolder) {
+		this.cardHolder = cardHolder;
+	}
+
+
 	public Card() {
 		super();
 	}

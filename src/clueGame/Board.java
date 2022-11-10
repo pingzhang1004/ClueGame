@@ -45,8 +45,6 @@ public class Board {
 	private ArrayList<Player> players;
 	//There are 21 cards：9 room cards, 6 player cards, 6 weapon cards
 	private  ArrayList<Card> cards;
-	
-	private Map<Card, Color> cardMap;
 
 	/*
 	 * variable and methods used for singleton pattern
@@ -87,8 +85,6 @@ public class Board {
 		roomEnter();
 		calcAdjList();
 		deal();
-//		Card testCard = new Card();
-//		testCard =  getCard("Miss Kate",CardType.PERSON);
 	}
 	// End from Canvas
 
@@ -409,7 +405,6 @@ public class Board {
 	//deal other cards to the players.
 	public void deal() {
 
-		cardMap = new HashMap<Card, Color>();
 		//solution card include 1 Room Card, 1 player Card, 1 weapon Card
 		Card solutionRoomCard = new Card();		
 		Card solutionPlayerCard  = new Card();
@@ -489,8 +484,8 @@ public class Board {
 		if(!dealPlayCards.isEmpty()) {
 			RandomIndex = randomGenerator.nextInt(dealPlayCards.size());
 			randomPlayerCard = dealPlayCards.get(RandomIndex);
+			randomPlayerCard.setCardHolder(currentPlayer);
 			currentPlayer.updateHand(randomPlayerCard);
-			cardMap.put(randomPlayerCard, currentPlayer.getColor());
 			dealPlayCards.remove(randomPlayerCard);
 		}
 	}
@@ -610,9 +605,5 @@ public class Board {
 			}
 		}
 		return null;
-	}
-	
-	public Map<Card, Color> getCardMap() {
-		return cardMap;
 	}
 }

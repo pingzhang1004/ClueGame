@@ -10,7 +10,6 @@ public class HumanPlayer extends Player {
 		super(name, strColor, row, column);
 		
 	}
-
 	
 	@Override
 	public BoardCell selectTarget(Set<BoardCell> targets, Map<Character, Room> roomMap) {
