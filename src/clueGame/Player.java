@@ -97,7 +97,6 @@ public abstract class Player {
 		
 		for (Card card : myCards) {
 			unseenCards.remove(card);
-			seenCards.add(card);
 		}
 	
 		for (Card card : unseenCards) {
@@ -126,6 +125,7 @@ public abstract class Player {
 		// If the card can be disprove, then add into the disprove card list
 		if (myCards.contains(suggestion.getPersonCard())) {
 			disproveCards.add(suggestion.getPersonCard());
+			
 		}
 		if (myCards.contains(suggestion.getRoomCard())) {
 			disproveCards.add(suggestion.getRoomCard());

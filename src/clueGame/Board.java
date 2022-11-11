@@ -545,8 +545,8 @@ public class Board {
 		theAnswer = new Solution(room, person, weapon);
 	}
 	
+	// Return a player
 	public Player getPlayer(String Name, String color, int row, int column) {
-		
 		for(Player currentPlayer : players) {
 			if(Name.equals(currentPlayer.getName()) && color.equals(currentPlayer.getStrColor()) && row==(currentPlayer.getRow()) && column==(currentPlayer.getColumn())) {
 				return currentPlayer ;
@@ -593,6 +593,7 @@ public class Board {
 		for (int i=index+1; i<players.size(); i++) {
 			Card disproveCard = players.get(i).disproveSuggestion(suggestion);
 			if (disproveCard != null) {
+				disproveCard.setCardHolder(players.get(i));
 				return disproveCard;
 			}
 		}
@@ -600,6 +601,7 @@ public class Board {
 		for (int i=0; i<index; i++) {
 			Card disproveCard = players.get(i).disproveSuggestion(suggestion);
 			if (disproveCard != null) {
+				disproveCard.setCardHolder(players.get(i));
 				return disproveCard;
 
 			}

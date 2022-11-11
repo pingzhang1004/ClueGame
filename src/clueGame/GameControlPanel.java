@@ -39,8 +39,16 @@ public class GameControlPanel extends JPanel {
 	}
 	
 	private JPanel createControlPanel() {
-	
-		//initialize the  createControlPane 
+		theGuess = new JTextField(5);
+		theGuess.setEditable(false);
+		theGuessResult = new JTextField(5);
+		theGuessResult.setEditable(false);
+		theRoll = new JTextField(3);
+		theRoll.setEditable(false);
+		theCurrentPlayer =  new JTextField(5);
+		theCurrentPlayer.setEditable(false);
+
+        //
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new GridLayout(2,0));		
 		// Use a grid layout, 1 row, 4 columns
@@ -48,26 +56,30 @@ public class GameControlPanel extends JPanel {
 		playTurnPanel.setLayout(new GridLayout(1,4));
 		// Use a grid layout,  2 row, 0 columns
 		JPanel currentPlayPanel = new JPanel();	
-		currentPlayPanel.setLayout(new GridLayout(2,0));
+		currentPlayPanel.setLayout(new GridLayout(2,1));
 		JLabel playTurnLable= new JLabel("Whose Turn?");
 		currentPlayPanel.add(playTurnLable);
-		currentPlayPanel.add(theCurrentPlayer);
+		currentPlayPanel.add(theCurrentPlayer);	    
 		// Use a grid layout,  0 row, 20 columns
 		JPanel rollPanel = new JPanel();	
-		rollPanel.setLayout(new GridLayout(0,2));
+		rollPanel.setLayout(new GridLayout(2,2));
 		JLabel rollLable = new JLabel("Roll:");
 		rollPanel.add(rollLable);
 		rollPanel.add(theRoll);
+		rollPanel.add(new JLabel());
+		rollPanel.add(new JLabel());
 		// new two buttons for the "Make Accusation" and "Next!"
 		JButton accusationButton = new JButton("Make Accusation");								
 		JButton nextButton = new JButton("Next!");
 
-		controlPanel.add(playTurnPanel);
+		
 		playTurnPanel.add(currentPlayPanel);
 		playTurnPanel.add(rollPanel);
 		playTurnPanel.add(accusationButton);
 		playTurnPanel.add(nextButton);
 
+		controlPanel.add(playTurnPanel);
+		
 		//initialize the guessGroupPanel
 		// Use a grid layout, 0 row, 2 columns
 		JPanel guessGroupPanel = new JPanel();					
@@ -85,9 +97,10 @@ public class GameControlPanel extends JPanel {
 		// add label, text
 		guessResultPanel.setBorder(new TitledBorder (new EtchedBorder(), "Guess Result"));
 
-		controlPanel.add(guessGroupPanel);
 		guessGroupPanel.add(guessPanel);
 		guessGroupPanel.add(guessResultPanel);
+		
+		controlPanel.add(guessGroupPanel);
 		
 		return controlPanel;
 	}
