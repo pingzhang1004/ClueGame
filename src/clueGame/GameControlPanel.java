@@ -48,9 +48,10 @@ public class GameControlPanel extends JPanel {
 		theCurrentPlayer =  new JTextField(5);
 		theCurrentPlayer.setEditable(false);
 
-        //
+		// 
 		JPanel controlPanel = new JPanel();
-		controlPanel.setLayout(new GridLayout(2,0));		
+		controlPanel.setLayout(new GridLayout(2,0));
+		controlPanel.setPreferredSize(new Dimension(1200, 100));
 		// Use a grid layout, 1 row, 4 columns
 		JPanel playTurnPanel = new JPanel();
 		playTurnPanel.setLayout(new GridLayout(1,4));
@@ -115,6 +116,9 @@ public class GameControlPanel extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 		frame.setVisible(true); // make it visible
 
+		System.out.println(panel.getWidth());
+		System.out.println(panel.getHeight());
+		
 		// test filling in the data
 		panel.setTurn(new ComputerPlayer("Miss Kate", "red", 0, 15), 5);
 		panel.setGuess( "I have no guess!");

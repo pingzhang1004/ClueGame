@@ -8,6 +8,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -19,9 +20,11 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.swing.JPanel;
+
 import experiment.TestBoardCell;
 
-public class Board {
+public class Board extends JPanel{
 
 	// Variables
 	private static final char walkwayChar = 'W';
@@ -608,4 +611,16 @@ public class Board {
 		}
 		return null;
 	}
+	
+	// GUI part******************************************************
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+	
+	}
+	
+	
+	
+	
+	
+	
 }

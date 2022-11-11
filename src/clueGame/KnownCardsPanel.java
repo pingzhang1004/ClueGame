@@ -1,6 +1,8 @@
 package clueGame;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Map;
@@ -21,9 +23,11 @@ public class KnownCardsPanel extends JPanel {
 	private JPanel roomPanel;
 	private JPanel weaponPanel;
 
-	private static Board board;
+	private Board board;
+	private static Board testBoard;
 
-	public KnownCardsPanel() {
+	public KnownCardsPanel(Board board) {
+		this.board = board;
 		knownCardsPanel = new JPanel();		
 		peoplePanel = new JPanel();
 		roomPanel = new JPanel();
@@ -38,6 +42,7 @@ public class KnownCardsPanel extends JPanel {
 		//initialize the  knowCardsPanel 
 		knownCardsPanel.setLayout(new GridLayout(3,0));
 		knownCardsPanel.setBorder(new TitledBorder (new EtchedBorder(), "Known Cards"));
+		knownCardsPanel.setPreferredSize(new Dimension(200, 600));
 
 		//initialize the PeoplePanel	
 		peoplePanel.setLayout(new GridLayout(0,1));
@@ -168,20 +173,21 @@ public class KnownCardsPanel extends JPanel {
 	public static void main(String[] args) {
 		// Board is singleton, get the only instance
 		//Board board = Board.getInstance();
-		board = Board.getInstance();
+		testBoard = Board.getInstance();
 		// set the file names to use my config files
-		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");		
+		testBoard.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");		
 		// Initialize will load config files 
-		board.initialize();
+		testBoard.initialize();
 				
 		// create the panel
-		KnownCardsPanel panel = new KnownCardsPanel(); 
+		KnownCardsPanel panel = new KnownCardsPanel(testBoard); 
+		
 		
 		//create seenCards for testing: add others' in hand cards into the seenCards
-		for (int i=1; i<board.getPlayersList().size(); i++) {
-			Player player = board.getPlayersList().get(i);
+		for (int i=1; i<testBoard.getPlayersList().size(); i++) {
+			Player player = testBoard.getPlayersList().get(i);
 			for (Card c : player.getMyCards()) {
-				board.getPlayersList().get(0).updateSeen(c);
+				testBoard.getPlayersList().get(0).updateSeen(c);
 			}
 		}
 		
@@ -197,6 +203,8 @@ public class KnownCardsPanel extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 		// make it visible
 		frame.setVisible(true); 
+		System.out.println(panel.getWidth());
+		System.out.println(panel.getHeight());
 	}
 
 
