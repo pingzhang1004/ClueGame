@@ -21,7 +21,7 @@ public class KnownCardsPanel extends JPanel {
 	private JPanel roomPanel;
 	private JPanel weaponPanel;
 
-	private static Board testBoard;
+	private static Board board;
 
 	public KnownCardsPanel() {
 		knownCardsPanel = new JPanel();		
@@ -47,9 +47,9 @@ public class KnownCardsPanel extends JPanel {
 		//add the people InHand card people Seen card to people Panel
 		knownCardsPanel.add(peoplePanel);
 		peoplePanel.add(peopleInHandLabel);
-		displayCardFields(testBoard.getPlayersList().get(0).getMyCards(),peoplePanel);
+		displayCardFields(board.getPlayersList().get(0).getMyCards(),peoplePanel);
 		peoplePanel.add(peopleSeenLabel);
-		displayCardFields(testBoard.getPlayersList().get(0).getSeenCards(),peoplePanel);
+		displayCardFields(board.getPlayersList().get(0).getSeenCards(),peoplePanel);
 
 		//initialize the Room Panel	
 		roomPanel.setLayout(new GridLayout(0,1));
@@ -60,9 +60,9 @@ public class KnownCardsPanel extends JPanel {
 		//add the room InHand card and room Seen card to room Panel	
 		knownCardsPanel.add(roomPanel);
 		roomPanel.add(roomInHandLabel);
-		displayCardFields(testBoard.getPlayersList().get(0).getMyCards(),roomPanel);
+		displayCardFields(board.getPlayersList().get(0).getMyCards(),roomPanel);
 		roomPanel.add(roomSeenLabel);
-		displayCardFields(testBoard.getPlayersList().get(0).getSeenCards(),roomPanel);
+		displayCardFields(board.getPlayersList().get(0).getSeenCards(),roomPanel);
 
 
 		//initialize the Weapon Panel	
@@ -74,9 +74,9 @@ public class KnownCardsPanel extends JPanel {
 		//add the room InHand Panel and room SeenPanel room CardsPanel		
 		knownCardsPanel.add(weaponPanel);
 		weaponPanel.add(weaponInHandLabel);
-		displayCardFields(testBoard.getPlayersList().get(0).getMyCards(),weaponPanel);
+		displayCardFields(board.getPlayersList().get(0).getMyCards(),weaponPanel);
 		weaponPanel.add(weaponSeenLabel);
-		displayCardFields(testBoard.getPlayersList().get(0).getSeenCards(),weaponPanel);
+		displayCardFields(board.getPlayersList().get(0).getSeenCards(),weaponPanel);
 
 		return knownCardsPanel;
 	}
@@ -150,26 +150,26 @@ public class KnownCardsPanel extends JPanel {
 
 	//rebuild the people panel/room panel/ weapon panel
 	public void updatePanel(JPanel currentPanel,CardType cardType) {
-		currentPanel.removeAll();
-		currentPanel.add(currentPanel);
+		currentPanel.removeAll();	
+		//currentPanel.add(currentPanel);
 	};
 
 	// Main to test the panel
 	public static void main(String[] args) {
 		// Board is singleton, get the only instance
-		Board board = Board.getInstance();
+		//Board board = Board.getInstance();
+		board = Board.getInstance();
 		// set the file names to use my config files
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");		
 		// Initialize will load config files 
 		board.initialize();
 
-		testBoard = board;
 		//create seenCards for testing: add all the cards into the sennCards
-		for(Card card : testBoard.getCardsList()) {					
-			testBoard.getPlayersList().get(0).updateSeen(card);					
+		for(Card card : board.getCardsList()) {					
+			board.getPlayersList().get(0).updateSeen(card);					
 		}
 		//		
-		//		for(Card card : testBoard.getPlayersList().get(0).getUnseenRooms()) {					
+		//		for(Card card :  board.getPlayersList().get(0).getUnseenRooms()) {					
 		//			testBoard.getPlayersList().get(0).updateSeen(card);					
 		//		}
 
