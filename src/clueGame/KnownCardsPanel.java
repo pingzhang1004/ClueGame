@@ -42,46 +42,22 @@ public class KnownCardsPanel extends JPanel {
 		//initialize the PeoplePanel	
 		peoplePanel.setLayout(new GridLayout(0,1));
 		peoplePanel.setBorder(new TitledBorder (new EtchedBorder(), "People"));
-//		JLabel peopleInHandLabel= new JLabel("In Hand: ");		
-//		JLabel peopleSeenLabel= new JLabel("Seen: ");
-		//add the people InHand card people Seen card to people Panel
+		
 		knownCardsPanel.add(peoplePanel);
-//		peoplePanel.add(peopleInHandLabel);
-//		displayCardFields(board.getPlayersList().get(0).getMyCards(),peoplePanel);
-//		peoplePanel.add(peopleSeenLabel);
-		//updatePanel(peoplePanel,CardType.PERSON);
-		//displayCardFields(board.getPlayersList().get(0).getSeenCards(),peoplePanel);
 
 		//initialize the Room Panel	
 		roomPanel.setLayout(new GridLayout(0,1));
 		roomPanel.setBorder(new TitledBorder (new EtchedBorder(), "Rooms"));	
-//		JLabel roomInHandLabel= new JLabel("In Hand: ");		
-//		JLabel roomSeenLabel= new JLabel("Seen: ");	
-
-		//add the room InHand card and room Seen card to room Panel	
 		knownCardsPanel.add(roomPanel);
-//		roomPanel.add(roomInHandLabel);
-//		displayCardFields(board.getPlayersList().get(0).getMyCards(),roomPanel);
-//		roomPanel.add(roomSeenLabel);
-		//updatePanel(roomPanel,CardType.ROOM);
-		//displayCardFields(board.getPlayersList().get(0).getSeenCards(),roomPanel);
-
 
 		//initialize the Weapon Panel	
 		weaponPanel.setLayout(new GridLayout(0,1));
-		weaponPanel.setBorder(new TitledBorder (new EtchedBorder(), "Weapons"));
-//		JLabel weaponInHandLabel= new JLabel("In Hand: ");		
-//		JLabel weaponSeenLabel= new JLabel("Seen: ");		
-
-		//add the room InHand Panel and room SeenPanel room CardsPanel		
+		weaponPanel.setBorder(new TitledBorder (new EtchedBorder(), "Weapons"));	
 		knownCardsPanel.add(weaponPanel);
-//		weaponPanel.add(weaponInHandLabel);
-//		displayCardFields(board.getPlayersList().get(0).getMyCards(),weaponPanel);
-//		weaponPanel.add(weaponSeenLabel);
-		//updatePanel(weaponPanel, CardType.WEAPON);
-		//displayCardFields(board.getPlayersList().get(0).getSeenCards(),weaponPanel);
-
+		
+		// update all card panels
 		updatePanels();
+		
 		return knownCardsPanel;
 	}
 
@@ -120,6 +96,7 @@ public class KnownCardsPanel extends JPanel {
 		}
 	}
 
+	// Add testField for cards that is in hand or seen
 	private int addFilledField(JPanel currentPanel, int cardTypeNum, Card card) {
 		JTextField textFiled;
 		textFiled = new JTextField(15);
@@ -134,13 +111,14 @@ public class KnownCardsPanel extends JPanel {
 		return cardTypeNum;
 	}
 
+	// Add textField as None if no card is in hand or seen
 	private void addNoneField(JPanel currentPanel, int cardTypeNum) {
 		JTextField textFiled;
 		if(cardTypeNum == 0) {
 			textFiled = new JTextField(15);
 			textFiled.setEditable(false);
 			textFiled.setText("None");
-			textFiled.setBackground(Color.white);
+			textFiled.setBackground(Color.gray);
 			currentPanel.add(textFiled);
 		}
 	}
@@ -156,25 +134,31 @@ public class KnownCardsPanel extends JPanel {
 	public void updatePanel(JPanel currentPanel,CardType cardType) {
 		currentPanel.removeAll();	
 		switch(cardType) {
+		// update the people panel
 		case PERSON:
 			JLabel peopleInHandLabel= new JLabel("In Hand: ");		
 			JLabel peopleSeenLabel= new JLabel("Seen: ");
+			//add the people InHand card people Seen card to people Panel
 			peoplePanel.add(peopleInHandLabel);
 			displayCardFields(board.getPlayersList().get(0).getMyCards(),peoplePanel);
 			peoplePanel.add(peopleSeenLabel);
 			displayCardFields(board.getPlayersList().get(0).getSeenCards(),currentPanel);
 			break;
+		// update the room panel
 		case ROOM:
 			JLabel roomInHandLabel= new JLabel("In Hand: ");		
 			JLabel roomSeenLabel= new JLabel("Seen: ");	
+			//add the room InHand card and room Seen card to room Panel	
 			roomPanel.add(roomInHandLabel);
 			displayCardFields(board.getPlayersList().get(0).getMyCards(),roomPanel);
 			roomPanel.add(roomSeenLabel);
 			displayCardFields(board.getPlayersList().get(0).getSeenCards(),currentPanel);
 			break;
+		// update the weapon panel
 		case WEAPON:
 			JLabel weaponInHandLabel= new JLabel("In Hand: ");		
-			JLabel weaponSeenLabel= new JLabel("Seen: ");		
+			JLabel weaponSeenLabel= new JLabel("Seen: ");	
+			//add the room InHand Panel and room SeenPanel room CardsPanel	
 			weaponPanel.add(weaponInHandLabel);
 			displayCardFields(board.getPlayersList().get(0).getMyCards(),weaponPanel);
 			weaponPanel.add(weaponSeenLabel);
@@ -193,6 +177,8 @@ public class KnownCardsPanel extends JPanel {
 		// Initialize will load config files 
 		board.initialize();
 
+		
+				
 		// create the panel
 		KnownCardsPanel panel = new KnownCardsPanel(); 
 		
@@ -203,7 +189,8 @@ public class KnownCardsPanel extends JPanel {
 				board.getPlayersList().get(0).updateSeen(c);
 			}
 		}
-				
+		
+		// Update the known cards panel
 		panel.updatePanels();
 		
 		// create the frame 
