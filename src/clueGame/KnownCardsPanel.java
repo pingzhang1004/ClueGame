@@ -42,7 +42,6 @@ public class KnownCardsPanel extends JPanel {
 		//initialize the PeoplePanel	
 		peoplePanel.setLayout(new GridLayout(0,1));
 		peoplePanel.setBorder(new TitledBorder (new EtchedBorder(), "People"));
-		
 		knownCardsPanel.add(peoplePanel);
 
 		//initialize the Room Panel	
@@ -60,8 +59,6 @@ public class KnownCardsPanel extends JPanel {
 		
 		return knownCardsPanel;
 	}
-
-
 
 	//add CardFields in different size automatically 
 	public void displayCardFields(ArrayList<Card> cards, JPanel currentPanel) { 
