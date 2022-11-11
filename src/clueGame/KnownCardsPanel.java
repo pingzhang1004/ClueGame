@@ -176,8 +176,6 @@ public class KnownCardsPanel extends JPanel {
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");		
 		// Initialize will load config files 
 		board.initialize();
-
-		
 				
 		// create the panel
 		KnownCardsPanel panel = new KnownCardsPanel(); 
