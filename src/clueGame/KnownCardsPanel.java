@@ -44,7 +44,7 @@ public class KnownCardsPanel extends JPanel {
 		//initialize the  knowCardsPanel 
 		knownCardsPanel.setLayout(new GridLayout(3,0));
 		knownCardsPanel.setBorder(new TitledBorder (new EtchedBorder(), "Known Cards"));
-		knownCardsPanel.setPreferredSize(new Dimension(200, 1000));
+		knownCardsPanel.setPreferredSize(new Dimension(150, 600));
 
 		//initialize the PeoplePanel	
 		peoplePanel.setLayout(new GridLayout(0,1));
@@ -208,9 +208,5 @@ public class KnownCardsPanel extends JPanel {
 		
 		
 	}
-
-
-
-
 }
 

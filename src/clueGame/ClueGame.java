@@ -19,12 +19,12 @@ public class ClueGame extends JFrame{
 		
 		GameControlPanel gPanel = new GameControlPanel();  // create the panel
 		KnownCardsPanel kPanel = new KnownCardsPanel(board); 
-		int i = kPanel.getWidth();
-		int j = kPanel.getHeight();
+		//int i = kPanel.getWidth();
+		//int j = kPanel.getHeight();
 		add(board, BorderLayout.CENTER);
 		add(gPanel, BorderLayout.SOUTH);
 		add(kPanel, BorderLayout.EAST);
-		setSize(new Dimension(1200,1200));
+		setSize(new Dimension(1000,1000));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close		
 		setVisible(true);
 		
@@ -35,9 +35,7 @@ public class ClueGame extends JFrame{
 	// Main to test the panel
 	public static void main(String[] args) {
 	
-		ClueGame frame = new ClueGame();
-		
-		
+		ClueGame frame = new ClueGame();	
 		
 	}
 	
