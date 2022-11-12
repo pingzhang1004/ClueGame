@@ -8,6 +8,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -49,6 +50,7 @@ public class Board extends JPanel{
 	//There are 21 cards：9 room cards, 6 player cards, 6 weapon cards
 	private  ArrayList<Card> cards;
 
+	private JPanel boardPanel;
 	/*
 	 * variable and methods used for singleton pattern
 	 */
@@ -75,6 +77,7 @@ public class Board extends JPanel{
 	// Initialize the game board
 	public void initialize()
 	{	
+		boardPanel = new JPanel();
 		try {
 			loadSetupConfig();
 			loadLayoutConfig();
@@ -615,50 +618,43 @@ public class Board extends JPanel{
 	// GUI part******************************************************
 	//Add a paintComponent() method to draw the board and players.
 	public void paintComponent(Graphics g) {
+		boardPanel.setPreferredSize(new Dimension(1000, 1000));
 		super.paintComponent(g);
 
 		//draw the board 
 		// use an object-oriented approach that has each BoardCell object draw itself.
 		int boardWidth = this.getWidth();
-		int boardHeight =this.getHeight();
+		int boardHeight=this.getHeight();
 		int cellWidth = boardWidth / numRows;
 		int	cellHeight = boardHeight / numColumns;
-		int OffsetX = 0;
-		int OffsetY = 0;
+		int offsetX = 0;
+		int offsetY = 0;
 		BoardCell cell = new BoardCell(); 
 		for(int i =0; i< numRows; i++) {
-			OffsetY = i*cellHeight;
+			offsetY = i*cellHeight;
 			for(int j =0; j< numColumns; j++) {	
-				OffsetX = j * cellWidth;
+				offsetX = j * cellWidth;
 				cell = grid[i][j];
-				cell.drawCell(cellWidth, cellHeight, OffsetX,OffsetY, g);			
-			}
-		}
-
-		//draw the roomLabel
-		OffsetX = 0;
-		OffsetY = 0;
-		for(int i =0; i< numRows; i++) {
-			OffsetY = i*cellHeight;
-			for(int j =0; j< numColumns; j++) {					
-				OffsetX = j * cellWidth;
-				cell = grid[i][j];
+				cell.drawCell(cellWidth, cellHeight, offsetX,offsetY, g);
+				//draw the door
+				cell.drawDoor(cellWidth, cellHeight, offsetX,offsetY, g);
+				//draw the roomLabel
 				if(cell.isRoomLabel()== true) {
 					String roomName = roomMap.get(cell.getInitial()).getName();
-					cell.drawRoomLabel(OffsetX,OffsetY,roomName,g);					
+					cell.drawRoomLabel(offsetX,offsetY,roomName,g);	
 				}
 			}
 		}
 
 		//draw the player
-		for(Player player :players) {
-			OffsetX = 0;
-			OffsetY = 0;
+		for(Player player : players) {
+			offsetX = 0;
+			offsetY = 0;
 			player.getColor();
-			OffsetX = player.getColumn()*cellWidth;				
-			OffsetY = player.getRow()*cellHeight;;
+			offsetX = player.getColumn()*cellWidth;				
+			offsetY = player.getRow()*cellHeight;;
 			cell = grid[player.getRow()][player.getColumn()];
-			cell.drawPlayer(player.getColor(),g,OffsetX,OffsetY,cellWidth,cellHeight);
+			cell.drawPlayer(player.getColor(),g,offsetX,offsetY,cellWidth,cellHeight);
 		}
 
 	}

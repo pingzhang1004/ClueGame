@@ -21,7 +21,7 @@ public class BoardCell {
 	public int row;
 	public int col;
 	private char initial;
-	private DoorDirection doordDirection;
+	private DoorDirection doorDirection;
 	private boolean roomLabel;
 	private boolean roomCenter;
 	private boolean secret;
@@ -47,7 +47,7 @@ public class BoardCell {
 		roomLabel = false;
 		roomCenter = false;
 		secret = false;
-		doordDirection= DoorDirection.NONE;
+		doorDirection= DoorDirection.NONE;
 		adjList = new HashSet<BoardCell>();
 		isOccupied = false;
 		isRoom = false;
@@ -65,7 +65,7 @@ public class BoardCell {
 
 	// ASet door direction
 	public void setDoordDirection(DoorDirection doordDirection) {
-		this.doordDirection = doordDirection;
+		this.doorDirection = doordDirection;
 	}
 
 	// Set is room label
@@ -111,7 +111,7 @@ public class BoardCell {
 
 	// return door way status
 	public boolean isDoorway() {
-		if (doordDirection == DoorDirection.NONE) {
+		if (doorDirection == DoorDirection.NONE) {
 			return false;			
 		}
 		else {
@@ -121,7 +121,7 @@ public class BoardCell {
 
 	// return a door direction
 	public DoorDirection getDoorDirection() {
-		return doordDirection;
+		return doorDirection;
 	}
 
 	// return label status
@@ -159,39 +159,65 @@ public class BoardCell {
 
 	//draw the cell
 	//Pass information to the board cell, like the cell size and perhaps a board offset.
-	public void drawCell(int cellWidth, int cellHeight, int OffsetX,int OffsetY, Graphics g) {		
+	public void drawCell(int cellWidth, int cellHeight, int offsetX,int offsetY, Graphics g) {		
 		switch (initial) {
 		case 'X':
 			g.setColor(Color.black);
-			g.drawRect(OffsetX,OffsetY, cellWidth, cellHeight);
-			g.fillRect(OffsetX, OffsetY, cellWidth, cellHeight);				
+			g.drawRect(offsetX,offsetY, cellWidth, cellHeight);
+			g.fillRect(offsetX, offsetY, cellWidth, cellHeight);				
 			break;
 		case 'W':		
 			g.setColor(Color.yellow);
-			g.fillRect(OffsetX, OffsetY, cellWidth, cellHeight);	
+			g.fillRect(offsetX, offsetY, cellWidth, cellHeight);	
 			g.setColor(Color.black);
-			g.drawRect(OffsetX,OffsetY, cellWidth, cellHeight);
+			g.drawRect(offsetX,offsetY, cellWidth, cellHeight);
 			break;
 		default:
 			g.setColor(Color.lightGray);
-			g.drawRect(OffsetX,OffsetY, cellWidth, cellHeight);
-			g.fillRect(OffsetX, OffsetY, cellWidth, cellHeight);	
+			g.drawRect(offsetX,offsetY, cellWidth, cellHeight);
+			g.fillRect(offsetX, offsetY, cellWidth, cellHeight);	
 			break;
 		}
 	}
-
-	//draw room name
-	public void drawRoomLabel(int OffsetX,int OffsetY,String roomName,Graphics g) {
-		g.setColor(Color.blue);
-		g.setFont(new Font("Verdana", Font.PLAIN, 16));
-		g.drawString(roomName, OffsetX, OffsetY);
+	
+	public void drawDoor(int cellWidth, int cellHeight, int offsetX,int offsetY, Graphics g) {		
+		
+		switch(doorDirection) {
+		case UP:
+			g.setColor(Color.blue);
+			g.fillRect(offsetX,offsetY-4, cellWidth, 4);
+			break;
+		case DOWN:
+			g.setColor(Color.blue);
+			g.fillRect(offsetX,offsetY+cellHeight, cellWidth, 4);
+			break;
+		case LEFT:
+			g.setColor(Color.blue);
+			g.fillRect(offsetX-4,offsetY, 4, cellHeight);
+			break;
+		case RIGHT:
+			g.setColor(Color.blue);
+			g.fillRect(offsetX+cellWidth,offsetY, 4, cellHeight);
+			break;
+		default:
+			break;
+		
+		}
 	}
 
-	public void drawPlayer(Color playerColor,Graphics g,int OffsetX,int OffsetY, int cellWidth,int cellHeight) {			
+	
+	//draw room name
+	public void drawRoomLabel(int offsetX, int offsetY, String roomName, Graphics g) {
+		g.setColor(Color.blue);
+		g.setFont(new Font("Verdana", Font.PLAIN, 16));
+		g.drawString(roomName, offsetX, offsetY);
+	}
+
+	public void drawPlayer(Color playerColor, Graphics g, int offsetX, int offsetY, int cellWidth, int cellHeight) {			
 		g.setColor(playerColor);
-		g.fillOval(OffsetX, OffsetY, cellWidth, cellHeight);
+		g.fillOval(offsetX, offsetY, cellWidth, cellHeight);
 		g.setColor(Color.black);
-		g.drawOval(OffsetX, OffsetY, cellWidth, cellHeight);
+		g.drawOval(offsetX, offsetY, cellWidth, cellHeight);
 	}
 
 }

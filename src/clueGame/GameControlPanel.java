@@ -37,6 +37,7 @@ public class GameControlPanel extends JPanel {
 		
 		JPanel panel  = createControlPanel();
 		add(panel);
+		
 	}
 	
 	private JPanel createControlPanel() {
@@ -52,7 +53,7 @@ public class GameControlPanel extends JPanel {
 		// 
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new GridLayout(2,0));
-		controlPanel.setPreferredSize(new Dimension(1200, 100));
+		controlPanel.setPreferredSize(new Dimension(1200, 150));
 		// Use a grid layout, 1 row, 4 columns
 		JPanel playTurnPanel = new JPanel();
 		playTurnPanel.setLayout(new GridLayout(1,4));

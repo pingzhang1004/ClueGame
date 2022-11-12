@@ -34,6 +34,8 @@ public class KnownCardsPanel extends JPanel {
 		weaponPanel  = new JPanel();
 		knownCardsPanel = createKnownCardPanel();
 		add(knownCardsPanel);
+		
+
 
 	}
 
@@ -42,7 +44,7 @@ public class KnownCardsPanel extends JPanel {
 		//initialize the  knowCardsPanel 
 		knownCardsPanel.setLayout(new GridLayout(3,0));
 		knownCardsPanel.setBorder(new TitledBorder (new EtchedBorder(), "Known Cards"));
-		knownCardsPanel.setPreferredSize(new Dimension(200, 550));
+		knownCardsPanel.setPreferredSize(new Dimension(200, 1000));
 
 		//initialize the PeoplePanel	
 		peoplePanel.setLayout(new GridLayout(0,1));
@@ -202,9 +204,9 @@ public class KnownCardsPanel extends JPanel {
 		frame.setSize(200, 1200);  
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
 		// make it visible
-		frame.setVisible(true); 
-		System.out.println(panel.getWidth());
-		System.out.println(panel.getHeight());
+		frame.setVisible(true);
+		
+		
 	}
 
 

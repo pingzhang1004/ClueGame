@@ -38,7 +38,7 @@ class GameSetupTests {
 		assertEquals(6, testList.size());
 		assertTrue(testList.contains(board.getPlayer("Mr William", "blue", 0, 7)));
 		assertTrue(testList.contains(board.getPlayer("Miss Kate", "red", 0, 15)));
-		assertTrue(testList.contains(board.getPlayer("Mr Harry", "yellow", 11, 0)));
+		assertTrue(testList.contains(board.getPlayer("Mr Harry", "orange", 11, 0)));
 		assertTrue(testList.contains(board.getPlayer("Miss Megan", "pink", 10, 21)));
 		assertTrue(testList.contains(board.getPlayer("Mr Charles", "green", 22, 9)));
 		assertTrue(testList.contains(board.getPlayer("Miss Elizabeth", "white", 6, 0)));

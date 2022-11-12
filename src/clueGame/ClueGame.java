@@ -12,7 +12,6 @@ public class ClueGame extends JFrame{
 	public ClueGame() {
 		// Board is singleton, get the only instance
 		Board board = Board.getInstance();
-		board = Board.getInstance();
 		// set the file names to use my config files
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");		
 		// Initialize will load config files 
@@ -20,6 +19,8 @@ public class ClueGame extends JFrame{
 		
 		GameControlPanel gPanel = new GameControlPanel();  // create the panel
 		KnownCardsPanel kPanel = new KnownCardsPanel(board); 
+		int i = kPanel.getWidth();
+		int j = kPanel.getHeight();
 		add(board, BorderLayout.CENTER);
 		add(gPanel, BorderLayout.SOUTH);
 		add(kPanel, BorderLayout.EAST);
