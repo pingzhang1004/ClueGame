@@ -210,7 +210,7 @@ class BoardAdjTargetTest {
 		board.calcTargets(board.getCell(6, 17), 4);
 		targets= board.getTargets();
 		//did not calculate by hand
-		assertEquals(12, targets.size());
+		assertEquals(13, targets.size());
 		assertTrue(targets.contains(board.getCell(7, 14)));
 		assertTrue(targets.contains(board.getCell(6, 19)));
 		assertTrue(targets.contains(board.getCell(4, 15)));	

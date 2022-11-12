@@ -105,7 +105,7 @@ public class FileInitTest {
 	public void testRooms() {
 		// check some of the cells to ensure they have the correct initial
 		BoardCell cell = board.getCell(20, 1);
-		assertFalse(cell.isLabel());
+		assertFalse(cell.isRoomLabel());
 		assertFalse(cell.isRoomCenter());
 		assertFalse(cell.isDoorway());
 		Room room = board.getRoom(cell);
@@ -115,7 +115,7 @@ public class FileInitTest {
 		assertFalse(room.getCenterCell() == cell);
 		
 		cell = board.getCell(4, 21);
-		assertFalse(cell.isLabel());
+		assertFalse(cell.isRoomLabel());
 		assertFalse(cell.isRoomCenter());
 		assertFalse(cell.isDoorway());
 		room = board.getRoom(cell);
@@ -126,7 +126,7 @@ public class FileInitTest {
 		
 		// check that rooms have the proper label cell
 		cell = board.getCell(8, 2);
-		assertTrue(cell.isLabel());
+		assertTrue(cell.isRoomLabel());
 		assertFalse(cell.isRoomCenter());
 		assertFalse(cell.isDoorway());
 		room = board.getRoom(cell);
@@ -136,7 +136,7 @@ public class FileInitTest {
 		assertFalse(room.getCenterCell() == cell);
 		
 		cell = board.getCell(8, 18);
-		assertTrue(cell.isLabel());
+		assertTrue(cell.isRoomLabel());
 		assertFalse(cell.isRoomCenter());
 		assertFalse(cell.isDoorway());
 		room = board.getRoom(cell);
@@ -147,7 +147,7 @@ public class FileInitTest {
 		
 		// check that rooms have the proper center cell
 		cell = board.getCell(2, 3);
-		assertFalse(cell.isLabel());
+		assertFalse(cell.isRoomLabel());
 		assertTrue(cell.isRoomCenter());
 		assertFalse(cell.isDoorway());
 		room = board.getRoom(cell);
@@ -157,7 +157,7 @@ public class FileInitTest {
 		assertTrue(room.getCenterCell() == cell);
 		
 		cell = board.getCell(17, 20);
-		assertFalse(cell.isLabel());
+		assertFalse(cell.isRoomLabel());
 		assertTrue(cell.isRoomCenter());
 		assertFalse(cell.isDoorway());
 		room = board.getRoom(cell);
@@ -169,7 +169,7 @@ public class FileInitTest {
 		// this is a secret passage test
 		cell = board.getCell(0, 0);
 		assertTrue(cell.getSecretPassage() == 'B');
-		assertFalse(cell.isLabel());
+		assertFalse(cell.isRoomLabel());
 		assertFalse(cell.isRoomCenter());
 		assertFalse(cell.isDoorway());
 		room = board.getRoom(cell);
@@ -180,7 +180,7 @@ public class FileInitTest {
 		
 		cell = board.getCell(22, 0);
 		assertTrue(cell.getSecretPassage() == 'G');
-		assertFalse(cell.isLabel());
+		assertFalse(cell.isRoomLabel());
 		assertFalse(cell.isRoomCenter());
 		assertFalse(cell.isDoorway());
 		room = board.getRoom(cell);
@@ -191,7 +191,7 @@ public class FileInitTest {
 		
 		// test a walkway
 		cell = board.getCell(5, 20);
-		assertFalse(cell.isLabel());
+		assertFalse(cell.isRoomLabel());
 		assertFalse(cell.isRoomCenter());
 		assertFalse(cell.isDoorway());
 		room = board.getRoom(cell);
@@ -201,7 +201,7 @@ public class FileInitTest {
 		assertFalse(room.getCenterCell() == cell);
 		
 		cell = board.getCell(22, 17);
-		assertFalse(cell.isLabel());
+		assertFalse(cell.isRoomLabel());
 		assertFalse(cell.isRoomCenter());
 		assertFalse(cell.isDoorway());
 		room = board.getRoom(cell);
@@ -211,8 +211,8 @@ public class FileInitTest {
 		assertFalse(room.getCenterCell() == cell);
 		
 		// test a closet
-		cell = board.getCell(0, 1);
-		assertFalse(cell.isLabel());
+		cell = board.getCell(0, 5);
+		assertFalse(cell.isRoomLabel());
 		assertFalse(cell.isRoomCenter());
 		assertFalse(cell.isDoorway());
 		room = board.getRoom(cell);
@@ -222,7 +222,7 @@ public class FileInitTest {
 		assertFalse(room.getCenterCell() == cell);
 		
 		cell = board.getCell(13, 21);
-		assertFalse(cell.isLabel());
+		assertFalse(cell.isRoomLabel());
 		assertFalse(cell.isRoomCenter());
 		assertFalse(cell.isDoorway());
 		room = board.getRoom(cell);

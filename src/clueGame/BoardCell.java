@@ -7,6 +7,9 @@
 
 package clueGame;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -74,17 +77,17 @@ public class BoardCell {
 	public void setIsRoomCenter(boolean roomCenter) {
 		this.roomCenter = roomCenter;
 	}
-    
+
 	// Set secret passage 
 	public void setIsSecretPassage(boolean secret) {
 		this.secret = secret;
 	}
-	
+
 	// set secret passage letter
 	public void setSecretPassage(char secretPassage) {
 		this.secretPassage = secretPassage;
 	}
-	
+
 	//for indicating a cell is part of a room (void setRoom(boolean) and perhaps boolean isRoom()).	
 	public void setIsRoom(boolean isRoom)
 	{
@@ -100,12 +103,12 @@ public class BoardCell {
 	public void addAdj(BoardCell adj) {
 		adjList.add(adj);
 	}
-	
+
 	//returns the adjacency list for the cell
 	public Set<BoardCell> getAdjList() {
 		return adjList;
 	}
-	
+
 	// return door way status
 	public boolean isDoorway() {
 		if (doordDirection == DoorDirection.NONE) {
@@ -122,7 +125,7 @@ public class BoardCell {
 	}
 
 	// return label status
-	public boolean isLabel() {
+	public boolean isRoomLabel() {
 		return roomLabel;
 	}
 	// return room center way status
@@ -145,13 +148,50 @@ public class BoardCell {
 	public boolean isSecretPassage() {
 		return secret;
 	}
-		
+
 	//for indicating a cell is occupied by another player 
 	public boolean getOccupied() {
 		if (roomCenter) {
 			return false;
 		}
 		return isOccupied;
+	}
+
+	//draw the cell
+	//Pass information to the board cell, like the cell size and perhaps a board offset.
+	public void drawCell(int cellWidth, int cellHeight, int OffsetX,int OffsetY, Graphics g) {		
+		switch (initial) {
+		case 'X':
+			g.setColor(Color.black);
+			g.drawRect(OffsetX,OffsetY, cellWidth, cellHeight);
+			g.fillRect(OffsetX, OffsetY, cellWidth, cellHeight);				
+			break;
+		case 'W':		
+			g.setColor(Color.yellow);
+			g.fillRect(OffsetX, OffsetY, cellWidth, cellHeight);	
+			g.setColor(Color.black);
+			g.drawRect(OffsetX,OffsetY, cellWidth, cellHeight);
+			break;
+		default:
+			g.setColor(Color.lightGray);
+			g.drawRect(OffsetX,OffsetY, cellWidth, cellHeight);
+			g.fillRect(OffsetX, OffsetY, cellWidth, cellHeight);	
+			break;
+		}
+	}
+
+	//draw room name
+	public void drawRoomLabel(int OffsetX,int OffsetY,String roomName,Graphics g) {
+		g.setColor(Color.blue);
+		g.setFont(new Font("Verdana", Font.PLAIN, 16));
+		g.drawString(roomName, OffsetX, OffsetY);
+	}
+
+	public void drawPlayer(Color playerColor,Graphics g,int OffsetX,int OffsetY, int cellWidth,int cellHeight) {			
+		g.setColor(playerColor);
+		g.fillOval(OffsetX, OffsetY, cellWidth, cellHeight);
+		g.setColor(Color.black);
+		g.drawOval(OffsetX, OffsetY, cellWidth, cellHeight);
 	}
 
 }

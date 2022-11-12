@@ -69,4 +69,5 @@ public class Room {
     public BoardCell getSecretPassageCell() {
     	return secretPassageCell;
     }
+
 }

@@ -419,8 +419,8 @@ public class Board extends JPanel{
 		ArrayList<Card> weaponCards = new ArrayList<Card>();
 
 		ArrayList<Card> dealPlayCards = new ArrayList<Card>();
-			//dealPlayCards = cards;
-		
+		//dealPlayCards = cards;
+
 		for(Card cardSort :cards) {
 			switch(cardSort.getCardType()) {
 			case ROOM:
@@ -476,7 +476,7 @@ public class Board extends JPanel{
 			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);
 			currentPlayer.setUnseenCard(cards);
 		}
-		
+
 	}
 
 	//deal the left card randomly to each player,no card dealt twice
@@ -527,12 +527,12 @@ public class Board extends JPanel{
 	public ArrayList<Player> getPlayersList() {
 		return players;
 	}
-	
+
 	//return CardList
 	public ArrayList<Card> getCardsList() {
 		return cards;
 	}
-	
+
 	// return a room list
 	public Map<Character, Room> getRoomMap() {
 		return roomMap;
@@ -542,12 +542,12 @@ public class Board extends JPanel{
 	public Solution getTheAnswer() {
 		return theAnswer;
 	}
-	
+
 	// Set the solution
 	public void setAnswer(Card person, Card room, Card weapon) {
 		theAnswer = new Solution(room, person, weapon);
 	}
-	
+
 	// Return a player
 	public Player getPlayer(String Name, String color, int row, int column) {
 		for(Player currentPlayer : players) {
@@ -557,7 +557,7 @@ public class Board extends JPanel{
 		}
 		return null;
 	}
-	
+
 	// When we needed a card, we would use our getCard() to return a reference from the deck. 
 	//parameter(s) might be for getCard() without creating fixed constants to reference the cards.  
 	public Card getCard(String cardName, CardType cardTpye) {
@@ -566,15 +566,15 @@ public class Board extends JPanel{
 				return currentCard ;
 		}
 		return null;
-		
-	//return cards.get(cards.indexOf(cardName));
+
+		//return cards.get(cards.indexOf(cardName));
 	}
 
 	// Set players for testing
 	public void setPlayers(ArrayList<Player> testPlayers) {
 		this.players = testPlayers;
 	}
-	
+
 	// returns true if accusation matches theAnswer
 	public boolean checkAccusation(Solution accusation) {
 		boolean checkPerson = theAnswer.getPersonCard().equals(accusation.getPersonCard());
@@ -611,16 +611,61 @@ public class Board extends JPanel{
 		}
 		return null;
 	}
-	
+
 	// GUI part******************************************************
+	//Add a paintComponent() method to draw the board and players.
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-	
+
+		//draw the board 
+		// use an object-oriented approach that has each BoardCell object draw itself.
+		int boardWidth = this.getWidth();
+		int boardHeight =this.getHeight();
+		int cellWidth = boardWidth / numRows;
+		int	cellHeight = boardHeight / numColumns;
+		int OffsetX = 0;
+		int OffsetY = 0;
+		BoardCell cell = new BoardCell(); 
+		for(int i =0; i< numRows; i++) {
+			OffsetY = i*cellHeight;
+			for(int j =0; j< numColumns; j++) {	
+				OffsetX = j * cellWidth;
+				cell = grid[i][j];
+				cell.drawCell(cellWidth, cellHeight, OffsetX,OffsetY, g);			
+			}
+		}
+
+		//draw the roomLabel
+		OffsetX = 0;
+		OffsetY = 0;
+		for(int i =0; i< numRows; i++) {
+			OffsetY = i*cellHeight;
+			for(int j =0; j< numColumns; j++) {					
+				OffsetX = j * cellWidth;
+				cell = grid[i][j];
+				if(cell.isRoomLabel()== true) {
+					String roomName = roomMap.get(cell.getInitial()).getName();
+					cell.drawRoomLabel(OffsetX,OffsetY,roomName,g);					
+				}
+			}
+		}
+
+		//draw the player
+		for(Player player :players) {
+			OffsetX = 0;
+			OffsetY = 0;
+			player.getColor();
+			OffsetX = player.getColumn()*cellWidth;				
+			OffsetY = player.getRow()*cellHeight;;
+			cell = grid[player.getRow()][player.getColumn()];
+			cell.drawPlayer(player.getColor(),g,OffsetX,OffsetY,cellWidth,cellHeight);
+		}
+
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 }

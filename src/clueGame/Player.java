@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
@@ -55,8 +56,8 @@ public abstract class Player {
 		case "pink": 
 			color = Color.pink;
 			break;   
-		case "yellow":
-			color = Color.yellow;
+		case "orange":
+			color = Color.orange;
 			break;   
 		case "white":
 			color = Color.white;
@@ -189,4 +190,11 @@ public abstract class Player {
 	abstract public BoardCell selectTarget(Set<BoardCell> targets, Map<Character, Room> roomMap);
 
 	abstract public Solution createSuggestion(Room room);
+	
+	public void drawPlayer(Player player, Graphics g,int cellWidth,int cellHeight) {
+		
+		g.setColor(color);
+		g.drawOval(row, column,cellWidth,cellHeight);
+	}
+	
 }

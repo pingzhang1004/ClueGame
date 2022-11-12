@@ -23,7 +23,7 @@ public class KnownCardsPanel extends JPanel {
 	private JPanel roomPanel;
 	private JPanel weaponPanel;
 
-	private Board board;
+	private static Board board;
 	private static Board testBoard;
 
 	public KnownCardsPanel(Board board) {
@@ -42,7 +42,7 @@ public class KnownCardsPanel extends JPanel {
 		//initialize the  knowCardsPanel 
 		knownCardsPanel.setLayout(new GridLayout(3,0));
 		knownCardsPanel.setBorder(new TitledBorder (new EtchedBorder(), "Known Cards"));
-		knownCardsPanel.setPreferredSize(new Dimension(200, 600));
+		knownCardsPanel.setPreferredSize(new Dimension(200, 550));
 
 		//initialize the PeoplePanel	
 		peoplePanel.setLayout(new GridLayout(0,1));
@@ -173,21 +173,21 @@ public class KnownCardsPanel extends JPanel {
 	public static void main(String[] args) {
 		// Board is singleton, get the only instance
 		//Board board = Board.getInstance();
-		testBoard = Board.getInstance();
+		board = Board.getInstance();
 		// set the file names to use my config files
-		testBoard.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");		
+		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");		
 		// Initialize will load config files 
-		testBoard.initialize();
+		board.initialize();
 				
 		// create the panel
-		KnownCardsPanel panel = new KnownCardsPanel(testBoard); 
+		KnownCardsPanel panel = new KnownCardsPanel(board); 
 		
 		
 		//create seenCards for testing: add others' in hand cards into the seenCards
-		for (int i=1; i<testBoard.getPlayersList().size(); i++) {
-			Player player = testBoard.getPlayersList().get(i);
+		for (int i=1; i<board.getPlayersList().size(); i++) {
+			Player player = board.getPlayersList().get(i);
 			for (Card c : player.getMyCards()) {
-				testBoard.getPlayersList().get(0).updateSeen(c);
+				board.getPlayersList().get(0).updateSeen(c);
 			}
 		}
 		
