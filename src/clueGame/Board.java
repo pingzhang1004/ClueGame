@@ -641,9 +641,14 @@ public class Board extends JPanel{
 				//draw the roomLabel
 				if(cell.isRoomLabel()== true) {
 					String roomName = roomMap.get(cell.getInitial()).getName();
-					cell.drawRoomLabel(offsetX,offsetY,roomName,g);	
+					cell.drawRoomLabel(offsetX,offsetY,roomName,g);						
+				}
+				//draw the secrect pass
+				if(cell.isSecretPassage()== true) {
+					cell.drawSecretCell(cellWidth, cellHeight, offsetX,offsetY, g);	
 				}
 			}
+
 		}
 
 		//draw the player

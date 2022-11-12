@@ -179,9 +179,10 @@ public class BoardCell {
 			break;
 		}
 	}
-	
+
+	//draw Door
 	public void drawDoor(int cellWidth, int cellHeight, int offsetX,int offsetY, Graphics g) {		
-		
+
 		switch(doorDirection) {
 		case UP:
 			g.setColor(Color.blue);
@@ -201,11 +202,11 @@ public class BoardCell {
 			break;
 		default:
 			break;
-		
+
 		}
 	}
 
-	
+
 	//draw room name
 	public void drawRoomLabel(int offsetX, int offsetY, String roomName, Graphics g) {
 		g.setColor(Color.blue);
@@ -213,11 +214,36 @@ public class BoardCell {
 		g.drawString(roomName, offsetX, offsetY);
 	}
 
+
+	//draw room Player
 	public void drawPlayer(Color playerColor, Graphics g, int offsetX, int offsetY, int cellWidth, int cellHeight) {			
 		g.setColor(playerColor);
 		g.fillOval(offsetX, offsetY, cellWidth, cellHeight);
 		g.setColor(Color.black);
 		g.drawOval(offsetX, offsetY, cellWidth, cellHeight);
+	}
+
+	//draw secret path
+	public void drawSecretCell(int cellWidth, int cellHeight,int offsetX, int offsetY, Graphics g) {
+		//draw secret cell polygon
+		g.setColor(Color.black);
+		g.drawRect(offsetX,offsetY, cellWidth, cellHeight);
+		g.fillRect(offsetX, offsetY, cellWidth, cellHeight);
+		//draw secret door polygon
+		// x coordinates of vertices
+		g.setColor(Color.red);
+		int x[] = {offsetX, (int)(offsetX+0.8*cellWidth),  (int)(offsetX+0.8*cellWidth),offsetX };		  
+		// y coordinates of vertices
+		int y[] = {offsetY, (int)(offsetY+0.2*cellHeight), (int)(offsetY+0.8*cellHeight), offsetY+cellHeight};	  
+		// number of vertices	  
+		g.drawPolygon(x, y, 4);		
+		g.fillPolygon(x, y, 4);
+		
+		//draw secret cell label
+		g.setColor(Color.blue);
+		g.setFont(new Font("Verdana", Font.PLAIN, 16));
+		g.drawString("S", (int)(offsetX+0.4*cellWidth), (int)(offsetY+0.7*cellHeight));		
+		
 	}
 
 }
