@@ -625,29 +625,38 @@ public class Board extends JPanel{
 		// use an object-oriented approach that has each BoardCell object draw itself.
 		int boardWidth = getWidth();
 		int boardHeight = getHeight();
+		
+		// Set game board background
 		g.fillRect(0, 0, boardWidth, boardHeight);
 		g.setColor(Color.black);
+		
 		int cellWidth = boardWidth / numColumns;
 		int	cellHeight = boardHeight / numRows;
-		int offsetX = 0;
-		int offsetY = 0;
+		
+		int side = Math.min(cellWidth, cellHeight);
+		
+		int originalX = (boardWidth - (numColumns * side)) / 2;
+		int originalY = (boardHeight - (numRows * side)) / 2;
+		int offsetY;
+		int offsetX;
+		
 		BoardCell cell = new BoardCell(); 
 		for(int i =0; i< numRows; i++) {
-			offsetY = i*cellHeight;
+			offsetY = i*side + originalY;
 			for(int j =0; j< numColumns; j++) {	
-				offsetX = j * cellWidth;
+				offsetX = j * side + originalX;
 				cell = grid[i][j];
-				cell.drawCell(cellWidth, cellHeight, offsetX,offsetY, g);
+				cell.drawCell(side, side, offsetX,offsetY, g);
 				//draw the door
-				cell.drawDoor(cellWidth, cellHeight, offsetX,offsetY, g);
+				cell.drawDoor(side, side, offsetX,offsetY, g);
 				//draw the roomLabel
 				if(cell.isRoomLabel()== true) {
 					String roomName = roomMap.get(cell.getInitial()).getName();
-					cell.drawRoomLabel(offsetX,offsetY,roomName,g);						
+					cell.drawRoomLabel(offsetX,offsetY,Math.round(side/2), roomName,g);						
 				}
 				//draw the secrect pass
 				if(cell.isSecretPassage()== true) {
-					cell.drawSecretCell(cellWidth, cellHeight, offsetX,offsetY, g);	
+					cell.drawSecretCell(side, side, offsetX,offsetY, g);	
 				}
 			}
 
@@ -655,13 +664,12 @@ public class Board extends JPanel{
 
 		//draw the player
 		for(Player player : players) {
-			offsetX = 0;
-			offsetY = 0;
+			
 			player.getColor();
-			offsetX = player.getColumn()*cellWidth;				
-			offsetY = player.getRow()*cellHeight;;
+			offsetX = player.getColumn() * side + originalX;				
+			offsetY = player.getRow() * side + originalY;
 			cell = grid[player.getRow()][player.getColumn()];
-			cell.drawPlayer(player.getColor(),g,offsetX,offsetY,cellWidth,cellHeight);
+			cell.drawPlayer(player.getColor(),g,offsetX,offsetY,side,side);
 		}
 
 	}

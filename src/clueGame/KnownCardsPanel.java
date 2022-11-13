@@ -177,8 +177,6 @@ public class KnownCardsPanel extends JPanel {
 		// create the panel
 		KnownCardsPanel panel = new KnownCardsPanel(board); 
 		
-		System.out.println(panel.getWidth());
-		System.out.println(panel.getHeight());
 		//create seenCards for testing: add others' in hand cards into the seenCards
 		for (int i=1; i<board.getPlayersList().size(); i++) {
 			Player player = board.getPlayersList().get(i);

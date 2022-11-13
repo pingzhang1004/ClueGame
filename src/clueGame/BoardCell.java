@@ -208,9 +208,9 @@ public class BoardCell {
 
 
 	//draw room name
-	public void drawRoomLabel(int offsetX, int offsetY, String roomName, Graphics g) {
+	public void drawRoomLabel(int offsetX, int offsetY, int size, String roomName, Graphics g) {
 		g.setColor(Color.blue);
-		g.setFont(new Font("Verdana", Font.PLAIN, 16));
+		g.setFont(new Font("Verdana", Font.PLAIN, size));
 		g.drawString(roomName, offsetX, offsetY);
 	}
 
