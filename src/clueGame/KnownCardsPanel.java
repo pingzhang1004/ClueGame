@@ -18,53 +18,46 @@ import org.junit.jupiter.api.BeforeAll;
 
 public class KnownCardsPanel extends JPanel {
 
-	private JPanel knownCardsPanel;	
 	private JPanel peoplePanel;
 	private JPanel roomPanel;
 	private JPanel weaponPanel;
 
 	private static Board board;
-	private static Board testBoard;
 
 	public KnownCardsPanel(Board board) {
-		this.board = board;
-		knownCardsPanel = new JPanel();		
+		this.board = board;	
 		peoplePanel = new JPanel();
 		roomPanel = new JPanel();
 		weaponPanel  = new JPanel();
-		knownCardsPanel = createKnownCardPanel();
-		add(knownCardsPanel);
-		
-
-
+		createKnownCardPanel();
 	}
 
-	private JPanel createKnownCardPanel() {
+	private  void createKnownCardPanel() {
 
 		//initialize the  knowCardsPanel 
-		knownCardsPanel.setLayout(new GridLayout(3,0));
-		knownCardsPanel.setBorder(new TitledBorder (new EtchedBorder(), "Known Cards"));
-		knownCardsPanel.setPreferredSize(new Dimension(150, 600));
+		setLayout(new GridLayout(3,0));
+		setBorder(new TitledBorder (new EtchedBorder(), "Known Cards"));
+		//knownCardsPanel.setPreferredSize(new Dimension(150, 600));
+		//setSize(200, 1100);
 
 		//initialize the PeoplePanel	
 		peoplePanel.setLayout(new GridLayout(0,1));
 		peoplePanel.setBorder(new TitledBorder (new EtchedBorder(), "People"));
-		knownCardsPanel.add(peoplePanel);
+		add(peoplePanel);
 
 		//initialize the Room Panel	
 		roomPanel.setLayout(new GridLayout(0,1));
 		roomPanel.setBorder(new TitledBorder (new EtchedBorder(), "Rooms"));	
-		knownCardsPanel.add(roomPanel);
+		add(roomPanel);
 
 		//initialize the Weapon Panel	
 		weaponPanel.setLayout(new GridLayout(0,1));
 		weaponPanel.setBorder(new TitledBorder (new EtchedBorder(), "Weapons"));	
-		knownCardsPanel.add(weaponPanel);
+		add(weaponPanel);
 		
 		// update all card panels
 		updatePanels();
 		
-		return knownCardsPanel;
 	}
 
 	//add CardFields in different size automatically 
@@ -103,7 +96,7 @@ public class KnownCardsPanel extends JPanel {
 	// Add testField for cards that is in hand or seen
 	private int addFilledField(JPanel currentPanel, int cardTypeNum, Card card) {
 		JTextField textFiled;
-		textFiled = new JTextField(15);
+		textFiled = new JTextField(5);
 		textFiled.setEditable(false);
 		textFiled.setText(card.getCardName());
 		if(card.getCardHolder()!= null)
@@ -119,7 +112,7 @@ public class KnownCardsPanel extends JPanel {
 	private void addNoneField(JPanel currentPanel, int cardTypeNum) {
 		JTextField textFiled;
 		if(cardTypeNum == 0) {
-			textFiled = new JTextField(15);
+			textFiled = new JTextField(10);
 			textFiled.setEditable(false);
 			textFiled.setText("None");
 			textFiled.setBackground(Color.gray);
@@ -184,7 +177,8 @@ public class KnownCardsPanel extends JPanel {
 		// create the panel
 		KnownCardsPanel panel = new KnownCardsPanel(board); 
 		
-		
+		System.out.println(panel.getWidth());
+		System.out.println(panel.getHeight());
 		//create seenCards for testing: add others' in hand cards into the seenCards
 		for (int i=1; i<board.getPlayersList().size(); i++) {
 			Player player = board.getPlayersList().get(i);

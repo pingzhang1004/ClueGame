@@ -50,7 +50,7 @@ public class Board extends JPanel{
 	//There are 21 cards：9 room cards, 6 player cards, 6 weapon cards
 	private  ArrayList<Card> cards;
 
-	private JPanel boardPanel;
+	//private JPanel boardPanel;
 	/*
 	 * variable and methods used for singleton pattern
 	 */
@@ -77,7 +77,7 @@ public class Board extends JPanel{
 	// Initialize the game board
 	public void initialize()
 	{	
-		boardPanel = new JPanel();
+		//boardPanel = new JPanel();
 		try {
 			loadSetupConfig();
 			loadLayoutConfig();
@@ -618,15 +618,17 @@ public class Board extends JPanel{
 	// GUI part******************************************************
 	//Add a paintComponent() method to draw the board and players.
 	public void paintComponent(Graphics g) {
-		boardPanel.setPreferredSize(new Dimension(1000, 1000));
+		//boardPanel.setPreferredSize(new Dimension(1000, 1000));
 		super.paintComponent(g);
 
 		//draw the board 
 		// use an object-oriented approach that has each BoardCell object draw itself.
-		int boardWidth = this.getWidth();
-		int boardHeight=this.getHeight();
-		int cellWidth = boardWidth / numRows;
-		int	cellHeight = boardHeight / numColumns;
+		int boardWidth = getWidth();
+		int boardHeight = getHeight();
+		g.fillRect(0, 0, boardWidth, boardHeight);
+		g.setColor(Color.black);
+		int cellWidth = boardWidth / numColumns;
+		int	cellHeight = boardHeight / numRows;
 		int offsetX = 0;
 		int offsetY = 0;
 		BoardCell cell = new BoardCell(); 

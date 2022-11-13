@@ -21,15 +21,24 @@ public class ClueGame extends JFrame{
 		KnownCardsPanel kPanel = new KnownCardsPanel(board); 
 		//int i = kPanel.getWidth();
 		//int j = kPanel.getHeight();
+		//setPreferredSize(new Dimension(1200,1200));
+		setSize(1200,1200);
+		System.out.println(gPanel.getWidth());
+		System.out.println(gPanel.getHeight());
+		System.out.println(kPanel.getWidth());
+		System.out.println(kPanel.getHeight());
+		//System.out.println(board.getWidth());
+		//System.out.println(board.getHeight());
 		add(board, BorderLayout.CENTER);
 		add(gPanel, BorderLayout.SOUTH);
 		add(kPanel, BorderLayout.EAST);
-		setSize(new Dimension(1000,1000));
+		
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close		
 		setVisible(true);
 		
-		revalidate();
-		repaint();
+//		revalidate();
+//		repaint();
 	}
 	
 	// Main to test the panel
