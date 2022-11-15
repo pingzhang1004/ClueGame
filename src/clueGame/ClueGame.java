@@ -17,19 +17,22 @@ public class ClueGame extends JFrame{
 		// Initialize will load config files 
 		board.initialize();
 		
-		GameControlPanel gPanel = new GameControlPanel();  // create the panel
-		KnownCardsPanel kPanel = new KnownCardsPanel(board); 
+		GameControlPanel controlPanel = new GameControlPanel();  // create the panel
+		KnownCardsPanel cardsPanel = new KnownCardsPanel(board); 
+		
+		// set frame size and title
 		setSize(1200,1200);
+		setTitle("Clue Game - CSCI306");
+		
+		// set frame layout
 		add(board, BorderLayout.CENTER);
-		add(gPanel, BorderLayout.SOUTH);
-		add(kPanel, BorderLayout.EAST);
+		add(controlPanel, BorderLayout.SOUTH);
+		add(cardsPanel, BorderLayout.EAST);
 		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close		
 		setVisible(true);
 		
-//		revalidate();
-//		repaint();
 	}
 	
 	// Main to test the panel

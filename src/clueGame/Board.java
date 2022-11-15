@@ -621,25 +621,29 @@ public class Board extends JPanel{
 		//boardPanel.setPreferredSize(new Dimension(1000, 1000));
 		super.paintComponent(g);
 
-		//draw the board 
 		// use an object-oriented approach that has each BoardCell object draw itself.
 		int boardWidth = getWidth();
 		int boardHeight = getHeight();
 		
-		// Set game board background
+		// Set game board background color
 		g.fillRect(0, 0, boardWidth, boardHeight);
 		g.setColor(Color.black);
 		
+		// Calculation for cell size and position
 		int cellWidth = boardWidth / numColumns;
 		int	cellHeight = boardHeight / numRows;
 		
+		// cell side
 		int side = Math.min(cellWidth, cellHeight);
 		
+		// top left corner point
 		int originalX = (boardWidth - (numColumns * side)) / 2;
 		int originalY = (boardHeight - (numRows * side)) / 2;
+		
 		int offsetY;
 		int offsetX;
 		
+		// draw the board 
 		BoardCell cell = new BoardCell(); 
 		for(int i =0; i< numRows; i++) {
 			offsetY = i*side + originalY;
@@ -647,6 +651,15 @@ public class Board extends JPanel{
 				offsetX = j * side + originalX;
 				cell = grid[i][j];
 				cell.drawCell(side, side, offsetX,offsetY, g);
+				
+			}
+		}
+
+		for(int i =0; i< numRows; i++) {
+			offsetY = i*side + originalY;
+			for(int j =0; j< numColumns; j++) {	
+				offsetX = j * side + originalX;
+				cell = grid[i][j];
 				//draw the door
 				cell.drawDoor(side, side, offsetX,offsetY, g);
 				//draw the roomLabel
@@ -659,12 +672,11 @@ public class Board extends JPanel{
 					cell.drawSecretCell(side, side, offsetX,offsetY, g);	
 				}
 			}
-
 		}
-
+				
+				
 		//draw the player
 		for(Player player : players) {
-			
 			player.getColor();
 			offsetX = player.getColumn() * side + originalX;				
 			offsetY = player.getRow() * side + originalY;

@@ -53,7 +53,7 @@ class GameSetupTests {
 		assertTrue(testList.contains(board.getCard("Balcony", CardType.ROOM)));
 		assertTrue(testList.contains(board.getCard("Garage", CardType.ROOM)));
 		assertTrue(testList.contains(board.getCard("Play Room", CardType.ROOM)));
-		assertTrue(testList.contains(board.getCard("Fitness Room", CardType.ROOM)));
+		assertTrue(testList.contains(board.getCard("Gym", CardType.ROOM)));
 		assertTrue(testList.contains(board.getCard("Home Office", CardType.ROOM)));
 		assertTrue(testList.contains(board.getCard("Laundry", CardType.ROOM)));
 		assertTrue(testList.contains(board.getCard("Living Room", CardType.ROOM)));

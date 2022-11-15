@@ -183,22 +183,24 @@ public class BoardCell {
 	//draw Door
 	public void drawDoor(int cellWidth, int cellHeight, int offsetX,int offsetY, Graphics g) {		
 
+		int doorSize = Math.round(cellWidth / 8);
+		
 		switch(doorDirection) {
 		case UP:
 			g.setColor(Color.blue);
-			g.fillRect(offsetX,offsetY-4, cellWidth, 4);
+			g.fillRect(offsetX,offsetY-doorSize, cellWidth, doorSize);
 			break;
 		case DOWN:
 			g.setColor(Color.blue);
-			g.fillRect(offsetX,offsetY+cellHeight, cellWidth, 4);
+			g.fillRect(offsetX,offsetY+cellHeight, cellWidth, doorSize);
 			break;
 		case LEFT:
 			g.setColor(Color.blue);
-			g.fillRect(offsetX-4,offsetY, 4, cellHeight);
+			g.fillRect(offsetX-doorSize,offsetY, doorSize, cellHeight);
 			break;
 		case RIGHT:
 			g.setColor(Color.blue);
-			g.fillRect(offsetX+cellWidth,offsetY, 4, cellHeight);
+			g.fillRect(offsetX+cellWidth,offsetY, doorSize, cellHeight);
 			break;
 		default:
 			break;

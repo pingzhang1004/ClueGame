@@ -37,8 +37,6 @@ public class KnownCardsPanel extends JPanel {
 		//initialize the  knowCardsPanel 
 		setLayout(new GridLayout(3,0));
 		setBorder(new TitledBorder (new EtchedBorder(), "Known Cards"));
-		//knownCardsPanel.setPreferredSize(new Dimension(150, 600));
-		//setSize(200, 1100);
 
 		//initialize the PeoplePanel	
 		peoplePanel.setLayout(new GridLayout(0,1));
@@ -167,7 +165,6 @@ public class KnownCardsPanel extends JPanel {
 	// Main to test the panel
 	public static void main(String[] args) {
 		// Board is singleton, get the only instance
-		//Board board = Board.getInstance();
 		board = Board.getInstance();
 		// set the file names to use my config files
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");		
