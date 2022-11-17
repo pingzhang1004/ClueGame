@@ -158,6 +158,7 @@ public class Board extends JPanel{
 				BoardCell cell = new BoardCell(i,j);
 				if (lines.get(i).split(",")[j].length() == 1) {						
 					cell.setInitial(charAtZero);
+					loadRoomCells(charAtZero,cell);
 				}
 				else {
 					cell.setInitial(charAtZero);
@@ -168,12 +169,14 @@ public class Board extends JPanel{
 					case '*':
 						cell.setIsRoomCenter(true);
 						getRoom(cell).setCenter(cell);
-						roomMap.get(charAtZero);
+						//roomMap.get(charAtZero);
+						loadRoomCells(charAtZero,cell);
 						break;
 
 					case '#':
 						cell.setIsRoomLabel(true);
 						getRoom(cell).setLabel(cell);
+						loadRoomCells(charAtZero,cell);
 						break;
 
 					case 'v':
@@ -197,13 +200,23 @@ public class Board extends JPanel{
 						cell.setIsSecretPassage(true);
 					}
 				}
+				
 				grid[i][j] = cell; 		
 			}
 		}
 	}
 
+	public void loadRoomCells(char initial, BoardCell cell) {
+		for (char key : roomMap.keySet()) {
+			if (key == initial) {
+				roomMap.get(key).addRoomCells(cell);
+				break;
+			}
+		}
+	}
+	
 	// Load setup file
-	public void loadSetupConfig() throws FileNotFoundException, BadConfigFormatException {
+ 	public void loadSetupConfig() throws FileNotFoundException, BadConfigFormatException {
 		//you need to build the grid array with the layout file. But how big do you make it, i.e. number of rows and columns?
 		//You almost need to know this information before you even read the file.
 		roomMap = new TreeMap<Character, Room>();
@@ -700,6 +713,28 @@ public class Board extends JPanel{
 			}
 		}
 
+		// draw the targets
+		if (targets != null) {
+			for (BoardCell targetCell : targets) {
+				
+				if (targetCell.isRoomCenter()) {
+					char initial = targetCell.getInitial();
+					Set<BoardCell> roomCells = roomMap.get(initial).getRoomCells();
+					for (BoardCell roomCell : roomCells) {
+						offsetX = roomCell.getCol() * side + originalX;				
+						offsetY = roomCell.getRow() * side + originalY;
+						targetCell.drawRoomTarget(g,offsetX,offsetY,side,side);
+					}
+				}
+				else {
+					offsetX = targetCell.getCol() * side + originalX;				
+					offsetY = targetCell.getRow() * side + originalY;
+					targetCell.drawTarget(g,offsetX,offsetY,side,side);
+				}
+			}
+		}
+		
+		
 		for(int i =0; i< numRows; i++) {
 			offsetY = i*side + originalY;
 			for(int j =0; j< numColumns; j++) {	
@@ -716,14 +751,6 @@ public class Board extends JPanel{
 				if(cell.isSecretPassage()== true) {
 					cell.drawSecretCell(side, side, offsetX,offsetY, g);	
 				}
-			}
-		}
-		
-		if (targets != null) {
-			for (BoardCell targetCell : targets) {
-				offsetX = targetCell.getCol() * side + originalX;				
-				offsetY = targetCell.getRow() * side + originalY;
-				targetCell.drawTarget(g,offsetX,offsetY,side,side);
 			}
 		}
 				
@@ -780,6 +807,7 @@ public class Board extends JPanel{
 					
 					getCurrentPlayer().setRow(cell.getRow());
 					getCurrentPlayer().setColumn(cell.getCol());
+					cell.setOccupied(true);
 					getTargets().clear();
 					repaint();
 					finishedTurn = true;
@@ -804,21 +832,25 @@ public class Board extends JPanel{
 		removeMouseListener(gettargetListener());
 		BoardCell playerCell = getCell(getCurrentPlayer().getRow(), getCurrentPlayer().getColumn());
 		calcTargets(playerCell, getRoll());
-		if (targets == null) {
+		if (targets.size() == 0) {
 			enabled = false;
+			repaint();
 			finishedTurn = true;
 		}
 		else if (player.equals(getPlayersList().get(0)) && !finishedTurn) {
 		    repaint();
 			enabled = true;
+			playerCell.setOccupied(false);
 			addMouseListener(gettargetListener());
 			
 		}
 		else {
 			enabled = false;
 			BoardCell targetCell = player.selectTarget(getTargets(), getRoomMap());
+			playerCell.setOccupied(false);
 			player.setRow(targetCell.getRow());
 			player.setColumn(targetCell.getCol());
+			targetCell.setOccupied(true);
 			getTargets().clear();
 			repaint();
 			finishedTurn = true;

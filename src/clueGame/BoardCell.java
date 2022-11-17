@@ -271,7 +271,14 @@ public class BoardCell {
 	public void drawTarget(Graphics g, int offsetX, int offsetY, int cellWidth, int cellHeight) {
 		g.setColor(Color.cyan);
 		g.fillRect(offsetX, offsetY, cellWidth, cellHeight);
-		
+		g.setColor(Color.black);
+		g.drawRect(offsetX,offsetY, cellWidth, cellHeight);
+		rect = new Rectangle(offsetX, offsetY, cellWidth, cellHeight);
+	}
+	
+	public void drawRoomTarget(Graphics g, int offsetX, int offsetY, int cellWidth, int cellHeight) {
+		g.setColor(Color.cyan);
+		g.fillRect(offsetX, offsetY, cellWidth, cellHeight);
 		rect = new Rectangle(offsetX, offsetY, cellWidth, cellHeight);
 	}
 	

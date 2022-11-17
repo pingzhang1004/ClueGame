@@ -15,9 +15,20 @@ public class Room {
 	private Set<BoardCell> doorList;
 	private BoardCell secretPassageCell;
 	
+	private Set<BoardCell> roomCells;
+	
 	// default constructor
 	public Room() {
 		doorList = new HashSet<BoardCell>();
+		roomCells = new HashSet<BoardCell>();
+	}
+
+	public Set<BoardCell> getRoomCells() {
+		return roomCells;
+	}
+
+	public void addRoomCells(BoardCell cell) {
+		roomCells.add(cell);
 	}
 
 	// return a room name
