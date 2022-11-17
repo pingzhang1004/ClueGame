@@ -176,6 +176,7 @@ public abstract class Player {
 		return strColor;
 	}
 
+	// setters
 	public void setRow(int row) {
 		this.row = row;
 	}
@@ -197,11 +198,5 @@ public abstract class Player {
 	abstract public BoardCell selectTarget(Set<BoardCell> targets, Map<Character, Room> roomMap);
 
 	abstract public Solution createSuggestion(Room room);
-	
-	public void drawPlayer(Player player, Graphics g,int cellWidth,int cellHeight) {
-		
-		g.setColor(color);
-		g.drawOval(row, column,cellWidth,cellHeight);
-	}
 	
 }

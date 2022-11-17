@@ -276,12 +276,14 @@ public class BoardCell {
 		rect = new Rectangle(offsetX, offsetY, cellWidth, cellHeight);
 	}
 	
+	// draw the room target
 	public void drawRoomTarget(Graphics g, int offsetX, int offsetY, int cellWidth, int cellHeight) {
 		g.setColor(Color.cyan);
 		g.fillRect(offsetX, offsetY, cellWidth, cellHeight);
 		rect = new Rectangle(offsetX, offsetY, cellWidth, cellHeight);
 	}
 	
+	// Check if the point of the cell is clicked
 	public boolean containsClick(int mouseX, int mouseY) {
 		if (rect.contains(new Point(mouseX, mouseY))) 
 			return true;

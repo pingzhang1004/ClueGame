@@ -60,7 +60,7 @@ public class Board extends JPanel{
 	private final int MIN_ROLL = 1;
 	
 	private boolean findSolution;
-	public boolean finishedTurn;
+	private boolean finishedTurn;
 	public boolean enabled;
 	private int playerIndex;
 	
@@ -107,6 +107,7 @@ public class Board extends JPanel{
 		roomEnter();
 		calcAdjList();
 		deal();
+		finishedTurn = false;
 		findSolution = false;
 		playerIndex = 0;
 		mouseCliker = new targetListener();
@@ -206,6 +207,7 @@ public class Board extends JPanel{
 		}
 	}
 
+	// Add all room cell to the specific room
 	public void loadRoomCells(char initial, BoardCell cell) {
 		for (char key : roomMap.keySet()) {
 			if (key == initial) {
@@ -656,25 +658,32 @@ public class Board extends JPanel{
 		return null;
 	}
 
+	// Set roll to a integer between 1 and 6 randomly
 	public void setRoll() {
 		int randomNum = (int)((Math.random() * MAX_ROLL) + MIN_ROLL);
 		this.roll = randomNum;
 	}
 	
+	// Get the roll value
 	public int getRoll() {
 		return roll;
 	}
 	
-	public void endGame() {
+	// Game process setting
+	public void setSolutionProcess() {
 		this.findSolution = true;
 	}
-	
-	public boolean checkGameProcess() {
+	public void setTurnProcess(boolean finishedTurn) {
+		this.finishedTurn = finishedTurn;
+	}
+	public boolean getTurnProcess() {
+		return finishedTurn;
+	}
+	public boolean getSolutionProcess() {
 		return findSolution;
 	}
 	
-	
-	// GUI part******************************************************
+	// GUI part**********************************************************************************
 	//Add a paintComponent() method to draw the board and players.
 	public void paintComponent(Graphics g) {
 		//boardPanel.setPreferredSize(new Dimension(1000, 1000));
@@ -734,7 +743,7 @@ public class Board extends JPanel{
 			}
 		}
 		
-		
+		// draw the room name
 		for(int i =0; i< numRows; i++) {
 			offsetY = i*side + originalY;
 			for(int j =0; j< numColumns; j++) {	
@@ -757,7 +766,6 @@ public class Board extends JPanel{
 		//draw the player
 		int offset = side / 2;
 		for(Player player : players) {
-			player.getColor();
 			offsetX = player.getColumn() * side + originalX;				
 			offsetY = player.getRow() * side + originalY;
 			cell = grid[player.getRow()][player.getColumn()];
@@ -776,42 +784,48 @@ public class Board extends JPanel{
 				int index = roomPlayers.indexOf(player);
 			    offsetX = offsetX+(index*offset);
 			}
-			
 			cell.drawPlayer(player.getColor(),g,offsetX,offsetY,side,side);
-			
 		}
 	}
 	
+	// When a point on the board panel is clicked
 	private class targetListener implements MouseListener {
 		public void mouseClicked(MouseEvent e) {}
 		public void mouseEntered(MouseEvent e) {}
 		public void mouseExited(MouseEvent e) {}
 		public void mouseReleased(MouseEvent e) {}
 		public void mousePressed(MouseEvent e)  {
-			System.out.println("Clicked");
+		    // When the mouseListener is off
 			if (!enabled) {
 			    return;
 			  }
+			// When the mouseListener is on
 			else {
 				boolean moved = false;
 				BoardCell cell = new BoardCell();
+				// Check if a target is clicked
 				for (BoardCell target : getTargets()) {
-					
+					// check targets that is a room cell
 					if (target.isRoomCenter()) {
 						char initial = target.getInitial();
 						Set<BoardCell> roomCells = roomMap.get(initial).getRoomCells();
 						for (BoardCell roomCell : roomCells) {
 							if (roomCell.containsClick(e.getX(), e.getY())) {
 								moved = true;
+								enabled = false;
 								cell = target;
 								break;
 							}
 						}
-						break;
+						if (moved) {
+							break;
+						}
 					}
+					// check target that is not a room cell
 					else {
 						if (target.containsClick(e.getX(), e.getY())) {
 							moved = true;
+							enabled = false;
 							cell = target;
 							break;
 						}
@@ -819,14 +833,14 @@ public class Board extends JPanel{
 				}
 				
 				if (moved) {
-					
+					// Set the new position for player
 					getCurrentPlayer().setRow(cell.getRow());
 					getCurrentPlayer().setColumn(cell.getCol());
 					cell.setOccupied(true);
 					getTargets().clear();
 					repaint();
+					// the turn is finished
 					finishedTurn = true;
-
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "That is not a target");
@@ -839,28 +853,37 @@ public class Board extends JPanel{
 		return mouseCliker;
 	}
 	
+	// game control center
 	public void gameControl() {
 		Player player = getPlayersList().get(playerIndex);
 		
+		// Set information for turn
 		setCurrentPlayer(player);
 		setRoll();
+		
 		removeMouseListener(gettargetListener());
 		BoardCell playerCell = getCell(getCurrentPlayer().getRow(), getCurrentPlayer().getColumn());
 		calcTargets(playerCell, getRoll());
 		if (targets.size() == 0) {
+			// clicker on
 			enabled = false;
+			
 			repaint();
 			finishedTurn = true;
 		}
 		else if (player.equals(getPlayersList().get(0)) && !finishedTurn) {
 		    repaint();
+		    
+		    // clicker off
 			enabled = true;
-			playerCell.setOccupied(false);
-			addMouseListener(gettargetListener());
 			
+			playerCell.setOccupied(false);
+			addMouseListener(gettargetListener());	
 		}
 		else {
+			// clicker off
 			enabled = false;
+			
 			BoardCell targetCell = player.selectTarget(getTargets(), getRoomMap());
 			playerCell.setOccupied(false);
 			player.setRow(targetCell.getRow());
@@ -871,6 +894,7 @@ public class Board extends JPanel{
 			finishedTurn = true;
 		}
 		
+		// Get the next player
 		playerIndex = (playerIndex + 1) % getPlayersList().size();
 		
 	}	

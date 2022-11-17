@@ -43,11 +43,9 @@ public class GameControlPanel extends JPanel {
 		theCurrentPlayer = new JTextField(10);
 		theCurrentPlayer.setEditable(false);
 		
-		board.finishedTurn = false;
-		
 		this.board = board;
 		
-		
+		// Initial set up
 		board.gameControl();
 		createControlPanel();
 		setTurn(board.getCurrentPlayer(), board.getRoll());
@@ -114,16 +112,19 @@ public class GameControlPanel extends JPanel {
 		
 	}
 
+	// Set guess
 	public void setGuess(String guess) {		
 
 		theGuess.setText(guess);
 	}
 
+	// Set the guess result
 	public void setGuessResult(String guessResult) {
 
 		theGuessResult.setText(guessResult);
 	}
 
+	// Set information for tthe urn
 	public void setTurn(Player currentPlayer, int roll) {
 
 		theCurrentPlayer.setText(currentPlayer.getName());		
@@ -132,15 +133,17 @@ public class GameControlPanel extends JPanel {
 		theCurrentPlayer.setBackground(playerColor);		
 	}
 	
+	// When NEXT button is pressed
 	private class ButtonListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
 			System.out.println("Button pressed");
-			if (board.finishedTurn) {
-				board.finishedTurn =false;
+			if (board.getTurnProcess()) {
+				board.setTurnProcess(false);
 				board.gameControl();
 				setTurn(board.getCurrentPlayer(), board.getRoll());
+				// End the game
 				//while (!board.checkGameProcess()) {
 			}
 			else {
