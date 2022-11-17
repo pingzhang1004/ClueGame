@@ -62,6 +62,7 @@ public class Board extends JPanel{
 	private boolean findSolution;
 	public boolean finishedTurn;
 	public boolean enabled;
+	private int playerIndex;
 	
 	private targetListener mouseCliker;
 
@@ -107,6 +108,7 @@ public class Board extends JPanel{
 		calcAdjList();
 		deal();
 		findSolution = false;
+		playerIndex = 0;
 		mouseCliker = new targetListener();
 	}
 	// End from Canvas
@@ -726,24 +728,30 @@ public class Board extends JPanel{
 		}
 				
 		//draw the player
+		int offset = side / 2;
 		for(Player player : players) {
 			player.getColor();
 			offsetX = player.getColumn() * side + originalX;				
 			offsetY = player.getRow() * side + originalY;
 			cell = grid[player.getRow()][player.getColumn()];
 			
-//			Set<Player> roomPlayers= new HashSet<Player>();
-//			
-//			if (cell.isRoomCenter()) {
-//				BoardCell playerCell = new BoardCell();
-//				for (Player p : players) {
-//					playerCell = grid[p.getRow()][p.getColumn()];
-//					if (playerCell.equals(cell)) {
-//						roomPlayers.add(p);
-//					}
-//				}
-//			}
+			ArrayList<Player> roomPlayers= new ArrayList<Player>();
+			
+			if (cell.isRoomCenter()) {
+				BoardCell playerCell = new BoardCell();
+				// get all players in the room
+				for (Player p : players) {
+					playerCell = grid[p.getRow()][p.getColumn()];
+					if (playerCell.equals(cell)) {
+						roomPlayers.add(p);
+					}
+				}
+				int index = roomPlayers.indexOf(player);
+			    offsetX = offsetX+(index*offset);
+			}
+			
 			cell.drawPlayer(player.getColor(),g,offsetX,offsetY,side,side);
+			
 		}
 	}
 	
@@ -769,6 +777,7 @@ public class Board extends JPanel{
 				}
 
 				if (moved) {
+					
 					getCurrentPlayer().setRow(cell.getRow());
 					getCurrentPlayer().setColumn(cell.getCol());
 					getTargets().clear();
@@ -786,6 +795,38 @@ public class Board extends JPanel{
 	public targetListener gettargetListener() {
 		return mouseCliker;
 	}
+	
+	public void gameControl() {
+		Player player = getPlayersList().get(playerIndex);
+		
+		setCurrentPlayer(player);
+		setRoll();
+		removeMouseListener(gettargetListener());
+		BoardCell playerCell = getCell(getCurrentPlayer().getRow(), getCurrentPlayer().getColumn());
+		calcTargets(playerCell, getRoll());
+		if (targets == null) {
+			enabled = false;
+			finishedTurn = true;
+		}
+		else if (player.equals(getPlayersList().get(0)) && !finishedTurn) {
+		    repaint();
+			enabled = true;
+			addMouseListener(gettargetListener());
+			
+		}
+		else {
+			enabled = false;
+			BoardCell targetCell = player.selectTarget(getTargets(), getRoomMap());
+			player.setRow(targetCell.getRow());
+			player.setColumn(targetCell.getCol());
+			getTargets().clear();
+			repaint();
+			finishedTurn = true;
+		}
+		
+		playerIndex = (playerIndex + 1) % getPlayersList().size();
+		
+	}	
 	
 	
 	

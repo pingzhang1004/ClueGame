@@ -28,10 +28,6 @@ public class GameControlPanel extends JPanel {
 	private JTextField theRoll;
 	private Color playerColor;
 	
-	
-	private int playerIndex;
-	
-	
 	private static Board board;
 
 	
@@ -48,12 +44,13 @@ public class GameControlPanel extends JPanel {
 		theCurrentPlayer.setEditable(false);
 		
 		board.finishedTurn = false;
-		playerIndex = 0;
+		
 		this.board = board;
 		
 		
-		gameControl();
+		board.gameControl();
 		createControlPanel();
+		setTurn(board.getCurrentPlayer(), board.getRoll());
 		
 		
 	}
@@ -142,7 +139,8 @@ public class GameControlPanel extends JPanel {
 			System.out.println("Button pressed");
 			if (board.finishedTurn) {
 				board.finishedTurn =false;
-				gameControl();
+				board.gameControl();
+				setTurn(board.getCurrentPlayer(), board.getRoll());
 				//while (!board.checkGameProcess()) {
 			}
 			else {
@@ -154,37 +152,7 @@ public class GameControlPanel extends JPanel {
 	
 	
 	
-	public void gameControl() {
-		Player player = board.getPlayersList().get(playerIndex);
-		
-		board.setCurrentPlayer(player);
-		board.setRoll();
-		board.removeMouseListener(board.gettargetListener());
-		BoardCell playerCell = board.getCell(board.getCurrentPlayer().getRow(), board.getCurrentPlayer().getColumn());
-		board.calcTargets(playerCell, board.getRoll());
-		if (player.equals(board.getPlayersList().get(0)) && !board.finishedTurn) {
-			board.repaint();
-			board.enabled = true;
-			board.addMouseListener(board.gettargetListener());
-			
-		}
-		else {
-			board.enabled = false;
-			BoardCell cell = player.selectTarget(board.getTargets(), board.getRoomMap());
-			player.setRow(cell.getRow());
-			player.setColumn(cell.getCol());
-			board.getTargets().clear();
-			board.repaint();
-			board.finishedTurn = true;
-		}
-		
-		setTurn(board.getCurrentPlayer(), board.getRoll());
-		
-		
-		
-		playerIndex = (playerIndex + 1) % board.getPlayersList().size();
-		
-	}	
+	
 	// Main to test the panel
 	public static void main(String[] args) {
 		GameControlPanel panel = new GameControlPanel(board);  // create the panel
