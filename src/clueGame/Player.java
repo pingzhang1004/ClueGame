@@ -45,7 +45,7 @@ public abstract class Player {
 	public void convertStrToColor(String strColor) {		 
 		switch(strColor){
 		case "blue": 
-			color = Color.cyan;
+			color = Color.blue;
 			break;  
 		case "green": 
 			color = Color.green;
@@ -176,6 +176,13 @@ public abstract class Player {
 		return strColor;
 	}
 
+	public void setRow(int row) {
+		this.row = row;
+	}
+	public void setColumn(int column) {
+		this.column = column;
+	}
+	
 	public int getRow() {
 		return row;
 	}

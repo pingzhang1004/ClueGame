@@ -4,15 +4,21 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+
 
 public class GameControlPanel extends JPanel {
 
@@ -21,10 +27,16 @@ public class GameControlPanel extends JPanel {
 	private JTextField theCurrentPlayer;
 	private JTextField theRoll;
 	private Color playerColor;
+	
+	
+	private int playerIndex;
+	
+	
+	private static Board board;
 
 	
 	//Constructor for the panel, it does 90% of the work
-	public GameControlPanel()  {
+	public GameControlPanel(Board board)  {
 		//initialize the Panel
 		theGuess = new JTextField(20);
 		theGuess.setEditable(false);
@@ -35,6 +47,12 @@ public class GameControlPanel extends JPanel {
 		theCurrentPlayer = new JTextField(10);
 		theCurrentPlayer.setEditable(false);
 		
+		board.finishedTurn = false;
+		playerIndex = 0;
+		this.board = board;
+		
+		
+		gameControl();
 		createControlPanel();
 		
 		
@@ -64,6 +82,8 @@ public class GameControlPanel extends JPanel {
 		accusationButton.setPreferredSize(null);
 		JButton nextButton = new JButton("Next!");		
 		nextButton.setPreferredSize(null);
+		
+		nextButton.addActionListener(new ButtonListener());
 		
 		playTurnPanel.add(currentPlayPanel);
 		playTurnPanel.add(rollPanel);
@@ -107,7 +127,7 @@ public class GameControlPanel extends JPanel {
 		theGuessResult.setText(guessResult);
 	}
 
-	public void setTurn(ComputerPlayer currentPlayer, int roll) {
+	public void setTurn(Player currentPlayer, int roll) {
 
 		theCurrentPlayer.setText(currentPlayer.getName());		
 		theRoll.setText(String.valueOf(roll));
@@ -115,9 +135,59 @@ public class GameControlPanel extends JPanel {
 		theCurrentPlayer.setBackground(playerColor);		
 	}
 	
+	private class ButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			System.out.println("Button pressed");
+			if (board.finishedTurn) {
+				board.finishedTurn =false;
+				gameControl();
+				//while (!board.checkGameProcess()) {
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "Please finish your turn!");
+			}
+		}
+		    
+	}
+	
+	
+	
+	public void gameControl() {
+		Player player = board.getPlayersList().get(playerIndex);
+		
+		board.setCurrentPlayer(player);
+		board.setRoll();
+		board.removeMouseListener(board.gettargetListener());
+		BoardCell playerCell = board.getCell(board.getCurrentPlayer().getRow(), board.getCurrentPlayer().getColumn());
+		board.calcTargets(playerCell, board.getRoll());
+		if (player.equals(board.getPlayersList().get(0)) && !board.finishedTurn) {
+			board.repaint();
+			board.enabled = true;
+			board.addMouseListener(board.gettargetListener());
+			
+		}
+		else {
+			board.enabled = false;
+			BoardCell cell = player.selectTarget(board.getTargets(), board.getRoomMap());
+			player.setRow(cell.getRow());
+			player.setColumn(cell.getCol());
+			board.getTargets().clear();
+			board.repaint();
+			board.finishedTurn = true;
+		}
+		
+		setTurn(board.getCurrentPlayer(), board.getRoll());
+		
+		
+		
+		playerIndex = (playerIndex + 1) % board.getPlayersList().size();
+		
+	}	
 	// Main to test the panel
 	public static void main(String[] args) {
-		GameControlPanel panel = new GameControlPanel();  // create the panel
+		GameControlPanel panel = new GameControlPanel(board);  // create the panel
 		JFrame frame = new JFrame();  // create the frame 
 		frame.setContentPane(panel); // put the panel in the frame
 		frame.setSize(new Dimension(700, 200));  // size the frame

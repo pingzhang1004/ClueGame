@@ -10,6 +10,8 @@ package clueGame;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,8 +20,8 @@ import experiment.TestBoardCell;
 public class BoardCell {
 
 	// Variables
-	public int row;
-	public int col;
+	private int row;
+	private int col;
 	private char initial;
 	private DoorDirection doorDirection;
 	private boolean roomLabel;
@@ -33,6 +35,8 @@ public class BoardCell {
 	private Boolean isOccupied ;
 	//A Set of board cells to hold adjacency list
 	private Set<BoardCell> adjList;
+	
+	private Rectangle rect;
 
 	// default constructor
 	public BoardCell() {
@@ -156,6 +160,22 @@ public class BoardCell {
 		}
 		return isOccupied;
 	}
+	
+	public int getRow() {
+		return row;
+	}
+
+	public void setRow(int row) {
+		this.row = row;
+	}
+
+	public int getCol() {
+		return col;
+	}
+
+	public void setCol(int col) {
+		this.col = col;
+	}
 
 	//draw the cell
 	//Pass information to the board cell, like the cell size and perhaps a board offset.
@@ -208,7 +228,6 @@ public class BoardCell {
 		}
 	}
 
-
 	//draw room name
 	public void drawRoomLabel(int offsetX, int offsetY, int size, String roomName, Graphics g) {
 		g.setColor(Color.blue);
@@ -248,4 +267,17 @@ public class BoardCell {
 		
 	}
 
+	// draw the target
+	public void drawTarget(Graphics g, int offsetX, int offsetY, int cellWidth, int cellHeight) {
+		g.setColor(Color.cyan);
+		g.fillRect(offsetX, offsetY, cellWidth, cellHeight);
+		
+		rect = new Rectangle(offsetX, offsetY, cellWidth, cellHeight);
+	}
+	
+	public boolean containsClick(int mouseX, int mouseY) {
+		if (rect.contains(new Point(mouseX, mouseY))) 
+			return true;
+		return false;
+	}
 }

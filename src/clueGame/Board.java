@@ -10,6 +10,8 @@ package clueGame;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import experiment.TestBoardCell;
@@ -49,6 +52,18 @@ public class Board extends JPanel{
 	private ArrayList<Player> players;
 	//There are 21 cards：9 room cards, 6 player cards, 6 weapon cards
 	private  ArrayList<Card> cards;
+	
+	private Player currentPlayer;
+	
+	private int roll;
+	private final int MAX_ROLL = 6;
+	private final int MIN_ROLL = 1;
+	
+	private boolean findSolution;
+	public boolean finishedTurn;
+	public boolean enabled;
+	
+	private targetListener mouseCliker;
 
 	//private JPanel boardPanel;
 	/*
@@ -91,6 +106,8 @@ public class Board extends JPanel{
 		roomEnter();
 		calcAdjList();
 		deal();
+		findSolution = false;
+		mouseCliker = new targetListener();
 	}
 	// End from Canvas
 
@@ -377,7 +394,7 @@ public class Board extends JPanel{
 		//It is used to avoid backtracking.
 		visited = new HashSet<BoardCell>();
 		//A set of board cells to hold the resulting targets from TargetCalc()
-		targets = new HashSet<BoardCell>() ;
+		targets = new HashSet<BoardCell>();
 
 		//add the start location to the visited list (so no cycle through this cell)
 		visited.add(startCell);
@@ -473,11 +490,11 @@ public class Board extends JPanel{
 
 		//deal the left card randomly to 6 players, each player has 3 cards
 		//Card randomPlayerCard = new Card();		
-		for(Player currentPlayer : players) {			
-			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);		
-			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);			
-			assignCardsToPlayerRandomly(dealPlayCards, currentPlayer);
-			currentPlayer.setUnseenCard(cards);
+		for(Player player : players) {			
+			assignCardsToPlayerRandomly(dealPlayCards, player);		
+			assignCardsToPlayerRandomly(dealPlayCards, player);			
+			assignCardsToPlayerRandomly(dealPlayCards, player);
+			player.setUnseenCard(cards);
 		}
 
 	}
@@ -553,9 +570,9 @@ public class Board extends JPanel{
 
 	// Return a player
 	public Player getPlayer(String Name, String color, int row, int column) {
-		for(Player currentPlayer : players) {
-			if(Name.equals(currentPlayer.getName()) && color.equals(currentPlayer.getStrColor()) && row==(currentPlayer.getRow()) && column==(currentPlayer.getColumn())) {
-				return currentPlayer ;
+		for(Player player : players) {
+			if(Name.equals(player.getName()) && color.equals(player.getStrColor()) && row==(player.getRow()) && column==(player.getColumn())) {
+				return player ;
 			}
 		}
 		return null;
@@ -576,6 +593,15 @@ public class Board extends JPanel{
 	// Set players for testing
 	public void setPlayers(ArrayList<Player> testPlayers) {
 		this.players = testPlayers;
+	}
+	
+	// Set the current player
+	public void setCurrentPlayer(Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
+	}
+	// Get the current player
+	public Player getCurrentPlayer() {
+		return currentPlayer;
 	}
 
 	// returns true if accusation matches theAnswer
@@ -615,6 +641,24 @@ public class Board extends JPanel{
 		return null;
 	}
 
+	public void setRoll() {
+		int randomNum = (int)((Math.random() * MAX_ROLL) + MIN_ROLL);
+		this.roll = randomNum;
+	}
+	
+	public int getRoll() {
+		return roll;
+	}
+	
+	public void endGame() {
+		this.findSolution = true;
+	}
+	
+	public boolean checkGameProcess() {
+		return findSolution;
+	}
+	
+	
 	// GUI part******************************************************
 	//Add a paintComponent() method to draw the board and players.
 	public void paintComponent(Graphics g) {
@@ -651,7 +695,6 @@ public class Board extends JPanel{
 				offsetX = j * side + originalX;
 				cell = grid[i][j];
 				cell.drawCell(side, side, offsetX,offsetY, g);
-				
 			}
 		}
 
@@ -673,7 +716,14 @@ public class Board extends JPanel{
 				}
 			}
 		}
-				
+		
+		if (targets != null) {
+			for (BoardCell targetCell : targets) {
+				offsetX = targetCell.getCol() * side + originalX;				
+				offsetY = targetCell.getRow() * side + originalY;
+				targetCell.drawTarget(g,offsetX,offsetY,side,side);
+			}
+		}
 				
 		//draw the player
 		for(Player player : players) {
@@ -681,12 +731,67 @@ public class Board extends JPanel{
 			offsetX = player.getColumn() * side + originalX;				
 			offsetY = player.getRow() * side + originalY;
 			cell = grid[player.getRow()][player.getColumn()];
+			
+//			Set<Player> roomPlayers= new HashSet<Player>();
+//			
+//			if (cell.isRoomCenter()) {
+//				BoardCell playerCell = new BoardCell();
+//				for (Player p : players) {
+//					playerCell = grid[p.getRow()][p.getColumn()];
+//					if (playerCell.equals(cell)) {
+//						roomPlayers.add(p);
+//					}
+//				}
+//			}
 			cell.drawPlayer(player.getColor(),g,offsetX,offsetY,side,side);
 		}
-
 	}
+	
+	private class targetListener implements MouseListener {
+		public void mouseClicked(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {}
+		public void mousePressed(MouseEvent e)  {
+			System.out.println("Clicked");
+			if (!enabled) {
+			    return;
+			  }
+			else {
+				boolean moved = false;
+				BoardCell cell = new BoardCell();
+				for (BoardCell target : getTargets()) {
+					if (target.containsClick(e.getX(), e.getY())) {
+						moved = true;
+						cell = target;
+						break;
+					}
+				}
+
+				if (moved) {
+					getCurrentPlayer().setRow(cell.getRow());
+					getCurrentPlayer().setColumn(cell.getCol());
+					getTargets().clear();
+					repaint();
+					finishedTurn = true;
+
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "That is not a target");
+				}
+			}
+		}
+	}
+	
+	public targetListener gettargetListener() {
+		return mouseCliker;
+	}
+	
+	
+	
 
 
+	
 
 
 
