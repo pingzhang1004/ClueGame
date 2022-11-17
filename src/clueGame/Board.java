@@ -796,7 +796,11 @@ public class Board extends JPanel{
 				boolean moved = false;
 				BoardCell cell = new BoardCell();
 				for (BoardCell target : getTargets()) {
+					if (target.isRoomCenter()) {
+						
+					}
 					if (target.containsClick(e.getX(), e.getY())) {
+						if ()
 						moved = true;
 						cell = target;
 						break;
