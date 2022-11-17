@@ -723,7 +723,7 @@ public class Board extends JPanel{
 					for (BoardCell roomCell : roomCells) {
 						offsetX = roomCell.getCol() * side + originalX;				
 						offsetY = roomCell.getRow() * side + originalY;
-						targetCell.drawRoomTarget(g,offsetX,offsetY,side,side);
+						roomCell.drawRoomTarget(g,offsetX,offsetY,side,side);
 					}
 				}
 				else {
@@ -796,17 +796,28 @@ public class Board extends JPanel{
 				boolean moved = false;
 				BoardCell cell = new BoardCell();
 				for (BoardCell target : getTargets()) {
+					
 					if (target.isRoomCenter()) {
-						
-					}
-					if (target.containsClick(e.getX(), e.getY())) {
-						if ()
-						moved = true;
-						cell = target;
+						char initial = target.getInitial();
+						Set<BoardCell> roomCells = roomMap.get(initial).getRoomCells();
+						for (BoardCell roomCell : roomCells) {
+							if (roomCell.containsClick(e.getX(), e.getY())) {
+								moved = true;
+								cell = target;
+								break;
+							}
+						}
 						break;
 					}
+					else {
+						if (target.containsClick(e.getX(), e.getY())) {
+							moved = true;
+							cell = target;
+							break;
+						}
+					}	
 				}
-
+				
 				if (moved) {
 					
 					getCurrentPlayer().setRow(cell.getRow());
