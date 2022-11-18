@@ -32,7 +32,6 @@ public class ClueGame extends JFrame{
 		add(controlPanel, BorderLayout.SOUTH);
 		add(cardsPanel, BorderLayout.EAST);
 		
-		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close		
 		setVisible(true);
 		

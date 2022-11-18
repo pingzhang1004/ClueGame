@@ -869,6 +869,9 @@ public class Board extends JPanel{
 			enabled = false;
 			
 			repaint();
+			if (player.equals(getPlayersList().get(0))) {
+				JOptionPane.showMessageDialog(null, "You are blocked!");
+			}
 			finishedTurn = true;
 		}
 		else if (player.equals(getPlayersList().get(0)) && !finishedTurn) {
