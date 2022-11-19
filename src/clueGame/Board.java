@@ -854,7 +854,7 @@ public class Board extends JPanel{
 	}
 	
 	// game control center
-	public void gameControl() {
+	public void startTurn() {
 		Player player = getPlayersList().get(playerIndex);
 		
 		// Set information for turn
@@ -864,6 +864,11 @@ public class Board extends JPanel{
 		removeMouseListener(gettargetListener());
 		BoardCell playerCell = getCell(getCurrentPlayer().getRow(), getCurrentPlayer().getColumn());
 		calcTargets(playerCell, getRoll());
+		//endTurn(player, playerCell);
+		
+	}
+	public void endTurn(Player player) {
+		BoardCell playerCell = getCell(getCurrentPlayer().getRow(), getCurrentPlayer().getColumn());
 		if (targets.size() == 0) {
 			// clicker on
 			enabled = false;
@@ -899,7 +904,6 @@ public class Board extends JPanel{
 		
 		// Get the next player
 		playerIndex = (playerIndex + 1) % getPlayersList().size();
-		
 	}	
 	
 	

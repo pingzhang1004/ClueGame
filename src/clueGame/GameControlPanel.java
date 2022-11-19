@@ -46,10 +46,10 @@ public class GameControlPanel extends JPanel {
 		this.board = board;
 		
 		// Initial set up
-		board.gameControl();
 		createControlPanel();
+		board.startTurn();
 		setTurn(board.getCurrentPlayer(), board.getRoll());
-		
+		board.endTurn(board.getCurrentPlayer());
 		
 	}
 	
@@ -141,8 +141,10 @@ public class GameControlPanel extends JPanel {
 			System.out.println("Button pressed");
 			if (board.getTurnProcess()) {
 				board.setTurnProcess(false);
-				board.gameControl();
+				board.startTurn();
 				setTurn(board.getCurrentPlayer(), board.getRoll());
+				board.endTurn(board.getCurrentPlayer());
+				
 				// End the game
 				//while (!board.checkGameProcess()) {
 			}
