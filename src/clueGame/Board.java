@@ -64,7 +64,7 @@ public class Board extends JPanel{
 	public boolean enabled;
 	private int playerIndex;
 	
-	private targetListener mouseCliker;
+	//private targetListener mouseCliker;
 
 	//private JPanel boardPanel;
 	/*
@@ -110,7 +110,8 @@ public class Board extends JPanel{
 		finishedTurn = false;
 		findSolution = false;
 		playerIndex = 0;
-		mouseCliker = new targetListener();
+		addMouseListener(new targetListener());	
+		//mouseCliker = new targetListener();
 	}
 	// End from Canvas
 
@@ -761,6 +762,7 @@ public class Board extends JPanel{
 					cell.drawSecretCell(side, side, offsetX,offsetY, g);	
 				}
 			}
+	
 		}
 				
 		//draw the player
@@ -794,17 +796,17 @@ public class Board extends JPanel{
 		public void mouseEntered(MouseEvent e) {}
 		public void mouseExited(MouseEvent e) {}
 		public void mouseReleased(MouseEvent e) {}
-		public void mousePressed(MouseEvent e)  {
-		    // When the mouseListener is off
+		public void mousePressed(MouseEvent e) {
+			// When the mouseListener is off
 			if (!enabled) {
-			    return;
-			  }
+				return;
+			}
 			// When the mouseListener is on
 			else {
 				boolean moved = false;
 				BoardCell cell = new BoardCell();
 				// Check if a target is clicked
-				for (BoardCell target : getTargets()) {
+				for (BoardCell target : targets) {
 					// check targets that is a room cell
 					if (target.isRoomCenter()) {
 						char initial = target.getInitial();
@@ -831,13 +833,13 @@ public class Board extends JPanel{
 						}
 					}	
 				}
-				
+
 				if (moved) {
 					// Set the new position for player
-					getCurrentPlayer().setRow(cell.getRow());
-					getCurrentPlayer().setColumn(cell.getCol());
+					currentPlayer.setRow(cell.getRow());
+					currentPlayer.setColumn(cell.getCol());
 					cell.setOccupied(true);
-					getTargets().clear();
+					targets.clear();
 					repaint();
 					// the turn is finished
 					finishedTurn = true;
@@ -846,65 +848,69 @@ public class Board extends JPanel{
 					JOptionPane.showMessageDialog(null, "That is not a target");
 				}
 			}
-		}
+	    }
 	}
 	
-	public targetListener gettargetListener() {
-		return mouseCliker;
-	}
+//	public targetListener gettargetListener() {
+//		return mouseCliker;
+//	}
 	
 	// game control center
 	public void startTurn() {
-		Player player = getPlayersList().get(playerIndex);
+		Player player = players.get(playerIndex);
 		
 		// Set information for turn
 		setCurrentPlayer(player);
 		setRoll();
 		
-		removeMouseListener(gettargetListener());
-		BoardCell playerCell = getCell(getCurrentPlayer().getRow(), getCurrentPlayer().getColumn());
+		//removeMouseListener(gettargetListener());
+		BoardCell playerCell = getCell(currentPlayer.getRow(), currentPlayer.getColumn());
 		calcTargets(playerCell, getRoll());
 		//endTurn(player, playerCell);
 		
 	}
 	public void endTurn(Player player) {
-		BoardCell playerCell = getCell(getCurrentPlayer().getRow(), getCurrentPlayer().getColumn());
+		BoardCell playerCell = getCell(currentPlayer.getRow(), currentPlayer.getColumn());
 		if (targets.size() == 0) {
 			// clicker on
 			enabled = false;
 			
 			repaint();
-			if (player.equals(getPlayersList().get(0))) {
+			if (player.equals(players.get(0))) {
 				JOptionPane.showMessageDialog(null, "You are blocked!");
 			}
 			finishedTurn = true;
 		}
-		else if (player.equals(getPlayersList().get(0)) && !finishedTurn) {
+		else if (player.equals(players.get(0)) && !finishedTurn) {
 		    repaint();
 		    
 		    // clicker off
 			enabled = true;
 			
 			playerCell.setOccupied(false);
-			addMouseListener(gettargetListener());	
+			
 		}
 		else {
 			// clicker off
 			enabled = false;
 			
-			BoardCell targetCell = player.selectTarget(getTargets(), getRoomMap());
+			BoardCell targetCell = player.selectTarget(targets, roomMap);
 			playerCell.setOccupied(false);
 			player.setRow(targetCell.getRow());
 			player.setColumn(targetCell.getCol());
 			targetCell.setOccupied(true);
-			getTargets().clear();
+			targets.clear();
 			repaint();
 			finishedTurn = true;
 		}
 		
 		// Get the next player
-		playerIndex = (playerIndex + 1) % getPlayersList().size();
-	}	
+		playerIndex = (playerIndex + 1) % players.size();
+	}
+	
+	public void suggestionControl(Player player) {
+		
+	}
 	
 	
 	
