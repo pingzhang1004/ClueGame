@@ -240,7 +240,7 @@ public class Board extends JPanel{
 				char roomLabel;
 				switch(strSplit[0]){					 
 				case "Room": 
-					//						//create Room
+					//create Room
 					room = new Room();
 					room.setName(strSplit[1]);	
 					roomLabel =strSplit[2].charAt(0);
