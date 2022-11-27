@@ -26,7 +26,11 @@ public class GameControlPanel extends JPanel {
 	private JTextField theGuessResult;
 	private JTextField theCurrentPlayer;
 	private JTextField theRoll;
-	private Color playerColor;
+	private Color playerColor;	
+	
+	private String guessRoom;
+	private String guessPerson;
+	private String guessWeapon;
 	
 	private static Board board;
 
@@ -34,6 +38,7 @@ public class GameControlPanel extends JPanel {
 	//Constructor for the panel, it does 90% of the work
 	public GameControlPanel(Board board)  {
 		//initialize the Panel
+		this.board = board;
 		theGuess = new JTextField(20);
 		theGuess.setEditable(false);
 		theGuessResult = new JTextField(20);
@@ -42,8 +47,6 @@ public class GameControlPanel extends JPanel {
 		theRoll.setEditable(false);
 		theCurrentPlayer = new JTextField(10);
 		theCurrentPlayer.setEditable(false);
-		
-		this.board = board;
 		
 		// Initial set up
 		createControlPanel();
@@ -95,6 +98,7 @@ public class GameControlPanel extends JPanel {
 		// Use a grid layout,  1 row, 0 columns
 		JPanel guessPanel = new JPanel();		
 		guessPanel.setLayout(new GridLayout(1,0));
+		setGuess();
 		guessPanel.add(theGuess);
 		// add label, text
 		guessPanel.setBorder(new TitledBorder (new EtchedBorder(), "Guess"));
@@ -113,9 +117,9 @@ public class GameControlPanel extends JPanel {
 	}
 
 	// Set guess
-	public void setGuess(String guess) {		
+	public void setGuess() {		
 
-		theGuess.setText(guess);
+		theGuess.setText(guessPerson + ", " + guessRoom + ", "+ guessWeapon);
 	}
 
 	// Set the guess result
@@ -155,18 +159,39 @@ public class GameControlPanel extends JPanel {
 		    
 	}
 	
-	// Main to test the panel
-	public static void main(String[] args) {
-		GameControlPanel panel = new GameControlPanel(board);  // create the panel
-		JFrame frame = new JFrame();  // create the frame 
-		frame.setContentPane(panel); // put the panel in the frame
-		frame.setSize(new Dimension(700, 200));  // size the frame
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
-		frame.setVisible(true); // make it visible
-		// test filling in the data
-		panel.setTurn(new ComputerPlayer("Miss Kate", "red", 0, 15), 5);
-		panel.setGuess( "I have no guess!");
-		panel.setGuessResult( "So you have nothing?");
+	
+	public String getGuessRoom() {
+		return guessRoom;
 	}
+	public void setGuessRoom(String guessRoom) {
+		this.guessRoom = guessRoom;
+	}
+	public String getGuessPerson() {
+		return guessPerson;
+	}
+	public void setGuessPerson(String guessPerson) {
+		this.guessPerson = guessPerson;
+	}
+	public String getGuessWeapon() {
+		return guessWeapon;
+	}
+	public void setGuessWeapon(String guessWeapon) {
+		this.guessWeapon = guessWeapon;
+	}
+	
+	
+	// Main to test the panel
+//	public static void main(String[] args) {
+//		GameControlPanel panel = new GameControlPanel(board);  // create the panel
+//		JFrame frame = new JFrame();  // create the frame 
+//		frame.setContentPane(panel); // put the panel in the frame
+//		frame.setSize(new Dimension(700, 200));  // size the frame
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
+//		frame.setVisible(true); // make it visible
+//		// test filling in the data
+//		panel.setTurn(new ComputerPlayer("Miss Kate", "red", 0, 15), 5);
+//		panel.setGuess( "I have no guess!");
+//		panel.setGuessResult( "So you have nothing?");
+//	}
 
 }

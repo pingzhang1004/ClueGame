@@ -63,6 +63,7 @@ public class Board extends JPanel{
 	private boolean finishedTurn;
 	public boolean enabled;
 	private int playerIndex;
+
 	
 	//private targetListener mouseCliker;
 
@@ -913,8 +914,6 @@ public class Board extends JPanel{
 	}
 	
 	
-	
-
 
 	
 
