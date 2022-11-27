@@ -9,10 +9,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
 
 
 //A dialog box for making Suggestion and making accusation
@@ -20,16 +22,19 @@ public class SuggestionGUI extends JFrame{
 
 	//main 函数测试用的，合并逻辑后可以删除？
 	private static Board board;
-	private static GameControlPanel controlPanel;
 
 	private JTextField roomName;
 	private JComboBox<String> personComboBox;
 	private JComboBox<String> weaponComboBox;
 
+	private String guessText;
+	private String guessRoom;
+	private String guessPerson;
+	private String guessWeapon;
+
 	//titleString is a parameter to distinguish suggestion or accusation
-	public SuggestionGUI(String titleString,Board board, GameControlPanel controlPanel) {	
+	public SuggestionGUI(String titleString,Board board) {	
 		this.board = board;	
-		this.controlPanel = controlPanel;
 
 		//create dialog 
 		setSize(new Dimension(300, 150));
@@ -60,7 +65,20 @@ public class SuggestionGUI extends JFrame{
 
 		ComboListener listener = new ComboListener();
 		personComboBox.addActionListener(listener);
-		weaponComboBox.addActionListener(listener);		
+		weaponComboBox.addActionListener(listener);
+
+
+		JButton submitButton = new JButton("Submit");	
+		submitButton.setPreferredSize(null);
+		add(submitButton);
+
+		JButton cancelButton = new JButton("Cancel");		
+		cancelButton.setPreferredSize(null);
+		add(cancelButton);
+
+		submitButton.addActionListener(new submitButtonListener());
+		cancelButton.addActionListener(new cancelButtonListener());
+
 	}
 
 
@@ -70,7 +88,8 @@ public class SuggestionGUI extends JFrame{
 		Room firstRoom = entry.getValue();
 		textField.setText(firstRoom.getName());
 		textField.setEditable(false);
-		controlPanel.setGuessRoom(firstRoom.getName());
+		//set room for Guess Field in Control Panel
+		guessRoom = firstRoom.getName();
 		return textField;
 	}
 
@@ -93,14 +112,44 @@ public class SuggestionGUI extends JFrame{
 	}
 
 
+	//set person and weapon for Guess Field in Control Panel
 	private class ComboListener implements ActionListener {
 		public void actionPerformed(ActionEvent e)
 		{
 			if (e.getSource() == personComboBox)
-				controlPanel.setGuessPerson(personComboBox.getSelectedItem().toString());
+				guessPerson = personComboBox.getSelectedItem().toString();
 			else
-				controlPanel.setGuessPerson(weaponComboBox.getSelectedItem().toString());
+				guessWeapon = weaponComboBox.getSelectedItem().toString();
 		}
+	}
+
+	// When submit button is pressed
+	private class submitButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			guessText = guessPerson + ", "+ guessWeapon + ", " + guessRoom ;
+			dispose();
+		}
+	}
+
+
+	// When submit button is pressed
+	private class cancelButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			guessText = null;
+			guessPerson = null;
+			guessWeapon = null;
+			dispose();
+		}
+	}
+
+
+
+	public String getGuessText() {
+		return guessText;
 	}
 
 
@@ -113,9 +162,7 @@ public class SuggestionGUI extends JFrame{
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");		
 		// Initialize will load config files 
 		board.initialize();
-		
-
-		SuggestionGUI gui = new SuggestionGUI("Suggestion",board,controlPanel);
+		SuggestionGUI gui = new SuggestionGUI("Suggestion",board);
 		gui.setVisible(true);
 	}
 }

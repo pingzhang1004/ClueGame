@@ -27,14 +27,13 @@ public class GameControlPanel extends JPanel {
 	private JTextField theCurrentPlayer;
 	private JTextField theRoll;
 	private Color playerColor;	
-	
-	private String guessRoom;
-	private String guessPerson;
-	private String guessWeapon;
-	
+
+	private SuggestionGUI suggestionGUI;
+
+
 	private static Board board;
 
-	
+
 	//Constructor for the panel, it does 90% of the work
 	public GameControlPanel(Board board)  {
 		//initialize the Panel
@@ -47,15 +46,15 @@ public class GameControlPanel extends JPanel {
 		theRoll.setEditable(false);
 		theCurrentPlayer = new JTextField(10);
 		theCurrentPlayer.setEditable(false);
-		
+
 		// Initial set up
 		createControlPanel();
 		board.startTurn();
 		setTurn(board.getCurrentPlayer(), board.getRoll());
 		board.endTurn(board.getCurrentPlayer());
-		
+
 	}
-	
+
 	private void createControlPanel() {
 		setLayout(new GridLayout(2,0));
 		// Use a grid layout, 1 row, 4 columns
@@ -80,16 +79,17 @@ public class GameControlPanel extends JPanel {
 		accusationButton.setPreferredSize(null);
 		JButton nextButton = new JButton("Next!");		
 		nextButton.setPreferredSize(null);
-		
-		nextButton.addActionListener(new ButtonListener());
-		
+
+		accusationButton.addActionListener(new AccusationButtonListener());
+		nextButton.addActionListener(new NextButtonListener());
+
 		playTurnPanel.add(currentPlayPanel);
 		playTurnPanel.add(rollPanel);
 		playTurnPanel.add(accusationButton);
 		playTurnPanel.add(nextButton);
 
 		add(playTurnPanel);
-		
+
 		//initialize the guessGroupPanel
 		// Use a grid layout, 0 row, 2 columns
 		JPanel guessGroupPanel = new JPanel();					
@@ -98,7 +98,6 @@ public class GameControlPanel extends JPanel {
 		// Use a grid layout,  1 row, 0 columns
 		JPanel guessPanel = new JPanel();		
 		guessPanel.setLayout(new GridLayout(1,0));
-		setGuess();
 		guessPanel.add(theGuess);
 		// add label, text
 		guessPanel.setBorder(new TitledBorder (new EtchedBorder(), "Guess"));
@@ -111,15 +110,18 @@ public class GameControlPanel extends JPanel {
 
 		guessGroupPanel.add(guessPanel);
 		guessGroupPanel.add(guessResultPanel);
-		
+
 		add(guessGroupPanel);
-		
+
 	}
 
 	// Set guess
-	public void setGuess() {		
-
-		theGuess.setText(guessPerson + ", " + guessRoom + ", "+ guessWeapon);
+	public void setGuess(String guess) {		
+		if(guess == null) {
+    	   theGuess.setText("");
+       }
+       else
+		theGuess.setText(guess);
 	}
 
 	// Set the guess result
@@ -128,7 +130,7 @@ public class GameControlPanel extends JPanel {
 		theGuessResult.setText(guessResult);
 	}
 
-	// Set information for tthe urn
+	// Set information for the urn
 	public void setTurn(Player currentPlayer, int roll) {
 
 		theCurrentPlayer.setText(currentPlayer.getName());		
@@ -136,9 +138,9 @@ public class GameControlPanel extends JPanel {
 		playerColor= currentPlayer.getColor();
 		theCurrentPlayer.setBackground(playerColor);		
 	}
-	
+
 	// When NEXT button is pressed
-	private class ButtonListener implements ActionListener
+	private class NextButtonListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
@@ -148,7 +150,7 @@ public class GameControlPanel extends JPanel {
 				board.startTurn();
 				setTurn(board.getCurrentPlayer(), board.getRoll());
 				board.endTurn(board.getCurrentPlayer());
-				
+
 				// End the game
 				//while (!board.checkGameProcess()) {
 			}
@@ -156,42 +158,34 @@ public class GameControlPanel extends JPanel {
 				JOptionPane.showMessageDialog(null, "Please finish your turn!");
 			}
 		}
-		    
+
 	}
-	
-	
-	public String getGuessRoom() {
-		return guessRoom;
+
+	// When Make Accusation button is pressed
+	private class AccusationButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			suggestionGUI = new SuggestionGUI("accusation",board);
+			suggestionGUI.setLocationRelativeTo(null);
+			suggestionGUI.setVisible(true);
+		}
 	}
-	public void setGuessRoom(String guessRoom) {
-		this.guessRoom = guessRoom;
-	}
-	public String getGuessPerson() {
-		return guessPerson;
-	}
-	public void setGuessPerson(String guessPerson) {
-		this.guessPerson = guessPerson;
-	}
-	public String getGuessWeapon() {
-		return guessWeapon;
-	}
-	public void setGuessWeapon(String guessWeapon) {
-		this.guessWeapon = guessWeapon;
-	}
-	
-	
+
+
+
 	// Main to test the panel
-//	public static void main(String[] args) {
-//		GameControlPanel panel = new GameControlPanel(board);  // create the panel
-//		JFrame frame = new JFrame();  // create the frame 
-//		frame.setContentPane(panel); // put the panel in the frame
-//		frame.setSize(new Dimension(700, 200));  // size the frame
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
-//		frame.setVisible(true); // make it visible
-//		// test filling in the data
-//		panel.setTurn(new ComputerPlayer("Miss Kate", "red", 0, 15), 5);
-//		panel.setGuess( "I have no guess!");
-//		panel.setGuessResult( "So you have nothing?");
-//	}
+	public static void main(String[] args) {
+		GameControlPanel panel = new GameControlPanel(board);  // create the panel
+		JFrame frame = new JFrame();  // create the frame 
+		frame.setContentPane(panel); // put the panel in the frame
+		frame.setSize(new Dimension(700, 200));  // size the frame
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
+		frame.setVisible(true); // make it visible
+		// test filling in the data
+		panel.setTurn(new ComputerPlayer("Miss Kate", "red", 0, 15), 5);
+		//panel.setGuess( "I have no guess!");
+		panel.setGuessResult( "So you have nothing?");
+	}
 
 }
