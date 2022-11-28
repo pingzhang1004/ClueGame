@@ -28,7 +28,7 @@ public class GameControlPanel extends JPanel {
 	private JTextField theRoll;
 	private Color playerColor;	
 
-	private SuggestionGUI suggestionGUI;
+	private GuessGUI suggestionGUI;
 
 
 	private static Board board;
@@ -122,12 +122,14 @@ public class GameControlPanel extends JPanel {
        }
        else
 		theGuess.setText(guess);
+		theGuess.setBackground(playerColor);
 	}
 
 	// Set the guess result
-	public void setGuessResult(String guessResult) {
+	public void setGuessResult(Card guessResult) {
 
-		theGuessResult.setText(guessResult);
+		theGuessResult.setText(guessResult.getCardName());
+		theGuessResult.setBackground(guessResult.getCardHolder().getColor());
 	}
 
 	// Set information for the urn
@@ -150,7 +152,21 @@ public class GameControlPanel extends JPanel {
 				board.startTurn();
 				setTurn(board.getCurrentPlayer(), board.getRoll());
 				board.endTurn(board.getCurrentPlayer());
-
+				
+//				while (board.getProcess()) {
+//					
+//				}
+				System.out.println("Finish");
+				
+				// Need to wait for making a suggestion and then execute the next step
+				if (board.getGuess() != null) {
+					setGuess(board.getGuess());
+				}
+				
+				if (board.getGuessResult() != null) {
+					setGuessResult(board.getGuessResult());
+				}
+				
 				// End the game
 				//while (!board.checkGameProcess()) {
 			}
@@ -166,26 +182,27 @@ public class GameControlPanel extends JPanel {
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			suggestionGUI = new SuggestionGUI("accusation",board);
+			suggestionGUI = new GuessGUI("Accusation", board);
 			suggestionGUI.setLocationRelativeTo(null);
 			suggestionGUI.setVisible(true);
+			//setGuess(suggestionGUI);
 		}
 	}
 
 
-
-	// Main to test the panel
-	public static void main(String[] args) {
-		GameControlPanel panel = new GameControlPanel(board);  // create the panel
-		JFrame frame = new JFrame();  // create the frame 
-		frame.setContentPane(panel); // put the panel in the frame
-		frame.setSize(new Dimension(700, 200));  // size the frame
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
-		frame.setVisible(true); // make it visible
-		// test filling in the data
-		panel.setTurn(new ComputerPlayer("Miss Kate", "red", 0, 15), 5);
-		//panel.setGuess( "I have no guess!");
-		panel.setGuessResult( "So you have nothing?");
-	}
+//
+//	// Main to test the panel
+//	public static void main(String[] args) {
+//		GameControlPanel panel = new GameControlPanel(board);  // create the panel
+//		JFrame frame = new JFrame();  // create the frame 
+//		frame.setContentPane(panel); // put the panel in the frame
+//		frame.setSize(new Dimension(700, 200));  // size the frame
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
+//		frame.setVisible(true); // make it visible
+//		// test filling in the data
+//		panel.setTurn(new ComputerPlayer("Miss Kate", "red", 0, 15), 5);
+//		//panel.setGuess( "I have no guess!");
+//		panel.setGuessResult( "So you have nothing?");
+//	}
 
 }

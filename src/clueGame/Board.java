@@ -61,8 +61,15 @@ public class Board extends JPanel{
 	
 	private boolean findSolution;
 	private boolean finishedTurn;
-	public boolean enabled;
+	private boolean enabled;
 	private int playerIndex;
+	
+	private GuessGUI suggestionGUI;
+	private String guess;
+	private Solution suggestion;
+	private Player disprovePlayer;
+	private boolean process;
+	
 
 	
 	//private targetListener mouseCliker;
@@ -811,12 +818,15 @@ public class Board extends JPanel{
 					// check targets that is a room cell
 					if (target.isRoomCenter()) {
 						char initial = target.getInitial();
+						String roomName = roomMap.get(initial).getName();
 						Set<BoardCell> roomCells = roomMap.get(initial).getRoomCells();
 						for (BoardCell roomCell : roomCells) {
 							if (roomCell.containsClick(e.getX(), e.getY())) {
 								moved = true;
 								enabled = false;
 								cell = target;
+								suggestionGUI = new GuessGUI("Suggestion", roomName, theInstance);
+
 								break;
 							}
 						}
@@ -842,8 +852,29 @@ public class Board extends JPanel{
 					cell.setOccupied(true);
 					targets.clear();
 					repaint();
+					if (suggestionGUI != null) {
+						suggestionGUI.setLocationRelativeTo(null);
+						suggestionGUI.setVisible(true);
+						if (suggestionGUI.getGuessText() != null) {
+							guess = suggestionGUI.getGuessText();
+							suggestion = suggestionGUI.getSuggestion();
+							String name = suggestion.getPersonCard().getCardName();
+							BoardCell playerCell = null;
+							for (Player player : players) {
+								if (player.getName().equals(name)) {
+									playerCell = getCell(player.getRow(), player.getColumn());
+									playerCell.setOccupied(false);
+									player.setRow(cell.getRow());
+									player.setColumn(cell.getCol());
+									repaint();
+									break;
+								}
+							}
+						}
+					}
 					// the turn is finished
 					finishedTurn = true;
+					setProcess(false);
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "That is not a target");
@@ -858,6 +889,7 @@ public class Board extends JPanel{
 	
 	// game control center
 	public void startTurn() {
+		setProcess(true);
 		Player player = players.get(playerIndex);
 		
 		// Set information for turn
@@ -881,6 +913,7 @@ public class Board extends JPanel{
 				JOptionPane.showMessageDialog(null, "You are blocked!");
 			}
 			finishedTurn = true;
+			setProcess(false);
 		}
 		else if (player.equals(players.get(0)) && !finishedTurn) {
 		    repaint();
@@ -903,16 +936,41 @@ public class Board extends JPanel{
 			targets.clear();
 			repaint();
 			finishedTurn = true;
+			setProcess(false);
 		}
 		
 		// Get the next player
 		playerIndex = (playerIndex + 1) % players.size();
+		
 	}
+	
+	//public
 	
 	public void suggestionControl(Player player) {
 		
 	}
 	
+//	public Player getDisprovePlayer() {
+//		disprovePlayer = player;
+//	}
+	
+	public String getGuess() {
+		return guess;
+	}
+	
+	public Card getGuessResult() {
+		Card disproveCard = handleSuggestion(currentPlayer, suggestion);
+		//if (disproveCard != null) {
+		return disproveCard;
+	}
+	
+	public void setProcess(boolean process) {
+		this.process = process;
+	}
+	
+	public boolean getProcess() {
+		return process;
+	}
 	
 
 	
