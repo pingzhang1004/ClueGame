@@ -166,27 +166,6 @@ public class GameControlPanel extends JPanel {
 				board.startTurn();
 				setTurn(board.getCurrentPlayer(), board.getRoll());
 				board.endTurn(board.getCurrentPlayer());
-				
-//				while (board.getProcess()) {
-//					// Need to wait for making a suggestion and then execute the next step
-//					if (board.getGuess() != null) {
-//						setGuess(board.getGuess());
-//						
-//						if (board.getGuessResult() != null) {
-//							board.getCurrentPlayer().updateSeen(board.getGuessResult());
-//							setGuessResult(board.getGuessResult());
-//						}
-//					}
-//
-//					
-//					
-//				}
-//				System.out.println("Finish");
-				
-				
-				
-				// End the game
-				//while (!board.checkGameProcess()) {
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Please finish your turn!");
@@ -200,6 +179,7 @@ public class GameControlPanel extends JPanel {
 	{
 		public void actionPerformed(ActionEvent e)
 		{
+			// When it is human
 			if (board.getCurrentPlayer() == board.getPlayersList().get(0) && !board.getTurnProcess()) {
 				suggestionGUI = new GuessGUI("Accusation", board);
 				suggestionGUI.setLocationRelativeTo(null);

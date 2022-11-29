@@ -187,11 +187,11 @@ public class GuessGUI extends JDialog{
 				Solution accusation = new Solution(new Card(CardType.ROOM, guessRoom), new Card(CardType.PERSON, guessPerson), new Card(CardType.WEAPON, guessWeapon));
 				boolean result = board.checkAccusation(accusation);
 				if (result) {
-					JOptionPane.showMessageDialog(null, "Congratulations, correct!\nYou Win!");
+					JOptionPane.showMessageDialog(null, "Accusation: " + guessText + "\nCongratulations, correct!\nYou Win!");
 					System.exit(0);
 				}
 				else {
-					JOptionPane.showMessageDialog(null, "Sorry, not correct!\nYou Lose!");
+					JOptionPane.showMessageDialog(null, "Accusation: " + guessText + "\nSorry, not correct!\nYou Lose!");
 					System.exit(0);
 				}
 			}
