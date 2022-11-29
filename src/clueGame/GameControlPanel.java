@@ -32,12 +32,15 @@ public class GameControlPanel extends JPanel {
 
 
 	private static Board board;
+	private KnownCardsPanel cardPanel;
 
 
 	//Constructor for the panel, it does 90% of the work
-	public GameControlPanel(Board board)  {
+	public GameControlPanel(Board board, KnownCardsPanel cardPanel)  {
 		//initialize the Panel
 		this.board = board;
+		this.cardPanel = cardPanel;
+		
 		theGuess = new JTextField(20);
 		theGuess.setEditable(false);
 		theGuessResult = new JTextField(20);
@@ -52,7 +55,6 @@ public class GameControlPanel extends JPanel {
 		board.startTurn();
 		setTurn(board.getCurrentPlayer(), board.getRoll());
 		board.endTurn(board.getCurrentPlayer());
-
 	}
 
 	private void createControlPanel() {
@@ -115,6 +117,13 @@ public class GameControlPanel extends JPanel {
 
 	}
 
+	public void resetGuessPanel() {
+		theGuess.setText(null);
+		theGuess.setBackground(Color.white);
+		theGuessResult.setText(null);
+		theGuessResult.setBackground(Color.white);
+	}
+	
 	// Set guess
 	public void setGuess(String guess) {		
 		if(guess == null) {
@@ -127,8 +136,13 @@ public class GameControlPanel extends JPanel {
 
 	// Set the guess result
 	public void setGuessResult(Card guessResult) {
-
-		theGuessResult.setText(guessResult.getCardName());
+		if (board.getCurrentPlayer() == board.getPlayersList().get(0)) {
+			theGuessResult.setText(guessResult.getCardName());
+		}
+		else {
+			theGuessResult.setText("Suggestion disproven!");
+		}
+		
 		theGuessResult.setBackground(guessResult.getCardHolder().getColor());
 	}
 
@@ -153,19 +167,23 @@ public class GameControlPanel extends JPanel {
 				setTurn(board.getCurrentPlayer(), board.getRoll());
 				board.endTurn(board.getCurrentPlayer());
 				
-//				while (board.getProcess()) {
-//					
-//				}
+				while (board.getProcess()) {
+					// Need to wait for making a suggestion and then execute the next step
+					if (board.getGuess() != null) {
+						setGuess(board.getGuess());
+						
+						if (board.getGuessResult() != null) {
+							board.getCurrentPlayer().updateSeen(board.getGuessResult());
+							setGuessResult(board.getGuessResult());
+						}
+					}
+
+					
+					
+				}
 				System.out.println("Finish");
 				
-				// Need to wait for making a suggestion and then execute the next step
-				if (board.getGuess() != null) {
-					setGuess(board.getGuess());
-				}
 				
-				if (board.getGuessResult() != null) {
-					setGuessResult(board.getGuessResult());
-				}
 				
 				// End the game
 				//while (!board.checkGameProcess()) {
@@ -182,10 +200,14 @@ public class GameControlPanel extends JPanel {
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			suggestionGUI = new GuessGUI("Accusation", board);
-			suggestionGUI.setLocationRelativeTo(null);
-			suggestionGUI.setVisible(true);
-			//setGuess(suggestionGUI);
+			if (board.getCurrentPlayer() == board.getPlayersList().get(0)) {
+				suggestionGUI = new GuessGUI("Accusation", board);
+				suggestionGUI.setLocationRelativeTo(null);
+				suggestionGUI.setVisible(true);
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "It is not your turn!");
+			}
 		}
 	}
 

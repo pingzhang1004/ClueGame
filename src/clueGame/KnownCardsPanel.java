@@ -123,6 +123,7 @@ public class KnownCardsPanel extends JPanel {
 		updatePanel(peoplePanel,CardType.PERSON);
 		updatePanel(roomPanel,CardType.ROOM);
 		updatePanel(weaponPanel,CardType.WEAPON);
+		revalidate();
 	}
 
 	//rebuild the people panel/room panel/ weapon panel

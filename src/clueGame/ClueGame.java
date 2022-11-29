@@ -20,8 +20,20 @@ public class ClueGame extends JFrame{
 		// Initialize will load config files 
 		board.initialize();
 		
-		GameControlPanel controlPanel = new GameControlPanel(board);  // create the panel
 		KnownCardsPanel cardsPanel = new KnownCardsPanel(board); 
+		GameControlPanel controlPanel = new GameControlPanel(board, cardsPanel);  // create the panel
+		board.setCardsPanel(cardsPanel);
+		board.setControlPanel(controlPanel);
+		
+		for (int i=1; i<board.getPlayersList().size(); i++) {
+			Player player = board.getPlayersList().get(i);
+			for (Card c : player.getMyCards()) {
+				board.getPlayersList().get(0).updateSeen(c);
+			}
+		}
+		
+		// Update the known cards panel
+		cardsPanel.updatePanels();
 		
 		// set frame size and title
 		setSize(1200,1200);

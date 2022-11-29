@@ -37,7 +37,7 @@ public class Card {
 	//returned a reference to the specific card we wanted
 	//compare Cards which were the same, yet had two different references
 	public boolean equals(Card target) {				
-		if(target.cardName.equals(this.cardName) && target.cardType.equals(this.cardType))			
+		if(target.getCardName().equals(cardName) && target.getCardType().equals(cardType))			
 				return true;
 		else
 			return false;

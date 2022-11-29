@@ -24,6 +24,9 @@ public abstract class Player {
 	private ArrayList<Card> unseenRooms;
 	private ArrayList<Card> unseenWeapons;
 	
+	private boolean pulled;
+	private boolean ready;
+	
 	// Constructor
 	public Player(String name, String strColor, int row, int column) {
 		super();
@@ -123,17 +126,23 @@ public abstract class Player {
 	// If is more than one card that can dispute the suggestion, one is randomly chosen.
 	public Card disproveSuggestion(Solution suggestion) {
 		ArrayList<Card> disproveCards = new ArrayList<Card>();
-		// If the card can be disprove, then add into the disprove card list
-		if (myCards.contains(suggestion.getPersonCard())) {
-			disproveCards.add(suggestion.getPersonCard());
-			
+		
+		for (Card inHandCard : myCards) {
+			if (inHandCard.equals(suggestion.getPersonCard()) || inHandCard.equals(suggestion.getRoomCard()) || inHandCard.equals(suggestion.getWeaponCard())) {
+				disproveCards.add(inHandCard);
+			}
 		}
-		if (myCards.contains(suggestion.getRoomCard())) {
-			disproveCards.add(suggestion.getRoomCard());
-		}
-		if (myCards.contains(suggestion.getWeaponCard())) {
-			disproveCards.add(suggestion.getWeaponCard());
-		}
+//		// If the card can be disprove, then add into the disprove card list
+//		if (myCards.contains(suggestion.getPersonCard())) {
+//			disproveCards.add(suggestion.getPersonCard());
+//			
+//		}
+//		if (myCards.contains(suggestion.getRoomCard())) {
+//			disproveCards.add(suggestion.getRoomCard());
+//		}
+//		if (myCards.contains(suggestion.getWeaponCard())) {
+//			disproveCards.add(suggestion.getWeaponCard());
+//		}
 	
 		// No card can be disproved
 		if (disproveCards.size() == 0) {
@@ -195,6 +204,22 @@ public abstract class Player {
 		return color;
 	}
 
+	public void setPulled(boolean pulled) {
+		this.pulled = pulled;
+	}
+	
+	public boolean getPulled() {
+		return pulled;
+	}
+	
+	public void setAccusation(boolean ready) {
+		this.ready = ready;
+	}
+	
+    public boolean getAccusation() {
+		return ready;
+	}
+	
 	abstract public BoardCell selectTarget(Set<BoardCell> targets, Map<Character, Room> roomMap);
 
 	abstract public Solution createSuggestion(Room room);

@@ -90,9 +90,15 @@ public class GuessGUI extends JDialog{
 		add(weaponComboBox);
 
 		ComboListener listener = new ComboListener();
+		
+		
+		
 		personComboBox.addActionListener(listener);
 		weaponComboBox.addActionListener(listener);
-
+		if (roomComboBox != null) {
+			roomComboBox.addActionListener(listener);
+		}
+		
 
 		JButton submitButton = new JButton("Submit");	
 		submitButton.setPreferredSize(null);
@@ -158,6 +164,9 @@ public class GuessGUI extends JDialog{
 		{
 			if (e.getSource() == personComboBox) {
 				guessPerson = personComboBox.getSelectedItem().toString();
+			}
+			else if (e.getSource() == roomComboBox) {
+				guessRoom = roomComboBox.getSelectedItem().toString();
 			}
 			else {
 				guessWeapon = weaponComboBox.getSelectedItem().toString();
