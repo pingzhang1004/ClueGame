@@ -49,6 +49,8 @@ public class ClueGame extends JFrame{
 		
 		//When the game starts, display the message
 		JOptionPane.showMessageDialog(null, "You are " + board.getPlayersList().get(0).getName() + ".\nCan you find the solution\nbefore the Computer player?", "Welcome to Clue", JOptionPane.INFORMATION_MESSAGE);
+	
+		
 	}
 	
 	// Main to test the panel

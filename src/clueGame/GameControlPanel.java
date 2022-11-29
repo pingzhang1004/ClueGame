@@ -167,21 +167,21 @@ public class GameControlPanel extends JPanel {
 				setTurn(board.getCurrentPlayer(), board.getRoll());
 				board.endTurn(board.getCurrentPlayer());
 				
-				while (board.getProcess()) {
-					// Need to wait for making a suggestion and then execute the next step
-					if (board.getGuess() != null) {
-						setGuess(board.getGuess());
-						
-						if (board.getGuessResult() != null) {
-							board.getCurrentPlayer().updateSeen(board.getGuessResult());
-							setGuessResult(board.getGuessResult());
-						}
-					}
-
-					
-					
-				}
-				System.out.println("Finish");
+//				while (board.getProcess()) {
+//					// Need to wait for making a suggestion and then execute the next step
+//					if (board.getGuess() != null) {
+//						setGuess(board.getGuess());
+//						
+//						if (board.getGuessResult() != null) {
+//							board.getCurrentPlayer().updateSeen(board.getGuessResult());
+//							setGuessResult(board.getGuessResult());
+//						}
+//					}
+//
+//					
+//					
+//				}
+//				System.out.println("Finish");
 				
 				
 				
@@ -200,7 +200,7 @@ public class GameControlPanel extends JPanel {
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			if (board.getCurrentPlayer() == board.getPlayersList().get(0)) {
+			if (board.getCurrentPlayer() == board.getPlayersList().get(0) && !board.getTurnProcess()) {
 				suggestionGUI = new GuessGUI("Accusation", board);
 				suggestionGUI.setLocationRelativeTo(null);
 				suggestionGUI.setVisible(true);

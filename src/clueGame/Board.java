@@ -954,7 +954,7 @@ public class Board extends JPanel{
 			
 		}
 		else {
-			if (player.getAccusation() || player.getSeenCards().size() == 18) {
+			if (player.getAccusation() || player.getSeenCards().size() == 15) {
 				JOptionPane.showMessageDialog(null, "Computer Win!\nYou Lose ~~~~");
 			}
 			// clicker off
