@@ -871,7 +871,7 @@ public class Board extends JPanel{
 							String name = suggestion.getPersonCard().getCardName();
 							BoardCell playerCell = null;
 							for (Player player : players) {
-								if (player.getName().equals(name)) {
+								if (player.getName().equals(name) && !player.equals(currentPlayer)) {
 									playerCell = getCell(player.getRow(), player.getColumn());
 									playerCell.setOccupied(false);
 									player.setRow(cell.getRow());
@@ -891,11 +891,13 @@ public class Board extends JPanel{
 								getCurrentPlayer().updateSeen(getGuessResult());
 								controlPanel.setGuessResult(getGuessResult());
 								cardsPanel.updatePanels();
+								
 							}
 						}
 					}
 					// the turn is finished
 					finishedTurn = true;
+					suggestionGUI = null;
 					//setProcess(false);
 				}
 				else {
@@ -955,7 +957,9 @@ public class Board extends JPanel{
 		}
 		else {
 			if (player.getAccusation() || player.getSeenCards().size() == 15) {
-				JOptionPane.showMessageDialog(null, "Computer Win!\nYou Lose ~~~~");
+				String accusationText = theAnswer.toString();
+				JOptionPane.showMessageDialog(null, "Accusation: " + accusationText + "\nCorrect!" + "\nComputer player " + player.getName() + " Win!\nYou Lose ~~~~");
+				System.exit(0);
 			}
 			// clicker off
 			enabled = false;
@@ -972,8 +976,8 @@ public class Board extends JPanel{
 				guess = personName + ", " + roomName + ", " + weaponName;
 				BoardCell suggestedPlayerCell = null;
 				for (Player suggestedPlayer : players) {
-					if (suggestedPlayer.getName().equals(personName)) {
-						suggestedPlayerCell = getCell(suggestedPlayer.getRow(), player.getColumn());
+					if (suggestedPlayer.getName().equals(personName) && !suggestedPlayer.equals(currentPlayer)) {
+						suggestedPlayerCell = getCell(suggestedPlayer.getRow(), suggestedPlayer.getColumn());
 						suggestedPlayerCell.setOccupied(false);
 						suggestedPlayer.setRow(targetCell.getRow());
 						suggestedPlayer.setColumn(targetCell.getCol());
