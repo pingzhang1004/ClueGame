@@ -639,7 +639,6 @@ public class Board extends JPanel{
 		boolean checkPerson = theAnswer.getPersonCard().equals(accusation.getPersonCard());
 		boolean checkRoom = theAnswer.getRoomCard().equals(accusation.getRoomCard());
 		boolean checkWeapon = theAnswer.getWeaponCard().equals(accusation.getWeaponCard());
-		System.out.println("Answer: " + theAnswer.getPersonCard().getCardName() + ", " + theAnswer.getWeaponCard().getCardName() + ", " + theAnswer.getRoomCard().getCardName());
 		// Check the answer
 		if (checkPerson && checkRoom && checkWeapon) {
 			return true;
@@ -683,10 +682,12 @@ public class Board extends JPanel{
 		return roll;
 	}
 	
+	// set turn process
 	public void setTurnProcess(boolean finishedTurn) {
 		this.finishedTurn = finishedTurn;
 	}
 	
+	// get turn process
 	public boolean getTurnProcess() {
 		return finishedTurn;
 	}
