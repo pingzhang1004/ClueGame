@@ -59,7 +59,6 @@ public class Board extends JPanel{
 	private final int MAX_ROLL = 6;
 	private final int MIN_ROLL = 1;
 	
-	private boolean findSolution;
 	private boolean finishedTurn;
 	private boolean enabled;
 	private int playerIndex;
@@ -67,8 +66,7 @@ public class Board extends JPanel{
 	private GuessGUI suggestionGUI;
 	private String guess;
 	private Solution suggestion;
-	private Player disprovePlayer;
-	private boolean process;
+
 	private GameControlPanel controlPanel;
 	private KnownCardsPanel cardsPanel;
 
@@ -124,10 +122,8 @@ public class Board extends JPanel{
 		calcAdjList();
 		deal();
 		finishedTurn = false;
-		findSolution = false;
 		playerIndex = 0;
 		addMouseListener(new targetListener());	
-		//mouseCliker = new targetListener();
 	}
 	// End from Canvas
 
@@ -687,18 +683,12 @@ public class Board extends JPanel{
 		return roll;
 	}
 	
-	// Game process setting
-	public void setSolutionProcess() {
-		this.findSolution = true;
-	}
 	public void setTurnProcess(boolean finishedTurn) {
 		this.finishedTurn = finishedTurn;
 	}
+	
 	public boolean getTurnProcess() {
 		return finishedTurn;
-	}
-	public boolean getSolutionProcess() {
-		return findSolution;
 	}
 	
 	// GUI part**********************************************************************************
@@ -861,16 +851,18 @@ public class Board extends JPanel{
 					cell.setOccupied(true);
 					targets.clear();
 					repaint();
+					// Open the dialog and human can make a suggestion
 					if (suggestionGUI != null) {
 						suggestionGUI.setLocationRelativeTo(null);
 						suggestionGUI.setVisible(true);
-						System.out.println(suggestionGUI.getGuessText());
+						// the suggestion was made
 						if (suggestionGUI.getGuessText() != null) {
 							guess = suggestionGUI.getGuessText();
 							suggestion = suggestionGUI.getSuggestion();
 							String name = suggestion.getPersonCard().getCardName();
 							BoardCell playerCell = null;
 							for (Player player : players) {
+								// set new position for the pulled player
 								if (player.getName().equals(name) && !player.equals(currentPlayer)) {
 									playerCell = getCell(player.getRow(), player.getColumn());
 									playerCell.setOccupied(false);
@@ -882,23 +874,24 @@ public class Board extends JPanel{
 								}
 							}
 						}
-						System.out.println("Guess: " + guess);
+						// set guess panel
 						if (suggestionGUI.getGuessText() != null) {
 							controlPanel.setGuess(guess);
-							System.out.println("Get Guess");
-							if (getGuessResult() != null) {
-								System.out.println("Get Guess Result");
-								getCurrentPlayer().updateSeen(getGuessResult());
+							if (getGuessResult() != null) {					
+								currentPlayer.updateSeen(getGuessResult());
 								controlPanel.setGuessResult(getGuessResult());
 								cardsPanel.updatePanels();
-								
+							}
+							else {
+								controlPanel.setGuessResult(getGuessResult());
 							}
 						}
 					}
 					// the turn is finished
 					finishedTurn = true;
+					
+					// clean GuessGUI
 					suggestionGUI = null;
-					//setProcess(false);
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "That is not a target");
@@ -906,10 +899,6 @@ public class Board extends JPanel{
 			}
 	    }
 	}
-	
-//	public targetListener gettargetListener() {
-//		return mouseCliker;
-//	}
 	
 	// game control center
 	public void startTurn() {
@@ -956,6 +945,7 @@ public class Board extends JPanel{
 			
 		}
 		else {
+			// Computer can make accusation and then win
 			if (player.getAccusation() || player.getSeenCards().size() == 15) {
 				String accusationText = theAnswer.toString();
 				JOptionPane.showMessageDialog(null, "Accusation: " + accusationText + "\nCorrect!" + "\nComputer player " + player.getName() + " Win!\nYou Lose ~~~~");
@@ -965,8 +955,8 @@ public class Board extends JPanel{
 			enabled = false;
 			
 			BoardCell targetCell = player.selectTarget(targets, roomMap);
+			// Computer player can make a suggestion
 			if (targetCell.isRoomCenter()) {
-				//setProcess(true);
 				char initial = targetCell.getInitial();
 				Room room = roomMap.get(initial);
 				suggestion = player.createSuggestion(room);
@@ -976,6 +966,7 @@ public class Board extends JPanel{
 				guess = personName + ", " + roomName + ", " + weaponName;
 				BoardCell suggestedPlayerCell = null;
 				for (Player suggestedPlayer : players) {
+					// set new position for the pulled player
 					if (suggestedPlayer.getName().equals(personName) && !suggestedPlayer.equals(currentPlayer)) {
 						suggestedPlayerCell = getCell(suggestedPlayer.getRow(), suggestedPlayer.getColumn());
 						suggestedPlayerCell.setOccupied(false);
@@ -986,18 +977,21 @@ public class Board extends JPanel{
 						break;
 					}
 				}
+				// set guess panel
 				if (guess != null) {
 					controlPanel.setGuess(guess);
-					System.out.println("Get Guess");
 					if (getGuessResult() != null) {
-						System.out.println("Get Guess Result");
 						getCurrentPlayer().updateSeen(getGuessResult());
 						controlPanel.setGuessResult(getGuessResult());
 						cardsPanel.updatePanels();
 					}
+					else {
+						controlPanel.setGuessResult(getGuessResult());
+					}
 				}
 			}
 			
+			// set new player position
 			playerCell.setOccupied(false);
 			player.setRow(targetCell.getRow());
 			player.setColumn(targetCell.getCol());
@@ -1005,7 +999,7 @@ public class Board extends JPanel{
 			targets.clear();
 			repaint();
 			finishedTurn = true;
-			//setProcess(false);
+			
 		}
 		
 		// Get the next player
@@ -1013,18 +1007,7 @@ public class Board extends JPanel{
 		
 	}
 	
-	public void suggestionControl(Player player) {
-		
-	}
-	
-//	public Player getDisprovePlayer() {
-//		disprovePlayer = player;
-//	}
-	
-	public String getGuess() {
-		return guess;
-	}
-	
+	// Get the guess result - return the disprove card
 	public Card getGuessResult() {
 		boolean checkRoom = false;
 		Card disproveCard = handleSuggestion(currentPlayer, suggestion);
@@ -1038,14 +1021,6 @@ public class Board extends JPanel{
 			currentPlayer.setAccusation(true);
 		}
 		return disproveCard;
-	}
-	
-	public void setProcess(boolean process) {
-		this.process = process;
-	}
-	
-	public boolean getProcess() {
-		return process;
 	}
 	
 

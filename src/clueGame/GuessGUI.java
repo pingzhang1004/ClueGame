@@ -34,10 +34,11 @@ public class GuessGUI extends JDialog{
 	private String guessRoom;
 	private String guessPerson;
 	private String guessWeapon;
-	private String titleString;
+	private String titleString; //titleString is a parameter to distinguish suggestion or accusation
 	
 	private Solution suggestion;
 
+	// Used for suggestion
 	public GuessGUI(String titleString, String guessRoom, Board board) {
 		this.board = board;
 		this.guessRoom = guessRoom;
@@ -45,7 +46,7 @@ public class GuessGUI extends JDialog{
 		setDialog();
 	}
 	
-	//titleString is a parameter to distinguish suggestion or accusation
+	// Used for accusation
 	public GuessGUI(String titleString, Board board) {	
 		this.board = board;	
 		this.titleString = titleString;
@@ -60,16 +61,17 @@ public class GuessGUI extends JDialog{
 		setLayout(new GridLayout(0, 2));
 		setModal(true);
 		
-		//room display
+		//room display for suggestion
 		if (titleString.equals("Suggestion")) {
 			JLabel roomLabel = new JLabel(" Current Room");
 			roomName = new JTextField();
 			//roomName.setFont(new Font("SansSerif", Font.BOLD, 12));
 			add(roomLabel);
-			roomName.setText(guessRoom);
+			roomName.setText("   " + guessRoom);
 			roomName.setEditable(false);
 			add(roomName);
 		}
+		// room display for accusation
 		else if (titleString.equals("Accusation")) {
 			JLabel roomLabel = new JLabel(" Room");		
 			add(roomLabel);
@@ -90,20 +92,18 @@ public class GuessGUI extends JDialog{
 		add(weaponComboBox);
 
 		ComboListener listener = new ComboListener();
-		
-		
-		
 		personComboBox.addActionListener(listener);
 		weaponComboBox.addActionListener(listener);
 		if (roomComboBox != null) {
 			roomComboBox.addActionListener(listener);
 		}
 		
-
+		// Submit button
 		JButton submitButton = new JButton("Submit");	
 		submitButton.setPreferredSize(null);
 		add(submitButton);
 
+		// Cancel button
 		JButton cancelButton = new JButton("Cancel");		
 		cancelButton.setPreferredSize(null);
 		add(cancelButton);
@@ -112,18 +112,6 @@ public class GuessGUI extends JDialog{
 		cancelButton.addActionListener(new cancelButtonListener());
 
 	}
-
-
-//	public JTextField createRoomField() {
-//		JTextField textField = new JTextField();
-//		Entry<Character, Room> entry = board.getRoomMap().entrySet().iterator().next();
-//		Room firstRoom = entry.getValue();
-//		textField.setText(firstRoom.getName());
-//		textField.setEditable(false);
-//		//set room for Guess Field in Control Panel
-//		guessRoom = firstRoom.getName();
-//		return textField;
-//	}
 
 	public JComboBox<String> createRoomCombo() {
 		JComboBox<String> combo = new JComboBox<String>();
@@ -158,7 +146,7 @@ public class GuessGUI extends JDialog{
 	}
 
 
-	//set person and weapon for Guess Field in Control Panel
+	//set person, room and weapon for Guess Field in Control Panel
 	private class ComboListener implements ActionListener {
 		public void actionPerformed(ActionEvent e)
 		{
@@ -180,21 +168,24 @@ public class GuessGUI extends JDialog{
 		public void actionPerformed(ActionEvent e)
 		{
 			guessText = guessPerson + ", "+ guessWeapon + ", " + guessRoom;
-			System.out.println(guessText);
 			dispose();
-			//setVisible(false);
+			
+			// Make an accusation
 			if (titleString.equals("Accusation")) {
 				Solution accusation = new Solution(new Card(CardType.ROOM, guessRoom), new Card(CardType.PERSON, guessPerson), new Card(CardType.WEAPON, guessWeapon));
 				boolean result = board.checkAccusation(accusation);
+				// The accusation is correct
 				if (result) {
 					JOptionPane.showMessageDialog(null, "Accusation: " + guessText + "\nCongratulations, correct!\nYou Win!");
 					System.exit(0);
 				}
+				// The accusation is not correct
 				else {
 					JOptionPane.showMessageDialog(null, "Accusation: " + guessText + "\nSorry, not correct!\nYou Lose!");
 					System.exit(0);
 				}
 			}
+			// Make a suggestion
 			else {
 				suggestion = new Solution(new Card(CardType.ROOM, guessRoom), new Card(CardType.PERSON, guessPerson), new Card(CardType.WEAPON, guessWeapon));
 			}
@@ -210,16 +201,16 @@ public class GuessGUI extends JDialog{
 			guessText = null;
 			guessPerson = null;
 			guessWeapon = null;
-			System.out.println(guessText);
 			dispose();
-			//setVisible(false);
 		}
 	}
 
+	// get the guess text
 	public String getGuessText() {
 		return guessText;
 	}
 	
+	// get the suggestion that human player make
 	public Solution getSuggestion() {
 		return suggestion;
 	}

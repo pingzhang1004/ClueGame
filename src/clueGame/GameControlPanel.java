@@ -32,14 +32,11 @@ public class GameControlPanel extends JPanel {
 
 
 	private static Board board;
-	private KnownCardsPanel cardPanel;
-
 
 	//Constructor for the panel, it does 90% of the work
-	public GameControlPanel(Board board, KnownCardsPanel cardPanel)  {
+	public GameControlPanel(Board board)  {
 		//initialize the Panel
 		this.board = board;
-		this.cardPanel = cardPanel;
 		
 		theGuess = new JTextField(20);
 		theGuess.setEditable(false);
@@ -117,6 +114,7 @@ public class GameControlPanel extends JPanel {
 
 	}
 
+	// Clean the guess panel
 	public void resetGuessPanel() {
 		theGuess.setText(null);
 		theGuess.setBackground(Color.white);
@@ -125,7 +123,8 @@ public class GameControlPanel extends JPanel {
 	}
 	
 	// Set guess
-	public void setGuess(String guess) {		
+	public void setGuess(String guess) {
+		// No guess
 		if(guess == null) {
     	   theGuess.setText("");
        }
@@ -136,9 +135,17 @@ public class GameControlPanel extends JPanel {
 
 	// Set the guess result
 	public void setGuessResult(Card guessResult) {
-		if (board.getCurrentPlayer() == board.getPlayersList().get(0)) {
+		// No one can disprove
+		if (guessResult == null) {
+			theGuessResult.setText("no new clue!");
+			theGuessResult.setBackground(Color.gray);
+			return;
+		}
+		// human player's suggestion was disprove
+		else if (board.getCurrentPlayer() == board.getPlayersList().get(0)) {
 			theGuessResult.setText(guessResult.getCardName());
 		}
+		// computer player's suggestion was disprove
 		else {
 			theGuessResult.setText("Suggestion disproven!");
 		}
@@ -148,7 +155,6 @@ public class GameControlPanel extends JPanel {
 
 	// Set information for the urn
 	public void setTurn(Player currentPlayer, int roll) {
-
 		theCurrentPlayer.setText(currentPlayer.getName());		
 		theRoll.setText(String.valueOf(roll));
 		playerColor= currentPlayer.getColor();
@@ -160,13 +166,14 @@ public class GameControlPanel extends JPanel {
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			System.out.println("Button pressed");
+			// The previous turn is finished
 			if (board.getTurnProcess()) {
 				board.setTurnProcess(false);
 				board.startTurn();
 				setTurn(board.getCurrentPlayer(), board.getRoll());
 				board.endTurn(board.getCurrentPlayer());
 			}
+			// The previous turn is not finished
 			else {
 				JOptionPane.showMessageDialog(null, "Please finish your turn!");
 			}
@@ -179,12 +186,13 @@ public class GameControlPanel extends JPanel {
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			// When it is human
+			// When human player just starts the new turn
 			if (board.getCurrentPlayer() == board.getPlayersList().get(0) && !board.getTurnProcess()) {
 				suggestionGUI = new GuessGUI("Accusation", board);
 				suggestionGUI.setLocationRelativeTo(null);
 				suggestionGUI.setVisible(true);
 			}
+			// Target was selected or it is computer player's turn
 			else {
 				JOptionPane.showMessageDialog(null, "It is not your turn!");
 			}
@@ -192,19 +200,19 @@ public class GameControlPanel extends JPanel {
 	}
 
 
-//
-//	// Main to test the panel
-//	public static void main(String[] args) {
-//		GameControlPanel panel = new GameControlPanel(board);  // create the panel
-//		JFrame frame = new JFrame();  // create the frame 
-//		frame.setContentPane(panel); // put the panel in the frame
-//		frame.setSize(new Dimension(700, 200));  // size the frame
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
-//		frame.setVisible(true); // make it visible
-//		// test filling in the data
-//		panel.setTurn(new ComputerPlayer("Miss Kate", "red", 0, 15), 5);
-//		//panel.setGuess( "I have no guess!");
-//		panel.setGuessResult( "So you have nothing?");
-//	}
+
+	// Main to test the panel
+	public static void main(String[] args) {
+		GameControlPanel panel = new GameControlPanel(board);  // create the panel
+		JFrame frame = new JFrame();  // create the frame 
+		frame.setContentPane(panel); // put the panel in the frame
+		frame.setSize(new Dimension(700, 200));  // size the frame
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
+		frame.setVisible(true); // make it visible
+		// test filling in the data
+		panel.setTurn(new ComputerPlayer("Miss Kate", "red", 0, 15), 5);
+		//panel.setGuess( "I have no guess!");
+		//panel.setGuessResult( "So you have nothing?");
+	}
 
 }
