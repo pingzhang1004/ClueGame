@@ -15,6 +15,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Stroke;
 import java.awt.TexturePaint;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -246,7 +247,7 @@ public class BoardCell {
 	}
 
 
-	//draw room Player
+	//draw Player
 	public void drawPlayer(String strPlayerColor,Color PlayerColor, Graphics g, int offsetX, int offsetY, int cellWidth, int cellHeight) {			
 		
 		Graphics2D g2d = (Graphics2D) g.create();	
@@ -278,7 +279,8 @@ public class BoardCell {
 		g2d.fillOval(offsetX, offsetY, cellWidth, cellHeight);
 	
 		g2d.setColor(PlayerColor);
-		g2d.drawOval(offsetX, offsetY, cellWidth, cellHeight);
+		g2d.setStroke(new BasicStroke(2f));
+		g2d.drawOval(offsetX, offsetY, cellWidth, cellHeight);	
 		g2d.dispose();        
 	}
 
