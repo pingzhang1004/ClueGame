@@ -803,7 +803,7 @@ public class Board extends JPanel{
 				int index = roomPlayers.indexOf(player);
 			    offsetX = offsetX+(index*offset);
 			}
-			cell.drawPlayer(player.getColor(),g,offsetX,offsetY,side,side);
+			cell.drawPlayer(player.getStrColor(),player.getColor(),g,offsetX,offsetY,side,side);
 		}
 	}
 	

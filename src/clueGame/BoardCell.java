@@ -7,15 +7,25 @@
 
 package clueGame;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.TexturePaint;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
+
 import experiment.TestBoardCell;
+
+
 
 public class BoardCell {
 
@@ -35,7 +45,7 @@ public class BoardCell {
 	private Boolean isOccupied ;
 	//A Set of board cells to hold adjacency list
 	private Set<BoardCell> adjList;
-	
+
 	private Rectangle rect;
 
 	// default constructor
@@ -160,7 +170,7 @@ public class BoardCell {
 		}
 		return isOccupied;
 	}
-	
+
 	public int getRow() {
 		return row;
 	}
@@ -204,7 +214,7 @@ public class BoardCell {
 	public void drawDoor(int cellWidth, int cellHeight, int offsetX,int offsetY, Graphics g) {		
 
 		int doorSize = Math.round(cellWidth / 8);
-		
+
 		switch(doorDirection) {
 		case UP:
 			g.setColor(Color.blue);
@@ -237,11 +247,39 @@ public class BoardCell {
 
 
 	//draw room Player
-	public void drawPlayer(Color playerColor, Graphics g, int offsetX, int offsetY, int cellWidth, int cellHeight) {			
-		g.setColor(playerColor);
-		g.fillOval(offsetX, offsetY, cellWidth, cellHeight);
-		g.setColor(Color.black);
-		g.drawOval(offsetX, offsetY, cellWidth, cellHeight);
+	public void drawPlayer(String strPlayerColor,Color PlayerColor, Graphics g, int offsetX, int offsetY, int cellWidth, int cellHeight) {			
+		
+		Graphics2D g2d = (Graphics2D) g.create();	
+		BufferedImage img = null;
+		TexturePaint imgSlate;
+
+		//read all the palyer from the folder playerImg
+		File folder = new File("data/playerImg");
+		File[] listOfFiles = folder.listFiles();
+		
+		for (int i = 0; i < listOfFiles.length; i++) {	
+			
+			//image is named by the player color
+			//eg: human player color is blue, so the blue.image represent the human player
+			if (listOfFiles[i].getName().equals(strPlayerColor + ".jpg")) { 			
+				try {
+
+					img = ImageIO.read(new File("data/playerImg/"+ listOfFiles[i].getName()));
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}	        	  
+			} 
+		}
+		
+		//draw the image and show the image in a circle
+		imgSlate = new TexturePaint(img, new Rectangle(offsetX, offsetY, cellWidth, cellHeight));
+		g2d.setPaint(imgSlate);
+		g2d.fillOval(offsetX, offsetY, cellWidth, cellHeight);
+	
+		g2d.setColor(PlayerColor);
+		g2d.drawOval(offsetX, offsetY, cellWidth, cellHeight);
+		g2d.dispose();        
 	}
 
 	//draw secret path
@@ -259,12 +297,12 @@ public class BoardCell {
 		// number of vertices	  
 		g.drawPolygon(x, y, 4);		
 		g.fillPolygon(x, y, 4);
-		
+
 		//draw secret cell label
 		g.setColor(Color.blue);
 		g.setFont(new Font("Verdana", Font.PLAIN, 16));
 		g.drawString("S", (int)(offsetX+0.4*cellWidth), (int)(offsetY+0.7*cellHeight));		
-		
+
 	}
 
 	// draw the target
@@ -275,14 +313,14 @@ public class BoardCell {
 		g.drawRect(offsetX,offsetY, cellWidth, cellHeight);
 		rect = new Rectangle(offsetX, offsetY, cellWidth, cellHeight);
 	}
-	
+
 	// draw the room target
 	public void drawRoomTarget(Graphics g, int offsetX, int offsetY, int cellWidth, int cellHeight) {
 		g.setColor(Color.cyan);
 		g.fillRect(offsetX, offsetY, cellWidth, cellHeight);
 		rect = new Rectangle(offsetX, offsetY, cellWidth, cellHeight);
 	}
-	
+
 	// Check if the point of the cell is clicked
 	public boolean containsClick(int mouseX, int mouseY) {
 		if (rect.contains(new Point(mouseX, mouseY))) 
