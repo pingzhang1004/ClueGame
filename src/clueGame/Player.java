@@ -78,7 +78,10 @@ public abstract class Player {
 
 	// update seen card list
 	public void updateSeen(Card card) {
-		seenCards.add(card);
+		if (!seenCards.contains(card)) {
+			seenCards.add(card);
+		}
+		
 		switch (card.getCardType()) {
 		case ROOM:
 			unseenRooms.remove(card);
@@ -132,17 +135,6 @@ public abstract class Player {
 				disproveCards.add(inHandCard);
 			}
 		}
-//		// If the card can be disprove, then add into the disprove card list
-//		if (myCards.contains(suggestion.getPersonCard())) {
-//			disproveCards.add(suggestion.getPersonCard());
-//			
-//		}
-//		if (myCards.contains(suggestion.getRoomCard())) {
-//			disproveCards.add(suggestion.getRoomCard());
-//		}
-//		if (myCards.contains(suggestion.getWeaponCard())) {
-//			disproveCards.add(suggestion.getWeaponCard());
-//		}
 	
 		// No card can be disproved
 		if (disproveCards.size() == 0) {

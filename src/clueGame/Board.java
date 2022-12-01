@@ -878,7 +878,7 @@ public class Board extends JPanel{
 						// set guess panel
 						if (suggestionGUI.getGuessText() != null) {
 							controlPanel.setGuess(guess);
-							if (getGuessResult() != null) {					
+							if (getGuessResult() != null) {	
 								currentPlayer.updateSeen(getGuessResult());
 								controlPanel.setGuessResult(getGuessResult());
 								cardsPanel.updatePanels();
